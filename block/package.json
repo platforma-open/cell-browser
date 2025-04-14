@@ -1,0 +1,47 @@
+{
+  "name": "@platforma-open/milaboratories.cell-browser",
+  "version": "1.0.0",
+  "scripts": {
+    "build": "rm -rf block-pack/* && block-tools pack"
+  },
+  "files": [
+    "index.d.ts",
+    "index.js"
+  ],
+  "dependencies": {
+    "@platforma-open/milaboratories.cell-browser.workflow": "workspace:*",
+    "@platforma-open/milaboratories.cell-browser.model": "workspace:*",
+    "@platforma-open/milaboratories.cell-browser.ui": "workspace:*"
+  },
+  "block": {
+    "components": {
+      "workflow": "@platforma-open/milaboratories.cell-browser.workflow/dist/tengo/tpl/main.plj.gz",
+      "model": "@platforma-open/milaboratories.cell-browser.model/dist/model.json",
+      "ui": "@platforma-open/milaboratories.cell-browser.ui/dist"
+    },
+    "meta": {
+      "title": "Cell Browser",
+      "logo": "file:../logos/block-logo.png",
+      "url": "https://github.com/milaboratory/platforma-cell-browser",
+      "docs": "https://github.com/milaboratory/platforma-cell-browser/docs",
+      "support": "mailto:support@milaboratories.com",
+      "description": "Visualize and explore single-cell RNA-seq data.",
+      "longDescription": "file:../docs/description.md",
+      "changelog": "file:../CHANGELOG.md",
+      "tags": [
+        "RNA-seq",
+        "visualization",
+        "single-cell"
+      ],
+      "organization": {
+        "name": "MiLaboratories Inc",
+        "url": "https://milaboratories.com/",
+        "logo": "file:../logos/organization-logo.png"
+      }
+    }
+  },
+  "devDependencies": {
+    "@platforma-sdk/block-tools": "catalog:"
+  },
+  "packageManager": "pnpm@9.12.0"
+}
