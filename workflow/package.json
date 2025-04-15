@@ -1,0 +1,19 @@
+{
+  "name": "@platforma-open/milaboratories.cell-browser.workflow",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Block Workflow",
+  "scripts": {
+    "build": "rm -rf dist && pl-tengo check && pl-tengo build",
+    "test": "vitest",
+    "format": "/usr/bin/env emacs --script ./format.el"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@platforma-sdk/tengo-builder": "catalog:",
+    "@platforma-sdk/workflow-tengo": "catalog:",
+    "@platforma-open/milaboratories.software-small-binaries": "^1.15.7",
+    "@platforma-sdk/test": "catalog:",
+    "vitest": "catalog:"
+  }
+}

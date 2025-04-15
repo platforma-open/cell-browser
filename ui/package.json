@@ -1,0 +1,26 @@
+{
+  "name": "@platforma-open/milaboratories.cell-browser.ui",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "watch": "vue-tsc && vite build --watch",
+    "build": "vue-tsc -b && vite build",
+    "lint": "eslint .",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@platforma-open/milaboratories.cell-browser.model": "workspace:*",
+    "@platforma-sdk/ui-vue": "catalog:",
+    "@milaboratories/graph-maker": "catalog:",
+    "@platforma-sdk/model": "catalog:",
+    "vue": "catalog:"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "catalog:",
+    "typescript": "catalog:",
+    "vite": "catalog:",
+    "vue-tsc": "catalog:",
+    "@platforma-sdk/eslint-config": "catalog:"
+  }
+}
