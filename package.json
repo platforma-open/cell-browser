@@ -6,7 +6,9 @@
     "build": "turbo run build",
     "test": "turbo run test --concurrency 1",
     "watch": "turbo watch build",
-    "lint": "pnpm -r lint"
+    "lint": "pnpm -r lint",
+    "changeset": "changeset",
+    "version-packages": "changeset version"
   },
   "files": [
     "index.d.ts",
