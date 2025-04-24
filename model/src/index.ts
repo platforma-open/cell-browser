@@ -2,7 +2,8 @@ import type { GraphMakerState } from '@milaboratories/graph-maker';
 import type {
   InferOutputsType,
   PFrameHandle,
-  PlRef } from '@platforma-sdk/model';
+  PlRef,
+  PColumnIdAndSpec } from '@platforma-sdk/model';
 import {
   BlockModel,
   createPFrameForGraphs,
@@ -12,6 +13,7 @@ import {
 
 export type UiState = {
   graphStateUMAP: GraphMakerState;
+  graphStateViolin: GraphMakerState;
 };
 
 export type BlockArgs = {
@@ -28,6 +30,15 @@ export const model = BlockModel.create()
     graphStateUMAP: {
       title: 'UMAP',
       template: 'dots',
+    },
+    graphStateViolin: {
+      template: 'violin',
+      title: 'Gene Expression',
+      layersSettings: {
+        violin: {
+          fillColor: '#99E099',
+        },
+      },
     },
   })
 
@@ -48,9 +59,62 @@ export const model = BlockModel.create()
     );
   })
 
+// @TODO - Currently createPFrameForGraphs is letting everything through. createPFrame used for now
+  .output('violinExprPf', (ctx): PFrameHandle | undefined => {
+    let pCols = ctx.resultPool
+      .getData()
+      .entries.map((c) => c.obj)
+      .filter(isPColumn)
+      .filter((col) => col.spec.name === 'pl7.app/rna-seq/countMatrix');
+    if (pCols === undefined) {
+      return undefined;
+    }
+
+    // Add sample labels and gene symbols
+    const upstream = ctx.resultPool
+      .getData()
+      .entries.map((v) => v.obj)
+      .filter(isPColumn)
+      .filter((col) => col.spec.name === 'pl7.app/label'
+        || col.spec.name === 'pl7.app/rna-seq/geneSymbols'
+        || col.spec.name === 'pl7.app/metadata');
+
+    pCols = [...pCols, ...upstream];
+
+    return ctx.createPFrame(pCols);
+  })
+
+// Pcolumns for violin plot defaults, filtered to only normalised
+  .output('violinExprPfDefaults', (ctx) => {
+    let pCols = ctx.resultPool
+      .getData()
+      .entries.map((o) => o.obj)
+      .filter(isPColumn)
+      .filter((col) => col.spec.name === 'pl7.app/rna-seq/countMatrix' && col.spec.domain?.['pl7.app/rna-seq/normalized'] === 'true');
+    if (pCols === undefined) return undefined;
+
+    // Add sample labels and gene symbols
+    const upstream = ctx.resultPool
+      .getData()
+      .entries.map((v) => v.obj)
+      .filter(isPColumn)
+      .filter((col) => col.spec.name === 'pl7.app/label' || col.spec.name === 'pl7.app/rna-seq/geneSymbols');
+
+    pCols = [...pCols, ...upstream];
+
+    return pCols.map(
+      (c) =>
+        ({
+          columnId: c.id,
+          spec: c.spec,
+        } satisfies PColumnIdAndSpec),
+    );
+  })
+
   .sections((_ctx) => ([
     { type: 'link', href: '/', label: 'Main' },
     { type: 'link', href: '/umap', label: 'UMAP' },
+    { type: 'link', href: '/violin', label: 'Gene Expression' },
   ]))
 
   .title((ctx) =>
