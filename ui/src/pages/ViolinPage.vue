@@ -46,7 +46,7 @@ const defaultOptions = ref(getDefaultOptions(app.model.outputs.violinExprPfDefau
 
 <template>
   <GraphMaker
-    v-model="app.model.ui.graphState" chartType="discrete"
+    v-model="app.model.ui.graphStateViolin" chartType="discrete"
     :p-frame="app.model.outputs.violinExprPf" :default-options="defaultOptions"
   />
 </template>

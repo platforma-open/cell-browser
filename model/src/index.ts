@@ -13,7 +13,7 @@ import {
 
 export type UiState = {
   graphStateUMAP: GraphMakerState;
-  graphState: GraphMakerState;
+  graphStateViolin: GraphMakerState;
 };
 
 export type BlockArgs = {
@@ -31,7 +31,7 @@ export const model = BlockModel.create()
       title: 'UMAP',
       template: 'dots',
     },
-    graphState: {
+    graphStateViolin: {
       template: 'violin',
       title: 'Gene Expression',
       layersSettings: {
@@ -112,7 +112,7 @@ export const model = BlockModel.create()
   .sections((_ctx) => ([
     { type: 'link', href: '/', label: 'Main' },
     { type: 'link', href: '/umap', label: 'UMAP' },
-    { type: 'link', href: '/graph', label: 'Gene Expression' },
+    { type: 'link', href: '/violin', label: 'Gene Expression' },
   ]))
 
   .title((ctx) =>
