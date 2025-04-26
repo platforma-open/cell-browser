@@ -1,5 +1,13 @@
 # @platforma-open/milaboratories.cell-browser
 
+## 1.1.2
+
+### Patch Changes
+
+- Updated dependencies [257af16]
+  - @platforma-open/milaboratories.cell-browser.model@1.2.1
+  - @platforma-open/milaboratories.cell-browser.ui@1.2.1
+
 ## 1.1.1
 
 ### Patch Changes

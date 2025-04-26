@@ -1,5 +1,11 @@
 # @platforma-open/milaboratories.cell-browser.model
 
+## 1.2.1
+
+### Patch Changes
+
+- 257af16: Enriched violing plot
+
 ## 1.2.0
 
 ### Minor Changes
