@@ -77,7 +77,9 @@ export const model = BlockModel.create()
       .filter(isPColumn)
       .filter((col) => col.spec.name === 'pl7.app/label'
         || col.spec.name === 'pl7.app/rna-seq/geneSymbols'
-        || col.spec.name === 'pl7.app/metadata');
+        || col.spec.name === 'pl7.app/metadata'
+        || col.spec.name === 'pl7.app/rna-seq/leidencluster',
+      );
 
     pCols = [...pCols, ...upstream];
 
