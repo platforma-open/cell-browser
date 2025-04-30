@@ -32,8 +32,10 @@ function getDefaultOptions(violinExprPfDefaults?: PColumnIdAndSpec[]) {
     },
     {
       inputName: 'filters',
-      selectedSource: violinExprPfDefaults[getIndex('pl7.app/rna-seq/geneSymbols',
-        violinExprPfDefaults)].spec,
+      selectedSource: {
+        name: 'pl7.app/rna-seq/geneId',
+        type: 'String',
+      },
     },
   ];
 
@@ -47,6 +49,6 @@ const defaultOptions = ref(getDefaultOptions(app.model.outputs.violinExprPfDefau
 <template>
   <GraphMaker
     v-model="app.model.ui.graphStateViolin" chartType="discrete"
-    :p-frame="app.model.outputs.violinExprPf" :default-options="defaultOptions"
+    :p-frame="app.model.outputs.ExprPf" :default-options="defaultOptions"
   />
 </template>
