@@ -1,5 +1,5 @@
 import type { GraphMakerState } from '@milaboratories/graph-maker';
-import type {
+import {
   InferOutputsType,
   PFrameHandle,
   PlRef,
@@ -14,6 +14,9 @@ import {
 export type UiState = {
   graphStateUMAP: GraphMakerState;
   graphStateViolin: GraphMakerState;
+  heatmapState: GraphMakerState;
+  countsRef?: PlRef;
+
 };
 
 export type BlockArgs = {
@@ -40,6 +43,15 @@ export const model = BlockModel.create()
         },
       },
     },
+    heatmapState: {
+      template: 'heatmapClustered',
+      title: 'Expression Heatmap',
+      layersSettings: {
+        heatmapClustered: {
+          normalizationDirection: null,
+        },
+      },
+    },
   })
 
   .output('countsOptions', (ctx) =>
@@ -48,6 +60,21 @@ export const model = BlockModel.create()
       && spec.name === 'pl7.app/rna-seq/countMatrix' && spec.domain?.['pl7.app/rna-seq/normalized'] === 'false'
     , { includeNativeLabel: true, addLabelAsSuffix: true }),
   )
+
+  .output('countsSpec', (ctx) => {
+    // return the Reference of the p-column selected as input dataset in Settings
+    if (!ctx.activeArgs?.countsRef) return undefined;
+
+    // Get the specs of that selected p-column
+    const countsColumn = ctx.resultPool.getPColumnByRef(ctx.activeArgs?.countsRef);
+    const countsSpec = countsColumn?.spec;
+    if (!countsSpec) {
+      console.error('Anchor spec is undefined or is not PColumnSpec', countsSpec);
+      return undefined;
+    }
+
+    return countsSpec;
+  })
 
   .output('UMAPPf', (ctx): PFrameHandle | undefined => {
     return createPFrameForGraphs(ctx,
@@ -60,7 +87,7 @@ export const model = BlockModel.create()
   })
 
 // @TODO - Currently createPFrameForGraphs is letting everything through. createPFrame used for now
-  .output('violinExprPf', (ctx): PFrameHandle | undefined => {
+  .output('ExprPf', (ctx): PFrameHandle | undefined => {
     let pCols = ctx.resultPool
       .getData()
       .entries.map((c) => c.obj)
@@ -76,9 +103,10 @@ export const model = BlockModel.create()
       .entries.map((v) => v.obj)
       .filter(isPColumn)
       .filter((col) => col.spec.name === 'pl7.app/label'
-        || col.spec.name === 'pl7.app/rna-seq/geneSymbols'
+        // || col.spec.name === 'pl7.app/rna-seq/geneSymbols'
         || col.spec.name === 'pl7.app/metadata'
-        || col.spec.name === 'pl7.app/rna-seq/leidencluster',
+        || col.spec.name === 'pl7.app/rna-seq/leidencluster'
+        || col.spec.name === 'pl7.app/rna-seq/DEG',
       );
 
     pCols = [...pCols, ...upstream];
@@ -100,7 +128,10 @@ export const model = BlockModel.create()
       .getData()
       .entries.map((v) => v.obj)
       .filter(isPColumn)
-      .filter((col) => col.spec.name === 'pl7.app/label' || col.spec.name === 'pl7.app/rna-seq/geneSymbols');
+      .filter((col) => col.spec.name === 'pl7.app/label'
+      // Now geneSymbols have pl7.app/label, unnecessary
+      // || col.spec.name === 'pl7.app/rna-seq/geneSymbols'
+        || col.spec.name === 'pl7.app/rna-seq/DEG');
 
     pCols = [...pCols, ...upstream];
 
@@ -113,10 +144,22 @@ export const model = BlockModel.create()
     );
   })
 
+  // Get DEG pframe
+  .output('DEGpf', (ctx) => {
+    const DEGcolumns = ctx.resultPool
+      .getData()
+      .entries.map((o) => o.obj)
+      .filter(isPColumn)
+      .filter((col) => col.spec.name === 'pl7.app/rna-seq/DEG');
+
+    return DEGcolumns;
+  })
+
   .sections((_ctx) => ([
     { type: 'link', href: '/', label: 'Main' },
     { type: 'link', href: '/umap', label: 'UMAP' },
     { type: 'link', href: '/violin', label: 'Gene Expression' },
+    { type: 'link', href: '/heatmap', label: 'Expression Heatmap' },
   ]))
 
   .title((ctx) =>

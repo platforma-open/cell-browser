@@ -3,6 +3,7 @@ import { defineApp } from '@platforma-sdk/ui-vue';
 import MainPage from './pages/MainPage.vue';
 import UMAP from './pages/UMAP.vue';
 import ViolinPage from './pages/ViolinPage.vue';
+import heatmapPage from './pages/heatmapPage.vue';
 
 export const sdkPlugin = defineApp(model, () => {
   return {
@@ -10,6 +11,7 @@ export const sdkPlugin = defineApp(model, () => {
       '/': () => MainPage,
       '/umap': () => UMAP,
       '/violin': () => ViolinPage,
+      '/heatmap': () => heatmapPage,
     },
   };
 });
