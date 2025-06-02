@@ -1,5 +1,16 @@
 # @platforma-open/milaboratories.cell-browser.ui
 
+## 1.3.0
+
+### Minor Changes
+
+- d3ff51c: Add expression heatmap page and set defaults
+
+### Patch Changes
+
+- Updated dependencies [d3ff51c]
+  - @platforma-open/milaboratories.cell-browser.model@1.3.0
+
 ## 1.2.1
 
 ### Patch Changes
