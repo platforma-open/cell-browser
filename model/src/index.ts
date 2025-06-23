@@ -1,12 +1,11 @@
 import type { GraphMakerState } from '@milaboratories/graph-maker';
-import {
+import type {
   InferOutputsType,
   PFrameHandle,
   PlRef,
   PColumnIdAndSpec } from '@platforma-sdk/model';
 import {
   BlockModel,
-  createPFrameForGraphs,
   isPColumn,
   isPColumnSpec,
 } from '@platforma-sdk/model';
@@ -77,13 +76,24 @@ export const model = BlockModel.create()
   })
 
   .output('UMAPPf', (ctx): PFrameHandle | undefined => {
-    return createPFrameForGraphs(ctx,
-      ctx.resultPool
-        .getData()
-        .entries.map((c) => c.obj)
-        .filter(isPColumn),
-      // .filter((column) => column.spec.name.includes('umap')),
-    );
+    // Get UMAP columns from the result pool
+    const umapColumns = ctx.resultPool
+      .getData()
+      .entries.map((c) => c.obj)
+      .filter(isPColumn)
+      .filter((column) => column.spec.name.includes('umap'));
+
+    if (umapColumns.length === 0) {
+      return undefined;
+    }
+
+    // Add all compatible columns from the result pool
+    const compatibleColumns = ctx.resultPool
+      .getData()
+      .entries.map((v) => v.obj)
+      .filter(isPColumn);
+
+    return ctx.createPFrame([...umapColumns, ...compatibleColumns]);
   })
 
 // @TODO - Currently createPFrameForGraphs is letting everything through. createPFrame used for now
