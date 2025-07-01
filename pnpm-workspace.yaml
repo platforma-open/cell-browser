@@ -18,7 +18,7 @@ catalog:
 
   '@milaboratories/software-pframes-conv': ^2.1.19
   '@platforma-open/milaboratories.software-small-binaries': ^1.15.19
-  "@platforma-open/milaboratories.runenv-python-3": ^1.1.7
+  "@platforma-open/milaboratories.runenv-python-3": ^1.1.16
   
   "vue": ^3.5.12
   "vue-tsc": ^2.1.6
