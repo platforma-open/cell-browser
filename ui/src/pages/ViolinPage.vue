@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { GraphMakerProps, PredefinedGraphOption } from '@milaboratories/graph-maker';
+import type { PredefinedGraphOption } from '@milaboratories/graph-maker';
 import { GraphMaker } from '@milaboratories/graph-maker';
 import '@milaboratories/graph-maker/styles';
 import { ref } from 'vue';
