@@ -60,6 +60,18 @@ function getDefaultOptions(violinExprPfDefaults?: PColumnIdAndSpec[]) {
     },
   });
 
+  // Add leiden cluster to annotationsX
+  defaults.push({
+    // Leiden Cluster ID as x-annotation
+    inputName: 'annotationsX',
+    selectedSource: {
+      kind: 'PColumn',
+      name: 'pl7.app/rna-seq/leidencluster',
+      valueType: 'String',
+      axesSpec: [],
+    },
+  });
+
   // Add default filter if DEG columns are available - filters need PColumn spec (kind: "column")
   if (degIndex !== -1) {
     defaults.push({
