@@ -50,6 +50,8 @@ export const model = BlockModel.create()
       layersSettings: {
         heatmapClustered: {
           normalizationDirection: null,
+          dendrogramX: false,
+          dendrogramY: false,
         },
       },
     },

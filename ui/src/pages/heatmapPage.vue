@@ -18,9 +18,8 @@ function getDefaultOptions(violinExprPfDefaults?: PColumnIdAndSpec[]) {
   }
 
   const countMatrixIndex = getIndex('pl7.app/rna-seq/countMatrix', violinExprPfDefaults);
-  const labelIndex = getIndex('pl7.app/label', violinExprPfDefaults);
   const degIndex = getIndex('pl7.app/rna-seq/DEG', violinExprPfDefaults);
-  
+
   if (countMatrixIndex === -1) {
     return undefined;
   }
