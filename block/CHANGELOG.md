@@ -1,5 +1,11 @@
 # @platforma-open/milaboratories.cell-browser
 
+## 1.2.0
+
+### Minor Changes
+
+- bca74ea: allow prepare venv on Windows
+
 ## 1.1.4
 
 ### Patch Changes
