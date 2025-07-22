@@ -2,13 +2,15 @@
 import type { PredefinedGraphOption } from '@milaboratories/graph-maker';
 import { GraphMaker } from '@milaboratories/graph-maker';
 import '@milaboratories/graph-maker/styles';
-import { ref } from 'vue';
+import { computed } from 'vue';
 import { useApp } from '../app';
 import type { PColumnIdAndSpec } from '@platforma-sdk/model';
 
 const app = useApp();
 
-function getDefaultOptions(violinExprPfDefaults?: PColumnIdAndSpec[]) {
+// Reactive computed property using violinExprPfDefaults (which contains normalized expression data)
+const defaultOptions = computed(() => {
+  const violinExprPfDefaults = app.model.outputs.violinExprPfDefaults;
   if (!violinExprPfDefaults) {
     return undefined;
   }
@@ -74,16 +76,14 @@ function getDefaultOptions(violinExprPfDefaults?: PColumnIdAndSpec[]) {
   // Add default filter if DEG columns are available - filters need PColumn spec (kind: "column")
   if (degIndex !== -1) {
     defaults.push({
-      // DEG gene list (if present) as filter
+      // DEG gene list (log2FC values) as filter 
       inputName: 'filters',
       selectedSource: violinExprPfDefaults[degIndex].spec,
     });
   }
 
   return defaults;
-}
-
-const defaultOptions = ref(getDefaultOptions(app.model.outputs.violinExprPfDefaults));
+});
 
 </script>
 
