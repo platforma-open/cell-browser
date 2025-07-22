@@ -1,5 +1,16 @@
 # @platforma-open/milaboratories.cell-browser.ui
 
+## 1.4.0
+
+### Minor Changes
+
+- dc2f22c: Improved UX/UI and updated SDK.
+
+### Patch Changes
+
+- Updated dependencies [dc2f22c]
+  - @platforma-open/milaboratories.cell-browser.model@1.4.0
+
 ## 1.3.0
 
 ### Minor Changes
