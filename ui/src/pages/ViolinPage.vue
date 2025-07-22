@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { GraphMakerProps } from '@milaboratories/graph-maker';
+import type { GraphMakerProps, PredefinedGraphOption } from '@milaboratories/graph-maker';
 import { GraphMaker } from '@milaboratories/graph-maker';
 import '@milaboratories/graph-maker/styles';
 import { ref } from 'vue';
@@ -19,7 +19,7 @@ function getDefaultOptions(violinExprPfDefaults?: PColumnIdAndSpec[]) {
     return pcols.findIndex((p) => p.spec.name === name);
   }
 
-  const defaults: GraphMakerProps['defaultOptions'] = [
+  const defaults: PredefinedGraphOption<'discrete'>[] = [
     {
       inputName: 'y',
       selectedSource: violinExprPfDefaults[getIndex('pl7.app/rna-seq/countMatrix',
