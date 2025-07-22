@@ -1,60 +1,84 @@
 <script setup lang="ts">
-import { GraphMaker, GraphMakerProps, PredefinedGraphOption } from "@milaboratories/graph-maker";
+import type { PredefinedGraphOption } from '@milaboratories/graph-maker';
+import { GraphMaker } from '@milaboratories/graph-maker';
 import '@milaboratories/graph-maker/styles';
 import { computed } from 'vue';
 import { useApp } from '../app';
+import type { PColumnIdAndSpec } from '@platforma-sdk/model';
 
 const app = useApp();
 
-const defaultOptions = computed((): GraphMakerProps['defaultOptions'] => {
-  if (!app.model.outputs.countsSpec)
+// Reactive computed property using violinExprPfDefaults (which contains normalized expression data)
+const defaultOptions = computed(() => {
+  const violinExprPfDefaults = app.model.outputs.violinExprPfDefaults;
+  if (!violinExprPfDefaults) {
     return undefined;
+  }
+
+  function getIndex(name: string, pcols: PColumnIdAndSpec[]): number {
+    return pcols.findIndex((p) => p.spec.name === name);
+  }
+
+  const countMatrixIndex = getIndex('pl7.app/rna-seq/countMatrix', violinExprPfDefaults);
+  const degIndex = getIndex('pl7.app/rna-seq/DEG', violinExprPfDefaults);
+
+  if (countMatrixIndex === -1) {
+    return undefined;
+  }
 
   const defaults: PredefinedGraphOption<'heatmap'>[] = [
     {
-      // Gene count values as Data Source
+      // Gene count values - needs PColumn spec (kind: "column")
       inputName: 'value',
-      selectedSource: app.model.outputs.countsSpec,
+      selectedSource: violinExprPfDefaults[countMatrixIndex].spec,
     },
     {
-      // Cell Barcode ID as X axis
+      // Cell Barcode ID as X axis - needs axis spec (kind: "axis")
       inputName: 'x',
-      selectedSource: app.model.outputs.countsSpec.axesSpec[1],
+      selectedSource: violinExprPfDefaults[countMatrixIndex].spec.axesSpec[1], // cellId
     },
     {
-      // Sample ID also needed in X axis. Because cluster ID includes sample ID as axis
+      // Sample ID as second X axis - needs axis spec (kind: "axis")
       inputName: 'x',
-      selectedSource: app.model.outputs.countsSpec.axesSpec[0],
+      selectedSource: violinExprPfDefaults[countMatrixIndex].spec.axesSpec[0], // sampleId
     },
     {
-      // Gene ID as Y axis
+      // Gene ID as Y axis - needs axis spec (kind: "axis")
       inputName: 'y',
-      selectedSource: app.model.outputs.countsSpec.axesSpec[2],
-    },
-    {
-      // Cluster ID as x-group-by axis
-      inputName: 'xGroupBy',
-      selectedSource: {
-        kind: 'PColumn',
-        name: 'pl7.app/rna-seq/leidencluster',
-        valueType: 'String',
-        axesSpec: [],
-      },
+      selectedSource: violinExprPfDefaults[countMatrixIndex].spec.axesSpec[2], // geneId
     },
   ];
-  // Add default filter only if there is at least a DEG subset Pcolumn
-  if (app.model.outputs.DEGpf
-    && app.model.outputs.DEGpf.length !== 0) {
-    // Extend default options
+
+  // Add cluster grouping - xGroupBy needs leiden cluster PColumn spec (kind: "column")
+  defaults.push({
+    // Leiden Cluster ID as x-group-by
+    inputName: 'xGroupBy',
+    selectedSource: {
+      kind: 'PColumn',
+      name: 'pl7.app/rna-seq/leidencluster',
+      valueType: 'String',
+      axesSpec: [],
+    },
+  });
+
+  // Add leiden cluster to annotationsX
+  defaults.push({
+    // Leiden Cluster ID as x-annotation
+    inputName: 'annotationsX',
+    selectedSource: {
+      kind: 'PColumn',
+      name: 'pl7.app/rna-seq/leidencluster',
+      valueType: 'String',
+      axesSpec: [],
+    },
+  });
+
+  // Add default filter if DEG columns are available - filters need PColumn spec (kind: "column")
+  if (degIndex !== -1) {
     defaults.push({
-      // DEG gene list (if present) as filter
+      // DEG gene list (log2FC values) as filter 
       inputName: 'filters',
-      selectedSource: app.model.outputs.DEGpf[0].spec,
-      // Set default filter to a specific cluster (else, will be set automatically)
-      /* fixedAxes: [{
-        axisIdx: 0,
-        axisValue: '0',
-      }], */
+      selectedSource: violinExprPfDefaults[degIndex].spec,
     });
   }
 
@@ -65,7 +89,9 @@ const defaultOptions = computed((): GraphMakerProps['defaultOptions'] => {
 
 <template>
   <GraphMaker
-    v-model="app.model.ui.heatmapState" chartType="heatmap" :p-frame="app.model.outputs.ExprPf"
-    :defaultOptions="defaultOptions"
+    v-model="app.model.ui.heatmapState"
+    chartType="heatmap"
+    :p-frame="app.model.outputs.ExprPf"
+    :default-options="defaultOptions"
   />
 </template>

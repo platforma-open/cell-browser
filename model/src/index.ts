@@ -1,14 +1,14 @@
 import type { GraphMakerState } from '@milaboratories/graph-maker';
-import {
+import type {
   InferOutputsType,
   PFrameHandle,
   PlRef,
   PColumnIdAndSpec } from '@platforma-sdk/model';
 import {
   BlockModel,
-  createPFrameForGraphs,
   isPColumn,
   isPColumnSpec,
+  PColumnCollection,
 } from '@platforma-sdk/model';
 
 export type UiState = {
@@ -33,6 +33,7 @@ export const model = BlockModel.create()
     graphStateUMAP: {
       title: 'UMAP',
       template: 'dots',
+      currentTab: 'settings',
     },
     graphStateViolin: {
       template: 'violin',
@@ -49,10 +50,14 @@ export const model = BlockModel.create()
       layersSettings: {
         heatmapClustered: {
           normalizationDirection: null,
+          dendrogramX: false,
+          dendrogramY: false,
         },
       },
     },
   })
+
+  .argsValid((ctx) => ctx.args.countsRef !== undefined)
 
   .output('countsOptions', (ctx) =>
     // I've added these "||" for backward compatibility (As I see, the shape of PColum was changed)
@@ -77,13 +82,50 @@ export const model = BlockModel.create()
   })
 
   .output('UMAPPf', (ctx): PFrameHandle | undefined => {
-    return createPFrameForGraphs(ctx,
-      ctx.resultPool
-        .getData()
-        .entries.map((c) => c.obj)
-        .filter(isPColumn),
-      // .filter((column) => column.spec.name.includes('umap')),
-    );
+    // Get the selected dataset spec to filter compatible columns
+    if (!ctx.args.countsRef) return undefined;
+    const countsSpec = ctx.resultPool.getPColumnSpecByRef(ctx.args.countsRef);
+    if (!countsSpec) return undefined;
+
+    // Use PColumnCollection to find UMAP columns and compatible columns
+    const columns = new PColumnCollection();
+    columns.addColumnProvider(ctx.resultPool);
+
+    // Get UMAP columns that match the selected dataset's domain properties
+    const umapColumns = columns.getColumns((spec) => {
+      // Filter for UMAP columns
+      if (!spec.name.includes('umap')) return false;
+
+      // Match domain properties with the selected dataset
+      // This ensures we only get UMAP columns that are compatible with the selected dataset
+      const countsDomain = countsSpec.domain || {};
+      const columnDomain = spec.domain || {};
+
+      // Match key domain properties that should be consistent
+      const domainKeys = ['pl7.app/rna-seq/batch-corrected', 'pl7.app/rna-seq/normalized'];
+      return domainKeys.every((key) =>
+        countsDomain[key] === undefined || columnDomain[key] === undefined || countsDomain[key] === columnDomain[key],
+      );
+    }, { dontWaitAllData: true }) || [];
+
+    if (umapColumns.length === 0) {
+      return undefined;
+    }
+
+    // Add the UMAP columns to the collection so they can be used for compatibility checking
+    columns.addColumns(umapColumns);
+
+    // Get all columns that are compatible with the UMAP columns
+    // This uses the SDK's sophisticated compatibility logic
+    const compatibleColumns = columns.getColumns((spec) => {
+      // Skip UMAP columns themselves since we already have them
+      if (spec.name.includes('umap')) return false;
+
+      // The SDK will automatically check axes compatibility
+      return true;
+    }, { dontWaitAllData: true }) || [];
+
+    return ctx.createPFrame([...umapColumns, ...compatibleColumns]);
   })
 
 // @TODO - Currently createPFrameForGraphs is letting everything through. createPFrame used for now
@@ -155,9 +197,10 @@ export const model = BlockModel.create()
     return DEGcolumns;
   })
 
+  .output('isRunning', (ctx) => ctx.outputs?.getIsReadyOrError() === false)
+
   .sections((_ctx) => ([
-    { type: 'link', href: '/', label: 'Main' },
-    { type: 'link', href: '/umap', label: 'UMAP' },
+    { type: 'link', href: '/', label: 'UMAP' },
     { type: 'link', href: '/violin', label: 'Gene Expression' },
     { type: 'link', href: '/heatmap', label: 'Expression Heatmap' },
   ]))
