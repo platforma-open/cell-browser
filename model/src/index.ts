@@ -8,7 +8,7 @@ import {
   BlockModel,
   isPColumn,
   isPColumnSpec,
-  PColumnCollection,
+  createPFrameForGraphs,
 } from '@platforma-sdk/model';
 
 export type UiState = {
@@ -82,50 +82,20 @@ export const model = BlockModel.create()
   })
 
   .output('UMAPPf', (ctx): PFrameHandle | undefined => {
-    // Get the selected dataset spec to filter compatible columns
+    // Build a PFrame consisting of all columns that can be associated with the selected countsRef anchor
     if (!ctx.args.countsRef) return undefined;
-    const countsSpec = ctx.resultPool.getPColumnSpecByRef(ctx.args.countsRef);
-    if (!countsSpec) return undefined;
 
-    // Use PColumnCollection to find UMAP columns and compatible columns
-    const columns = new PColumnCollection();
-    columns.addColumnProvider(ctx.resultPool);
+    // Use the SDK's anchored selection to gather all compatible columns for graphs
+    const anchoredColumns = ctx.resultPool.getAnchoredPColumns(
+      { countsRef: ctx.args.countsRef },
+      // Capture all p-columns associated with the anchor; filtering is handled by SDK axis/anchor logic
+      (_spec) => true,
+      { dontWaitAllData: true },
+    );
 
-    // Get UMAP columns that match the selected dataset's domain properties
-    const umapColumns = columns.getColumns((spec) => {
-      // Filter for UMAP columns
-      if (!spec.name.includes('umap')) return false;
+    if (!anchoredColumns || anchoredColumns.length === 0) return undefined;
 
-      // Match domain properties with the selected dataset
-      // This ensures we only get UMAP columns that are compatible with the selected dataset
-      const countsDomain = countsSpec.domain || {};
-      const columnDomain = spec.domain || {};
-
-      // Match key domain properties that should be consistent
-      const domainKeys = ['pl7.app/rna-seq/batch-corrected', 'pl7.app/rna-seq/normalized'];
-      return domainKeys.every((key) =>
-        countsDomain[key] === undefined || columnDomain[key] === undefined || countsDomain[key] === columnDomain[key],
-      );
-    }, { dontWaitAllData: true }) || [];
-
-    if (umapColumns.length === 0) {
-      return undefined;
-    }
-
-    // Add the UMAP columns to the collection so they can be used for compatibility checking
-    columns.addColumns(umapColumns);
-
-    // Get all columns that are compatible with the UMAP columns
-    // This uses the SDK's sophisticated compatibility logic
-    const compatibleColumns = columns.getColumns((spec) => {
-      // Skip UMAP columns themselves since we already have them
-      if (spec.name.includes('umap')) return false;
-
-      // The SDK will automatically check axes compatibility
-      return true;
-    }, { dontWaitAllData: true }) || [];
-
-    return ctx.createPFrame([...umapColumns, ...compatibleColumns]);
+    return createPFrameForGraphs(ctx, anchoredColumns);
   })
 
 // @TODO - Currently createPFrameForGraphs is letting everything through. createPFrame used for now
