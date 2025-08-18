@@ -1,5 +1,11 @@
 # @platforma-open/milaboratories.cell-browser.model
 
+## 1.5.0
+
+### Minor Changes
+
+- fe311c2: Updated SDK to support multiomics.
+
 ## 1.4.0
 
 ### Minor Changes
