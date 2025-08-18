@@ -1,5 +1,13 @@
 # @platforma-open/milaboratories.cell-browser.ui
 
+## 1.5.1
+
+### Patch Changes
+
+- 9422e4b: Updated graph maker to solve minor bug
+- Updated dependencies [9422e4b]
+  - @platforma-open/milaboratories.cell-browser.model@1.5.1
+
 ## 1.5.0
 
 ### Minor Changes
