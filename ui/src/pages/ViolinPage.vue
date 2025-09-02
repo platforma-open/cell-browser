@@ -2,9 +2,9 @@
 import type { PredefinedGraphOption } from '@milaboratories/graph-maker';
 import { GraphMaker } from '@milaboratories/graph-maker';
 import '@milaboratories/graph-maker/styles';
+import type { PColumnIdAndSpec } from '@platforma-sdk/model';
 import { ref } from 'vue';
 import { useApp } from '../app';
-import type { PColumnIdAndSpec } from '@platforma-sdk/model';
 
 // import '@milaboratories/graph-maker/styles';
 
@@ -27,15 +27,13 @@ function getDefaultOptions(violinExprPfDefaults?: PColumnIdAndSpec[]) {
     },
     {
       inputName: 'primaryGrouping',
-      selectedSource: violinExprPfDefaults[getIndex('pl7.app/label',
-        violinExprPfDefaults)].spec,
+      selectedSource: violinExprPfDefaults[getIndex('pl7.app/rna-seq/countMatrix',
+        violinExprPfDefaults)].spec.axesSpec[0],
     },
     {
       inputName: 'filters',
-      selectedSource: {
-        name: 'pl7.app/rna-seq/geneId',
-        type: 'String',
-      },
+      selectedSource: violinExprPfDefaults[getIndex('pl7.app/rna-seq/countMatrix',
+        violinExprPfDefaults)].spec.axesSpec[2],
     },
   ];
 

@@ -1,14 +1,15 @@
 import type { GraphMakerState } from '@milaboratories/graph-maker';
 import type {
   InferOutputsType,
+  PColumnIdAndSpec,
   PFrameHandle,
   PlRef,
-  PColumnIdAndSpec } from '@platforma-sdk/model';
+} from '@platforma-sdk/model';
 import {
   BlockModel,
+  createPFrameForGraphs,
   isPColumn,
   isPColumnSpec,
-  createPFrameForGraphs,
 } from '@platforma-sdk/model';
 
 export type UiState = {
@@ -143,7 +144,8 @@ export const model = BlockModel.create()
       .filter((col) => col.spec.name === 'pl7.app/label'
       // Now geneSymbols have pl7.app/label, unnecessary
       // || col.spec.name === 'pl7.app/rna-seq/geneSymbols'
-        || col.spec.name === 'pl7.app/rna-seq/DEG');
+        || col.spec.name === 'pl7.app/rna-seq/DEG'
+        || col.spec.name === 'pl7.app/rna-seq/leidencluster');
 
     pCols = [...pCols, ...upstream];
 
@@ -181,6 +183,6 @@ export const model = BlockModel.create()
       : 'Cell Browser',
   )
 
-  .done();
+  .done(2);
 
 export type BlockOutputs = InferOutputsType<typeof model>;
