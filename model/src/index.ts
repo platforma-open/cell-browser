@@ -99,6 +99,35 @@ export const model = BlockModel.create()
     return createPFrameForGraphs(ctx, anchoredColumns);
   })
 
+  .output('umapDefaults', (ctx) => {
+    // Build a PFrame consisting of all columns that can be associated with the selected countsRef anchor
+    if (!ctx.args.countsRef) return undefined;
+
+    // Use the SDK's anchored selection to gather all compatible columns for graphs
+    const anchoredColumns = ctx.resultPool.getAnchoredPColumns(
+      { countsRef: ctx.args.countsRef },
+      // Capture all p-columns associated with the anchor; filtering is handled by SDK axis/anchor logic
+      (_spec) => true,
+      { dontWaitAllData: true },
+    );
+
+    if (!anchoredColumns || anchoredColumns.length === 0) return undefined;
+
+    // Return batch corrected UMAP if present
+    let finalPcols = anchoredColumns.filter((col) => col.spec.domain?.['pl7.app/rna-seq/batch-corrected'] === 'true');
+    if (finalPcols.length === 0) {
+      finalPcols = anchoredColumns.filter((col) => col.spec.domain?.['pl7.app/rna-seq/batch-corrected'] === 'false');
+    }
+
+    return finalPcols.map(
+      (c) =>
+        ({
+          columnId: c.id,
+          spec: c.spec,
+        } satisfies PColumnIdAndSpec),
+    );
+  })
+
 // @TODO - Currently createPFrameForGraphs is letting everything through. createPFrame used for now
   .output('ExprPf', (ctx): PFrameHandle | undefined => {
     let pCols = ctx.resultPool
