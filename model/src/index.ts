@@ -1,14 +1,14 @@
 import type { GraphMakerState } from '@milaboratories/graph-maker';
 import type {
   InferOutputsType,
+  PColumnIdAndSpec,
   PFrameHandle,
-  PlRef,
-  PColumnIdAndSpec } from '@platforma-sdk/model';
+  PlRef
+} from '@platforma-sdk/model';
 import {
   BlockModel,
   isPColumn,
-  isPColumnSpec,
-  createPFrameForGraphs,
+  isPColumnSpec
 } from '@platforma-sdk/model';
 
 export type UiState = {
@@ -60,10 +60,11 @@ export const model = BlockModel.create()
   .argsValid((ctx) => ctx.args.countsRef !== undefined)
 
   .output('countsOptions', (ctx) =>
-    // I've added these "||" for backward compatibility (As I see, the shape of PColum was changed)
     ctx.resultPool.getOptions((spec) => isPColumnSpec(spec)
-      && spec.name === 'pl7.app/rna-seq/countMatrix' && spec.domain?.['pl7.app/rna-seq/normalized'] === 'false'
-    , { includeNativeLabel: true, addLabelAsSuffix: true }),
+      && spec.name === 'pl7.app/rna-seq/countMatrix'
+      && spec.domain?.['pl7.app/rna-seq/normalized'] === 'false'
+      && spec.annotations?.['pl7.app/hideDataFromGraphs'] !== 'true'
+    , { includeNativeLabel: false, addLabelAsSuffix: true }),
   )
 
   .output('countsSpec', (ctx) => {
@@ -95,7 +96,44 @@ export const model = BlockModel.create()
 
     if (!anchoredColumns || anchoredColumns.length === 0) return undefined;
 
-    return createPFrameForGraphs(ctx, anchoredColumns);
+    // Return batch corrected UMAP if present
+    let finalPcols = anchoredColumns.filter((col) => col.spec.domain?.['pl7.app/rna-seq/batch-corrected'] === 'true');
+    if (finalPcols.length === 0) {
+      finalPcols = anchoredColumns.filter((col) => col.spec.domain?.['pl7.app/rna-seq/batch-corrected'] === 'false');
+    }
+
+    finalPcols = anchoredColumns.filter((col) => col.spec.annotations?.['pl7.app/hideDataFromGraphs'] !== 'true');
+
+    return ctx.createPFrame(anchoredColumns);
+  })
+
+  .output('umapDefaults', (ctx) => {
+    // Build a PFrame consisting of all columns that can be associated with the selected countsRef anchor
+    if (!ctx.args.countsRef) return undefined;
+
+    // Use the SDK's anchored selection to gather all compatible columns for graphs
+    const anchoredColumns = ctx.resultPool.getAnchoredPColumns(
+      { countsRef: ctx.args.countsRef },
+      // Capture all p-columns associated with the anchor; filtering is handled by SDK axis/anchor logic
+      (_spec) => true,
+      { dontWaitAllData: true },
+    );
+
+    if (!anchoredColumns || anchoredColumns.length === 0) return undefined;
+
+    // Return batch corrected UMAP if present
+    let finalPcols = anchoredColumns.filter((col) => col.spec.domain?.['pl7.app/rna-seq/batch-corrected'] === 'true');
+    if (finalPcols.length === 0) {
+      finalPcols = anchoredColumns.filter((col) => col.spec.domain?.['pl7.app/rna-seq/batch-corrected'] === 'false');
+    }
+
+    return finalPcols.map(
+      (c) =>
+        ({
+          columnId: c.id,
+          spec: c.spec,
+        } satisfies PColumnIdAndSpec),
+    );
   })
 
 // @TODO - Currently createPFrameForGraphs is letting everything through. createPFrame used for now
@@ -104,7 +142,8 @@ export const model = BlockModel.create()
       .getData()
       .entries.map((c) => c.obj)
       .filter(isPColumn)
-      .filter((col) => col.spec.name === 'pl7.app/rna-seq/countMatrix');
+      .filter((col) => col.spec.name === 'pl7.app/rna-seq/countMatrix'
+        && col.spec.annotations?.['pl7.app/hideDataFromGraphs'] !== 'true');
     if (pCols === undefined) {
       return undefined;
     }
@@ -132,7 +171,9 @@ export const model = BlockModel.create()
       .getData()
       .entries.map((o) => o.obj)
       .filter(isPColumn)
-      .filter((col) => col.spec.name === 'pl7.app/rna-seq/countMatrix' && col.spec.domain?.['pl7.app/rna-seq/normalized'] === 'true');
+      .filter((col) => col.spec.name === 'pl7.app/rna-seq/countMatrix'
+        && col.spec.domain?.['pl7.app/rna-seq/normalized'] === 'true'
+        && col.spec.annotations?.['pl7.app/hideDataFromGraphs'] !== 'true');
     if (pCols === undefined) return undefined;
 
     // Add sample labels and gene symbols
