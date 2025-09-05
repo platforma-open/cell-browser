@@ -73,6 +73,10 @@ const defaultOptions = computed(() => {
       inputName: 'filters',
       selectedSource: violinExprPfDefaults[degIndex].spec,
     });
+    defaults.push({
+      inputName: 'filters',
+      selectedSource: violinExprPfDefaults[degIndex].spec.axesSpec[0], // Cluster
+    });
   }
 
   return defaults;
@@ -82,9 +86,7 @@ const defaultOptions = computed(() => {
 
 <template>
   <GraphMaker
-    v-model="app.model.ui.heatmapState"
-    chartType="heatmap"
-    :p-frame="app.model.outputs.ExprPf"
+    v-model="app.model.ui.heatmapState" chartType="heatmap" :p-frame="app.model.outputs.ExprPf"
     :default-options="defaultOptions"
   />
 </template>

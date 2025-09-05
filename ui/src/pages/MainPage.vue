@@ -3,7 +3,7 @@ import '@milaboratories/graph-maker/styles';
 import type { PColumnIdAndSpec, PlRef } from '@platforma-sdk/model';
 import { plRefsEqual } from '@platforma-sdk/model';
 import { PlBlockPage, PlDropdownRef } from '@platforma-sdk/ui-vue';
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 import { useApp } from '../app';
 
 import type { PredefinedGraphOption } from '@milaboratories/graph-maker';
@@ -50,31 +50,19 @@ function getDefaultOptions(umapDefaults?: PColumnIdAndSpec[]) {
   return defaults;
 }
 
-const defaultOptions = ref(getDefaultOptions(app.model.outputs.umapDefaults));
-const key = ref(defaultOptions.value ? JSON.stringify(defaultOptions.value) : '');
+const defaultOptions = computed(() => getDefaultOptions(app.model.outputs.umapDefaults));
+const key = computed(() => defaultOptions.value ? JSON.stringify(defaultOptions.value) : '');
 
 </script>
 
 <template>
   <PlBlockPage>
-    <GraphMaker
-      :key="key"
-      v-model="app.model.ui.graphStateUMAP"
-      chartType="scatterplot-umap"
-      :p-frame="app.model.outputs.UMAPPf"
-      :default-options="defaultOptions"
-      @run="settingsOpen = false"
-    >
+    <GraphMaker :dataStateKey="key" v-model="app.model.ui.graphStateUMAP" chartType="scatterplot-umap"
+      :p-frame="app.model.outputs.UMAPPf" :default-options="defaultOptions"
+      @run="console.log('run?'); settingsOpen = false">
       <template v-if="settingsOpen" #settingsSlot>
-        <PlDropdownRef
-          v-model="app.model.args.countsRef"
-          :options="app.model.outputs.countsOptions"
-          :style="{ width: '320px' }"
-          label="Select dataset"
-          clearable
-          required
-          @update:model-value="setInput"
-        />
+        <PlDropdownRef v-model="app.model.args.countsRef" :options="app.model.outputs.countsOptions"
+          :style="{ width: '320px' }" label="Select dataset" clearable required @update:model-value="setInput" />
       </template>
     </GraphMaker>
   </PlBlockPage>
