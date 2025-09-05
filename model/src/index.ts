@@ -61,10 +61,11 @@ export const model = BlockModel.create()
   .argsValid((ctx) => ctx.args.countsRef !== undefined)
 
   .output('countsOptions', (ctx) =>
-    // I've added these "||" for backward compatibility (As I see, the shape of PColum was changed)
     ctx.resultPool.getOptions((spec) => isPColumnSpec(spec)
-      && spec.name === 'pl7.app/rna-seq/countMatrix' && spec.domain?.['pl7.app/rna-seq/normalized'] === 'false'
-    , { includeNativeLabel: true, addLabelAsSuffix: true }),
+      && spec.name === 'pl7.app/rna-seq/countMatrix'
+      && spec.domain?.['pl7.app/rna-seq/normalized'] === 'false'
+      && spec.annotations?.['pl7.app/hideDataFromGraphs'] !== 'true'
+    , { includeNativeLabel: false, addLabelAsSuffix: true }),
   )
 
   .output('countsSpec', (ctx) => {
@@ -134,7 +135,8 @@ export const model = BlockModel.create()
       .getData()
       .entries.map((c) => c.obj)
       .filter(isPColumn)
-      .filter((col) => col.spec.name === 'pl7.app/rna-seq/countMatrix');
+      .filter((col) => col.spec.name === 'pl7.app/rna-seq/countMatrix'
+        && col.spec.annotations?.['pl7.app/hideDataFromGraphs'] !== 'true');
     if (pCols === undefined) {
       return undefined;
     }
@@ -162,7 +164,9 @@ export const model = BlockModel.create()
       .getData()
       .entries.map((o) => o.obj)
       .filter(isPColumn)
-      .filter((col) => col.spec.name === 'pl7.app/rna-seq/countMatrix' && col.spec.domain?.['pl7.app/rna-seq/normalized'] === 'true');
+      .filter((col) => col.spec.name === 'pl7.app/rna-seq/countMatrix'
+        && col.spec.domain?.['pl7.app/rna-seq/normalized'] === 'true'
+        && col.spec.annotations?.['pl7.app/hideDataFromGraphs'] !== 'true');
     if (pCols === undefined) return undefined;
 
     // Add sample labels and gene symbols

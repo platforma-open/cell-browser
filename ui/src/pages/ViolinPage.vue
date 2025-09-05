@@ -28,12 +28,12 @@ function getDefaultOptions(violinExprPfDefaults?: PColumnIdAndSpec[]) {
     {
       inputName: 'primaryGrouping',
       selectedSource: violinExprPfDefaults[getIndex('pl7.app/rna-seq/countMatrix',
-        violinExprPfDefaults)].spec.axesSpec[0],
+        violinExprPfDefaults)].spec.axesSpec[0], // sampleId
     },
     {
       inputName: 'filters',
       selectedSource: violinExprPfDefaults[getIndex('pl7.app/rna-seq/countMatrix',
-        violinExprPfDefaults)].spec.axesSpec[2],
+        violinExprPfDefaults)].spec.axesSpec[2], // geneId
     },
   ];
 
