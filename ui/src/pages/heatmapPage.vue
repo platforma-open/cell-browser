@@ -2,9 +2,9 @@
 import type { PredefinedGraphOption } from '@milaboratories/graph-maker';
 import { GraphMaker } from '@milaboratories/graph-maker';
 import '@milaboratories/graph-maker/styles';
+import type { PColumnIdAndSpec } from '@platforma-sdk/model';
 import { computed } from 'vue';
 import { useApp } from '../app';
-import type { PColumnIdAndSpec } from '@platforma-sdk/model';
 
 const app = useApp();
 
@@ -50,35 +50,32 @@ const defaultOptions = computed(() => {
   ];
 
   // Add cluster grouping - xGroupBy needs leiden cluster PColumn spec (kind: "column")
-  defaults.push({
-    // Leiden Cluster ID as x-group-by
-    inputName: 'xGroupBy',
-    selectedSource: {
-      kind: 'PColumn',
-      name: 'pl7.app/rna-seq/leidencluster',
-      valueType: 'String',
-      axesSpec: [],
-    },
-  });
+  const leidenIndex = getIndex('pl7.app/rna-seq/leidencluster', violinExprPfDefaults);
+  if (leidenIndex !== -1) {
+    defaults.push({
+      // Leiden Cluster ID as x-group-by
+      inputName: 'xGroupBy',
+      selectedSource: violinExprPfDefaults[leidenIndex].spec,
+    });
 
-  // Add leiden cluster to annotationsX
-  defaults.push({
-    // Leiden Cluster ID as x-annotation
-    inputName: 'annotationsX',
-    selectedSource: {
-      kind: 'PColumn',
-      name: 'pl7.app/rna-seq/leidencluster',
-      valueType: 'String',
-      axesSpec: [],
-    },
-  });
+    // Add leiden cluster to annotationsX
+    defaults.push({
+      // Leiden Cluster ID as x-annotation
+      inputName: 'annotationsX',
+      selectedSource: violinExprPfDefaults[leidenIndex].spec,
+    });
+  }
 
   // Add default filter if DEG columns are available - filters need PColumn spec (kind: "column")
   if (degIndex !== -1) {
     defaults.push({
-      // DEG gene list (log2FC values) as filter 
+      // DEG gene list (log2FC values) as filter
       inputName: 'filters',
       selectedSource: violinExprPfDefaults[degIndex].spec,
+    });
+    defaults.push({
+      inputName: 'filters',
+      selectedSource: violinExprPfDefaults[degIndex].spec.axesSpec[0], // Cluster
     });
   }
 
@@ -89,9 +86,7 @@ const defaultOptions = computed(() => {
 
 <template>
   <GraphMaker
-    v-model="app.model.ui.heatmapState"
-    chartType="heatmap"
-    :p-frame="app.model.outputs.ExprPf"
+    v-model="app.model.ui.heatmapState" chartType="heatmap" :p-frame="app.model.outputs.ExprPf"
     :default-options="defaultOptions"
   />
 </template>
