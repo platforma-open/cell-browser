@@ -1,5 +1,11 @@
 # @platforma-open/milaboratories.cell-browser.model
 
+## 1.5.2
+
+### Patch Changes
+
+- c1a934a: Updated to latest SDK
+
 ## 1.5.1
 
 ### Patch Changes
