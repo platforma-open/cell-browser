@@ -87,17 +87,7 @@ export const model = BlockModel.create()
     // Build a PFrame consisting of all columns that can be associated with the selected countsRef anchor
     if (!ctx.args.countsRef) return undefined;
 
-    // Use the SDK's anchored selection to gather all compatible columns for graphs
-    const anchoredColumns = ctx.resultPool.getAnchoredPColumns(
-      { countsRef: ctx.args.countsRef },
-      // Capture all p-columns associated with the anchor; filtering is handled by SDK axis/anchor logic
-      (_spec) => true,
-      { dontWaitAllData: true },
-    );
-
-    if (!anchoredColumns || anchoredColumns.length === 0) return undefined;
-
-    return createPFrameForGraphs(ctx, anchoredColumns);
+    return createPFrameForGraphs(ctx);
   })
 
   .output('umapDefaults', (ctx) => {
