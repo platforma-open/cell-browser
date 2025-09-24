@@ -64,7 +64,7 @@ export const model = BlockModel.create()
     ctx.resultPool.getOptions((spec) => isPColumnSpec(spec)
       && spec.name === 'pl7.app/rna-seq/countMatrix'
       && spec.domain?.['pl7.app/rna-seq/normalized'] === 'false'
-      && spec.annotations?.['pl7.app/hideDataFromGraphs'] !== 'true'
+      // && spec.annotations?.['pl7.app/hideDataFromGraphs'] !== 'true'
     , { includeNativeLabel: false, addLabelAsSuffix: true }),
   )
 
@@ -125,8 +125,8 @@ export const model = BlockModel.create()
       .getData()
       .entries.map((c) => c.obj)
       .filter(isPColumn)
-      .filter((col) => col.spec.name === 'pl7.app/rna-seq/countMatrix'
-        && col.spec.annotations?.['pl7.app/hideDataFromGraphs'] !== 'true');
+      .filter((col) => col.spec.name === 'pl7.app/rna-seq/countMatrix');
+      // && col.spec.annotations?.['pl7.app/hideDataFromGraphs'] !== 'true');
     if (pCols === undefined) {
       return undefined;
     }
@@ -155,8 +155,8 @@ export const model = BlockModel.create()
       .entries.map((o) => o.obj)
       .filter(isPColumn)
       .filter((col) => col.spec.name === 'pl7.app/rna-seq/countMatrix'
-        && col.spec.domain?.['pl7.app/rna-seq/normalized'] === 'true'
-        && col.spec.annotations?.['pl7.app/hideDataFromGraphs'] !== 'true');
+        && col.spec.domain?.['pl7.app/rna-seq/normalized'] === 'true');
+      // && col.spec.annotations?.['pl7.app/hideDataFromGraphs'] !== 'true');
     if (pCols === undefined) return undefined;
 
     // Add sample labels and gene symbols
