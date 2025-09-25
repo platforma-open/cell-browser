@@ -29,21 +29,26 @@ function getDefaultOptions(umapDefaults?: PColumnIdAndSpec[]) {
     return pcols.findIndex((p) => p.spec.name === name);
   }
 
+  const getDefaultSource = (name: string) => {
+    const spec = umapDefaults[getIndex(name, umapDefaults)].spec;
+    return {
+      ...spec,
+      annotations: undefined,
+    };
+  }; // annotation contains changed labels, so with them we search here only columns with long modified labels
+
   const defaults: PredefinedGraphOption<'scatterplot-umap'>[] = [
     {
       inputName: 'x',
-      selectedSource: umapDefaults[getIndex('pl7.app/rna-seq/umap1',
-        umapDefaults)].spec,
+      selectedSource: getDefaultSource('pl7.app/rna-seq/umap1'),
     },
     {
       inputName: 'y',
-      selectedSource: umapDefaults[getIndex('pl7.app/rna-seq/umap2',
-        umapDefaults)].spec,
+      selectedSource: getDefaultSource('pl7.app/rna-seq/umap2'),
     },
     {
       inputName: 'grouping',
-      selectedSource: umapDefaults[getIndex('pl7.app/rna-seq/umap1',
-        umapDefaults)].spec.axesSpec[0],
+      selectedSource: getDefaultSource('pl7.app/rna-seq/umap1').axesSpec[0],
     },
   ];
 

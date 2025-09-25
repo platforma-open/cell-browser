@@ -64,7 +64,7 @@ export const model = BlockModel.create()
     ctx.resultPool.getOptions((spec) => isPColumnSpec(spec)
       && spec.name === 'pl7.app/rna-seq/countMatrix'
       && spec.domain?.['pl7.app/rna-seq/normalized'] === 'false'
-      && spec.annotations?.['pl7.app/hideDataFromGraphs'] !== 'true'
+      // && spec.annotations?.['pl7.app/hideDataFromGraphs'] !== 'true'
     , { includeNativeLabel: false, addLabelAsSuffix: true }),
   )
 
@@ -87,17 +87,7 @@ export const model = BlockModel.create()
     // Build a PFrame consisting of all columns that can be associated with the selected countsRef anchor
     if (!ctx.args.countsRef) return undefined;
 
-    // Use the SDK's anchored selection to gather all compatible columns for graphs
-    const anchoredColumns = ctx.resultPool.getAnchoredPColumns(
-      { countsRef: ctx.args.countsRef },
-      // Capture all p-columns associated with the anchor; filtering is handled by SDK axis/anchor logic
-      (_spec) => true,
-      { dontWaitAllData: true },
-    );
-
-    if (!anchoredColumns || anchoredColumns.length === 0) return undefined;
-
-    return createPFrameForGraphs(ctx, anchoredColumns);
+    return createPFrameForGraphs(ctx);
   })
 
   .output('umapDefaults', (ctx) => {
@@ -135,8 +125,8 @@ export const model = BlockModel.create()
       .getData()
       .entries.map((c) => c.obj)
       .filter(isPColumn)
-      .filter((col) => col.spec.name === 'pl7.app/rna-seq/countMatrix'
-        && col.spec.annotations?.['pl7.app/hideDataFromGraphs'] !== 'true');
+      .filter((col) => col.spec.name === 'pl7.app/rna-seq/countMatrix');
+      // && col.spec.annotations?.['pl7.app/hideDataFromGraphs'] !== 'true');
     if (pCols === undefined) {
       return undefined;
     }
@@ -165,8 +155,8 @@ export const model = BlockModel.create()
       .entries.map((o) => o.obj)
       .filter(isPColumn)
       .filter((col) => col.spec.name === 'pl7.app/rna-seq/countMatrix'
-        && col.spec.domain?.['pl7.app/rna-seq/normalized'] === 'true'
-        && col.spec.annotations?.['pl7.app/hideDataFromGraphs'] !== 'true');
+        && col.spec.domain?.['pl7.app/rna-seq/normalized'] === 'true');
+      // && col.spec.annotations?.['pl7.app/hideDataFromGraphs'] !== 'true');
     if (pCols === undefined) return undefined;
 
     // Add sample labels and gene symbols
@@ -207,7 +197,7 @@ export const model = BlockModel.create()
   .sections((_ctx) => ([
     { type: 'link', href: '/', label: 'UMAP' },
     { type: 'link', href: '/violin', label: 'Gene Expression' },
-    { type: 'link', href: '/heatmap', label: 'Expression Heatmap' },
+    // { type: 'link', href: '/heatmap', label: 'Expression Heatmap' },
   ]))
 
   .title((ctx) =>
