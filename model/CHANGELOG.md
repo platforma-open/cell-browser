@@ -1,5 +1,11 @@
 # @platforma-open/milaboratories.cell-browser.model
 
+## 1.6.0
+
+### Minor Changes
+
+- e194190: Faster plotting and SDK update
+
 ## 1.5.2
 
 ### Patch Changes
