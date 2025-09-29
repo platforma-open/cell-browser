@@ -197,7 +197,7 @@ export const model = BlockModel.create()
   .sections((_ctx) => ([
     { type: 'link', href: '/', label: 'UMAP' },
     { type: 'link', href: '/violin', label: 'Gene Expression' },
-    // { type: 'link', href: '/heatmap', label: 'Expression Heatmap' },
+    { type: 'link', href: '/heatmap', label: 'Expression Heatmap' },
   ]))
 
   .title((ctx) =>
