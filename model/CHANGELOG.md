@@ -1,5 +1,11 @@
 # @platforma-open/milaboratories.cell-browser.model
 
+## 1.7.0
+
+### Minor Changes
+
+- 24f9c6e: Added gene expression heatmap with aggregation
+
 ## 1.6.0
 
 ### Minor Changes
