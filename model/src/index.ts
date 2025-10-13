@@ -110,6 +110,8 @@ export const model = BlockModel.create()
       finalPcols = anchoredColumns.filter((col) => col.spec.domain?.['pl7.app/rna-seq/batch-corrected'] === 'false');
     }
 
+    if (finalPcols.length === 0) return undefined;
+
     return finalPcols.map(
       (c) =>
         ({

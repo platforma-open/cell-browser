@@ -62,12 +62,17 @@ const key = computed(() => defaultOptions.value ? JSON.stringify(defaultOptions.
 
 <template>
   <PlBlockPage>
-    <GraphMaker :dataStateKey="key" v-model="app.model.ui.graphStateUMAP" chartType="scatterplot-umap"
+    <GraphMaker
+      v-model="app.model.ui.graphStateUMAP" :dataStateKey="key" chartType="scatterplot-umap"
       :p-frame="app.model.outputs.UMAPPf" :default-options="defaultOptions"
-      @run="console.log('run?'); settingsOpen = false">
+      @run="console.log('run?'); settingsOpen = false"
+    >
       <template v-if="settingsOpen" #settingsSlot>
-        <PlDropdownRef v-model="app.model.args.countsRef" :options="app.model.outputs.countsOptions"
-          :style="{ width: '320px' }" label="Select dataset" clearable required @update:model-value="setInput" />
+        <PlDropdownRef
+          v-model="app.model.args.countsRef" :options="app.model.outputs.countsOptions"
+          :style="{ width: '320px' }" label="Select dataset"
+          clearable required @update:model-value="setInput"
+        />
       </template>
     </GraphMaker>
   </PlBlockPage>
