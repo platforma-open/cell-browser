@@ -8,11 +8,11 @@ packages:
 catalog:
   "@platforma-sdk/model": ^1.43.21
   "@platforma-sdk/ui-vue": ^1.43.21
-  "@platforma-sdk/workflow-tengo": ^5.3.1
+  "@platforma-sdk/workflow-tengo": ^5.3.3
   "@platforma-sdk/block-tools": ^2.6.8
-  "@platforma-sdk/test": ^1.43.25
-  "@platforma-sdk/tengo-builder": ^2.2.2
-  "@platforma-sdk/package-builder": ^3.4.0
+  "@platforma-sdk/test": ^1.44.7
+  "@platforma-sdk/tengo-builder": ^2.3.0
+  "@platforma-sdk/package-builder": ^3.8.0
   "@platforma-sdk/eslint-config": ^1.1.0
   "@milaboratories/graph-maker": ^1.1.165
   "@platforma-sdk/blocks-deps-updater": ^2.0.0
