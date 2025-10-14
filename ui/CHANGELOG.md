@@ -1,5 +1,13 @@
 # @platforma-open/milaboratories.cell-browser.ui
 
+## 1.6.2
+
+### Patch Changes
+
+- be7b8ca: Fix default options for cases when we do not have umap
+- Updated dependencies [be7b8ca]
+  - @platforma-open/milaboratories.cell-browser.model@1.7.1
+
 ## 1.6.1
 
 ### Patch Changes

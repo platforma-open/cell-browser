@@ -1,5 +1,11 @@
 # @platforma-open/milaboratories.cell-browser.model
 
+## 1.7.1
+
+### Patch Changes
+
+- be7b8ca: Fix default options for cases when we do not have umap
+
 ## 1.7.0
 
 ### Minor Changes
