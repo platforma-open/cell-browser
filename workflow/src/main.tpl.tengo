@@ -2,38 +2,43 @@ pt := import("@platforma-sdk/workflow-tengo:pt")
 wf := import("@platforma-sdk/workflow-tengo:workflow")
 assets := import("@platforma-sdk/workflow-tengo:assets")
 render := import("@platforma-sdk/workflow-tengo:render")
-util := import(":util")
 pFrames := import("@platforma-sdk/workflow-tengo:pframes")
 
-doCalculations := assets.importTemplate(":do-calculations")
-exportTable := assets.importTemplate(":export-table")
+util := import(":util")
+annotations := import(":annotations")
 
 wf.setPreRun(assets.importTemplate(":prerun"))
 
+wf.prepare(func(args) {
+	return {
+		inputAnchorSpec: is_undefined(args.inputAnchor) ? undefined : wf.resolve(args.inputAnchor).spec
+	}
+})
 wf.body(func(args) {
-	if is_undefined(args.inputAnchor) {
+	outputs := {}
+	exports := {}
+
+	annotationSpec := args.annotationSpec
+	inputAnchorSpec := args.inputAnchorSpec
+	annotationColumnSpec := util.prepareAnnotationColumnSpec(args)
+
+	if is_undefined(annotationColumnSpec) {
 		return {
-			outputs: {},
-			exports: {}
+			outputs: outputs,
+			exports: exports
 		}
 	}
-
-	blockId := wf.getBlockId()
-
-	exports := {}
-	outputs := {}
-
-	if len(args.annotationSpec.steps) > 0 {
-		columnBundle := util.createColumnBundle(wf, args)
-		calculationResult := render.createEphemeral(doCalculations, {
-			blockId: blockId,
-			blockArgs: args,
-			columnBundle: columnBundle,
+	
+	if len(annotationSpec.steps) > 0 {
+		result := annotations.computeCellAnnotations({
+			steps: annotationSpec.steps,
+			inputAnchor: args.inputAnchor,
+			annotationColumnSpec: annotationColumnSpec,
 			shouldComputeFilters: true
 		})
 
-		exports["annotationPf"] = calculationResult.output("annotationPf")
-		exports["filtersPf"] = calculationResult.output("filtersPf")
+		exports["annotationPf"] = result["annotationPf"]
+		exports["filtersPf"] = result["filtersPf"]
 	}
 
 	return {
@@ -41,4 +46,3 @@ wf.body(func(args) {
 		exports: exports
 	}
 })
-

@@ -1,0 +1,43 @@
+ll := import("@platforma-sdk/workflow-tengo:ll")
+wf := import("@platforma-sdk/workflow-tengo:workflow")
+slices := import("@platforma-sdk/workflow-tengo:slices")
+pFrames := import("@platforma-sdk/workflow-tengo:pframes")
+annotations := import("@platforma-sdk/workflow-tengo:annotations")
+
+util := import(":util")
+
+convertToPFrame := func(...entities) {
+	return slices.reduce(entities, func(acc, v) {
+		acc.add(v.column, v.spec, v.data)
+		return acc
+	}, pFrames.pFrameBuilder()).build()
+}
+
+computeCellAnnotations := func(inputs) {
+	steps := inputs.steps
+	inputAnchor := inputs.inputAnchor
+	annotationColumnSpec := inputs.annotationColumnSpec
+	shouldComputeFilters := inputs.shouldComputeFilters
+
+	outputs := {}
+
+	if len(steps) == 0 {
+		return outputs
+	}
+
+	result := annotations.computeAnnotations({
+		steps: steps,
+		inputAnchor: inputAnchor,
+		resultColumnSpec: annotationColumnSpec,
+		shouldComputeFilters: shouldComputeFilters
+	})
+
+	outputs["annotationPf"] = is_map(result.annotations) ? convertToPFrame(result.annotations) : undefined
+	outputs["filtersPf"] = is_array(result.annotationsFilters) ? convertToPFrame(result.annotationsFilters...) : undefined
+
+	return outputs
+}
+
+export ll.toStrict({
+	computeCellAnnotations: computeCellAnnotations
+})

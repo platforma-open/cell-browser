@@ -1,13 +1,9 @@
 import type {
-  AnchoredPColumnSelector,
   InferHrefType,
   InferOutputsType,
-  PColumn,
-  PColumnDataUniversal,
   PColumnEntryUniversal,
   PlDataTableStateV2,
   PlRef,
-  PObjectId,
   SimplifiedUniversalPColumnEntry,
 } from '@platforma-sdk/model';
 import {
@@ -28,9 +24,6 @@ type BlockArgs = {
 export type UiState = {
   settingsOpen: boolean;
   overlapTable: {
-    tableState: PlDataTableStateV2;
-  };
-  statsTable: {
     tableState: PlDataTableStateV2;
   };
   annotationSpec: AnnotationSpecUi;
@@ -57,6 +50,7 @@ const simplifyColumnEntries = (
     return {
       id: entry.id,
       label: entry.label,
+      axesSpec: entry.spec.axesSpec,
       obj: {
         valueType: entry.spec.valueType,
         annotations: filteredAnnotations,
@@ -69,16 +63,11 @@ const simplifyColumnEntries = (
   return ret;
 };
 
-const commonExcludes: AnchoredPColumnSelector[] = [
-  { name: 'pl7.app/vdj/sequence/annotation' },
-  { annotations: { 'pl7.app/isSubset': 'true' } },
-];
-
 export const platforma = BlockModel.create('Heavy')
 
   .withArgs<BlockArgs>({
     annotationSpec: {
-      title: 'My Annotation',
+      title: 'Cell Annotation',
       steps: [],
     },
   })
@@ -88,30 +77,24 @@ export const platforma = BlockModel.create('Heavy')
     overlapTable: {
       tableState: createPlDataTableStateV2(),
     },
-    statsTable: {
-      tableState: createPlDataTableStateV2(),
-    },
     annotationSpec: {
       isCreated: false,
-      title: 'My Annotation',
+      title: 'Cell Annotation',
       steps: [],
     } satisfies AnnotationSpecUi,
   })
 
   .output('inputOptions', (ctx) =>
-    ctx.resultPool.getOptions([{
-      axes: [
-        { name: 'pl7.app/sampleId' },
-        { name: 'pl7.app/vdj/clonotypeKey' },
-      ],
-      annotations: { 'pl7.app/isAnchor': 'true' },
-    }, {
-      axes: [
-        { name: 'pl7.app/sampleId' },
-        { name: 'pl7.app/vdj/scClonotypeKey' },
-      ],
-      annotations: { 'pl7.app/isAnchor': 'true' },
-    }], {
+    ctx.resultPool.getOptions([
+      {
+        axes: [
+          { name: 'pl7.app/sampleId' },
+          { name: 'pl7.app/sc/cellId' },
+          { name: 'pl7.app/rna-seq/geneId' },
+        ],
+        // annotations: { 'pl7.app/isAnchor': 'true' },
+      },
+    ], {
       refsWithEnrichments: true,
     }),
   )
@@ -126,34 +109,25 @@ export const platforma = BlockModel.create('Heavy')
       .addColumnProvider(ctx.resultPool)
       .addAxisLabelProvider(ctx.resultPool)
       .getUniversalEntries(
-        [{
-          domainAnchor: 'main',
-          axes: [
-            { anchor: 'main', idx: 1 },
-          ],
-        }, {
-          domainAnchor: 'main',
-          axes: [
-            { split: true },
-            { anchor: 'main', idx: 1 },
-          ],
-          annotations: {
-            'pl7.app/isAbundance': 'true',
+        [
+          {
+            axes: [
+              { anchor: 'main', idx: 0 }, // sampleId
+              { anchor: 'main', idx: 1 }, // cellId
+            ],
           },
-        }],
+          {
+            axes: [
+              { anchor: 'main', idx: 0 }, // sampleId
+              { anchor: 'main', idx: 1 }, // cellId
+              { anchor: 'main', idx: 2 }, // geneId
+            ],
+          },
+        ],
         { anchorCtx },
       );
-    return {
-      columns: simplifyColumnEntries(entries),
-      pFrame: ctx.createPFrame(entries
-        ?.map((e) => {
-          return {
-            id: e.id as PObjectId,
-            spec: e.spec,
-            data: e.data(),
-          };
-        }).filter((e): e is PColumn<PColumnDataUniversal> => e.data !== undefined) ?? []),
-    };
+
+    return simplifyColumnEntries(entries);
   })
 
   .output('overlapTable', (ctx) => {
@@ -174,22 +148,55 @@ export const platforma = BlockModel.create('Heavy')
       .addAxisLabelProvider(ctx.resultPool);
 
     const columns = collection.getColumns(
-      [{
-        domainAnchor: 'main',
-        axes: [
-          { split: true },
-          { anchor: 'main', idx: 1 },
-        ],
-        annotations: {
-          'pl7.app/isAbundance': 'true',
+      [
+        {
+          axes: [
+            { anchor: 'main', idx: 0 }, // sampleId
+            { anchor: 'main', idx: 1 }, // cellId
+          ],
         },
-      }, {
-        domainAnchor: 'main',
-        axes: [
-          { anchor: 'main', idx: 1 },
-        ],
-      }],
-      { anchorCtx, exclude: commonExcludes },
+        // {
+        //   axes: [
+        //     { anchor: 'main', idx: 0 }, // sampleId
+        //     { anchor: 'main', idx: 1 }, // cellId
+        //     { anchor: 'main', idx: 2 }, // geneId
+        //   ],
+        // },
+        // {
+        //   axes: [
+        //     { anchor: 'main', idx: 0 }, // sampleId
+        //     { anchor: 'main', idx: 1 }, // cellId
+        //   ],
+        // },
+        // {
+        //   axes: [
+        //     { anchor: 'main', idx: 1 }, // cellId
+        //     { anchor: 'main', idx: 2 }, // geneId
+        //   ],
+        // },
+        // {
+        //   axes: [
+        //     { anchor: 'main', idx: 0 }, // cellId
+        //     { anchor: 'main', idx: 2 }, // geneId
+        //   ],
+        // },
+        // {
+        //   axes: [
+        //     { anchor: 'main', idx: 0 }, // sampleId
+        //   ],
+        // },
+        // {
+        //   axes: [
+        //     { anchor: 'main', idx: 1 }, // cellId
+        //   ],
+        // },
+        // {
+        //   axes: [
+        //     { anchor: 'main', idx: 2 }, // geneId
+        //   ],
+        // },
+      ],
+      { anchorCtx },
     );
 
     if (!columns) return undefined;
@@ -201,67 +208,9 @@ export const platforma = BlockModel.create('Heavy')
     );
   })
 
-  .output('statsTable', (ctx) => {
-    const allColumns = [];
-    const annotationStatsPf = ctx.prerun?.resolve({ field: 'annotationStatsPf', assertFieldType: 'Input', allowPermanentAbsence: true });
-    if (annotationStatsPf && annotationStatsPf.getIsReadyOrError()) {
-      const columns = annotationStatsPf.getPColumns();
-      if (columns) {
-        allColumns.push(columns);
-      }
-    }
-    const sampleStatsPf = ctx.prerun?.resolve({ field: 'sampleStatsPf', assertFieldType: 'Input', allowPermanentAbsence: true });
-    if (sampleStatsPf && sampleStatsPf.getIsReadyOrError()) {
-      const columns = sampleStatsPf.getPColumns();
-      if (columns) {
-        allColumns.push(columns);
-      }
-    }
-
-    if (allColumns.length !== 2) return undefined;
-
-    const collection = new PColumnCollection()
-      .addAxisLabelProvider(ctx.resultPool);
-
-    for (const cols of allColumns) {
-      collection.addColumns(cols);
-    }
-
-    const columnsAfterSplitting = collection
-      .getColumns([
-        // annotationStatsPf without split
-        { axes: [{}] },
-        // sampleStatsPf with split sampleId
-        { axes: [{ split: true }, {}] },
-      ]);
-
-    if (columnsAfterSplitting === undefined) return undefined;
-
-    return createPlDataTableV2(
-      ctx,
-      columnsAfterSplitting,
-      ctx.uiState.statsTable.tableState,
-    );
-  })
-
-  .output('exportedTsvZip', (ctx) => {
-    if (ctx.args.inputAnchor === undefined)
-      return undefined;
-    const tsvResource = ctx.prerun?.resolve('tsvZip');
-    if (!tsvResource) return undefined;
-    if (!tsvResource.getIsReadyOrError())
-      return undefined;
-    if (tsvResource.resourceType.name === 'Null')
-      return null;
-    return tsvResource.getRemoteFileHandle();
-  })
-
-  .sections((ctx) => {
+  .sections(() => {
     return [
       { type: 'link', href: '/', label: 'Annotation' } as const,
-      ...(ctx.args.annotationSpec.steps.length > 0
-        ? [{ type: 'link', href: '/stats', label: 'Stats' } as const]
-        : []),
     ];
   })
 
@@ -279,7 +228,6 @@ export const platforma = BlockModel.create('Heavy')
   .done(2);
 
 export type Platforma = typeof platforma;
-
 export type BlockOutputs = InferOutputsType<typeof platforma>;
 export type Href = InferHrefType<typeof platforma>;
 export * from './types';

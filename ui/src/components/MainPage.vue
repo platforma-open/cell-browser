@@ -11,7 +11,6 @@ import {
 } from '@platforma-sdk/ui-vue';
 import { useApp } from '../app';
 import AnnotationModal from './AnnotationModal.vue';
-import ExportBtn from './ExportBtn.vue';
 
 const app = useApp();
 
@@ -31,7 +30,6 @@ const tableSettings = usePlDataTableSettingsV2({
       Overlap Clonotypes Browser
     </template>
     <template #append>
-      <ExportBtn />
       <PlBtnGhost icon="settings" @click.stop="app.isAnnotationModalOpen = true">
         Annotations
       </PlBtnGhost>
@@ -42,7 +40,6 @@ const tableSettings = usePlDataTableSettingsV2({
     <PlAgDataTableV2
       ref="tableInstance"
       v-model="app.model.ui.overlapTable.tableState"
-      v-model:selection="app.selectedColumns"
       :settings="tableSettings"
     />
   </PlBlockPage>

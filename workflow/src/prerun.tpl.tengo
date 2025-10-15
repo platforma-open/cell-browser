@@ -1,57 +1,44 @@
 ll := import("@platforma-sdk/workflow-tengo:ll")
 wf := import("@platforma-sdk/workflow-tengo:workflow")
-smart := import("@platforma-sdk/workflow-tengo:smart")
 file := import("@platforma-sdk/workflow-tengo:file")
+smart := import("@platforma-sdk/workflow-tengo:smart")
+pSpec := import("@platforma-sdk/workflow-tengo:pframes.spec")
 assets := import("@platforma-sdk/workflow-tengo:assets")
 render := import("@platforma-sdk/workflow-tengo:render")
 pFrames := import("@platforma-sdk/workflow-tengo:pframes")
 
 util := import(":util")
+annotations := import(":annotations")
 
-doCalculations := assets.importTemplate(":do-calculations")
-exportTableTpl := assets.importTemplate(":export-table")
-
-wf.body(func(args) {
-	if is_undefined(args.inputAnchor) {
-		return {
-			outputs: {
-				tsv: smart.createNullResource()
-			},
-			exports: {}
-		}
+wf.prepare(func(args) {
+	return {
+		inputAnchorSpec: is_undefined(args.inputAnchor) ? undefined : wf.resolve(args.inputAnchor).spec
 	}
-
-	blockId := wf.blockId().getDataAsJson()
-
+})
+wf.body(func(args) {
 	outputs := {}
 	exports := {}
 
-	bundleBuilderForExport := wf.createPBundleBuilder()
+	annotationSpec := args.annotationSpec
+	inputAnchorSpec := args.inputAnchorSpec
+	annotationColumnSpec := util.prepareAnnotationColumnSpec(args)
 
-	bundleBuilderForExport.addAnchor("main", args.inputAnchor)
-	bundleBuilderForExport.addMulti({ axes: [{ anchor: "main", idx: 0 }, { anchor: "main", idx: 1 }] }, "perSample")
-	bundleBuilderForExport.addMulti({ axes: [{ anchor: "main", idx: 1 }] }, "perClonotype")
-	bundleBuilderForExport.addSingle({ name: "pl7.app/label", axes: [{ anchor: "main", idx: 0 }] }, "sampleLabels")
-
-	exportResult := render.createEphemeral(exportTableTpl, {
-		columnBundle: bundleBuilderForExport.build()
-	})
-
-	outputs["tsvZip"] = exportResult.output("tsvZip")
-	outputs["exportDebug"] = exportResult.output("exportDebug")
-
-	if len(args.annotationSpec.steps) > 0 {
-		columnBundle := util.createColumnBundle(wf, args)
-		calculationResult := render.createEphemeral(doCalculations, {
-			blockId: blockId,
-			blockArgs: args,
-			columnBundle: columnBundle,
-			shouldComputeFilters: true
+	if is_undefined(annotationColumnSpec) {
+		return {
+			outputs: outputs,
+			exports: exports
+		}
+	}
+	
+	if len(annotationSpec.steps) > 0 {
+		result := annotations.computeCellAnnotations({
+			steps: annotationSpec.steps,
+			inputAnchor: args.inputAnchor,
+			annotationColumnSpec: annotationColumnSpec,
+			shouldComputeFilters: false
 		})
 
-		outputs["annotationPf"] = pFrames.exportFrame(calculationResult.output("annotationPf"))
-		outputs["annotationStatsPf"] = pFrames.exportFrame(calculationResult.output("annotationStatsPf"))
-		outputs["sampleStatsPf"] = pFrames.exportFrame(calculationResult.output("sampleStatsPf"))
+		outputs["annotationPf"] = pFrames.exportFrame(result["annotationPf"])
 	}
 
 	return {

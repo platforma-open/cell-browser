@@ -14,20 +14,15 @@
     "@platforma-sdk/model": "catalog:",
     "@platforma-sdk/ui-vue": "catalog:",
     "@vueuse/core": "catalog:",
-    "ag-grid-enterprise": "catalog:",
-    "ag-grid-vue3": "catalog:",
-    "canonicalize": "catalog:",
-    "vue": "catalog:",
-    "zod": "catalog:"
+    "es-toolkit": "catalog:",
+    "vue": "catalog:"
   },
   "devDependencies": {
     "@milaboratories/build-configs": "catalog:",
     "@milaboratories/helpers": "catalog:",
     "@milaboratories/ts-configs": "catalog:",
     "@platforma-sdk/eslint-config": "catalog:",
-    "@types/lodash": "catalog:",
     "@vitejs/plugin-vue": "catalog:",
-    "lodash": "catalog:",
     "rollup-plugin-sourcemaps2": "catalog:",
     "sass-embedded": "^1.89.2",
     "typescript": "catalog:",
