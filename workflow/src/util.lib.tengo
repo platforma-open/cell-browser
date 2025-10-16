@@ -2,7 +2,7 @@ ll := import("@platforma-sdk/workflow-tengo:ll")
 wf := import("@platforma-sdk/workflow-tengo:workflow")
 pSpec := import("@platforma-sdk/workflow-tengo:pframes.spec")
 
-prepareAnnotationColumnSpec := func(args) {
+getAnnotationAxesSpec := func(args) {
 	if is_undefined(args.inputAnchorSpec) {
 		return undefined
 	}
@@ -11,30 +11,13 @@ prepareAnnotationColumnSpec := func(args) {
 		ll.panic("Input anchor must have exactly 3 axes (sample, cell, and gene), found %d", len(args.inputAnchorSpec.axesSpec))
 	}
 
-	blockId := wf.getBlockId()
 	sampleAxisSpec := args.inputAnchorSpec.axesSpec[0]
 	cellAxisSpec := args.inputAnchorSpec.axesSpec[1]
 	// geneAxisSpec := args.inputAnchorSpec.axesSpec[2]
 
-	trace := pSpec.makeTrace(args.inputAnchorSpec, {
-		type: "milaboratories.cell-annotation",
-		label: args.annotationSpec.title,
-		importance: 20,
-		id: blockId
-	})
-
-	annotationColumnSpec := trace.inject({
-		kind: "PColumn",
-		valueType: "String",
-		name: "pl7.app/cellAnnotation/result",
-		domain: { "pl7.app/cellAnnotationRunId": blockId },
-		axesSpec: [sampleAxisSpec, cellAxisSpec],
-		annotations: { "pl7.app/label": args.annotationSpec.title }
-	})
-
-	return annotationColumnSpec
+	return [sampleAxisSpec, cellAxisSpec]
 }
 
 export ll.toStrict({
-	prepareAnnotationColumnSpec: prepareAnnotationColumnSpec
+	getAnnotationAxesSpec: getAnnotationAxesSpec
 })

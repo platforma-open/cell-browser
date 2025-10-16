@@ -14,26 +14,28 @@ convertToPFrame := func(...entities) {
 }
 
 computeCellAnnotations := func(inputs) {
+	title := inputs.title
 	steps := inputs.steps
 	inputAnchor := inputs.inputAnchor
-	annotationColumnSpec := inputs.annotationColumnSpec
+	annotationAxesSpec := inputs.annotationAxesSpec
 	shouldComputeFilters := inputs.shouldComputeFilters
 
 	outputs := {}
 
 	if len(steps) == 0 {
-		return outputs
+		ll.panic("No annotation steps provided")
 	}
 
 	result := annotations.computeAnnotations({
+		title: title,
 		steps: steps,
 		inputAnchor: inputAnchor,
-		resultColumnSpec: annotationColumnSpec,
+		resultAxesSpec: annotationAxesSpec,
 		shouldComputeFilters: shouldComputeFilters
 	})
 
-	outputs["annotationPf"] = is_map(result.annotations) ? convertToPFrame(result.annotations) : undefined
-	outputs["filtersPf"] = is_array(result.annotationsFilters) ? convertToPFrame(result.annotationsFilters...) : undefined
+	outputs["annotationPf"] = convertToPFrame(result.annotationColumn)
+	outputs["filtersPf"] = convertToPFrame(result.annotationFilterColumns...)
 
 	return outputs
 }

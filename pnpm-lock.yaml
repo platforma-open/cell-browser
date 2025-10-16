@@ -1262,7 +1262,7 @@ packages:
     resolution: {integrity: sha512-tNk8184Qk+YZ5ZZT67nWbqQKn0mG8qXvXEPOoJAQmlTx3sajt2DGl+9MQtzZnbiWjbgRgAsDUTn1DOihrXb8pg==}
 
   '@platforma-sdk/workflow-tengo@file:../platforma/sdk/workflow-tengo/package.tgz':
-    resolution: {integrity: sha512-HAxx/c5nUo59DLJg3iZP5k81JiVaAMT/63+7a3ehYPKoxlcCVLbkM/NSZRT3TKKXdP/VTEBww341MnnVgKMjmQ==, tarball: file:../platforma/sdk/workflow-tengo/package.tgz}
+    resolution: {integrity: sha512-Vr1bDX+8R2AmcC61G4M4s5CLrR6BnrTJhbRP4k7+KBnaO/1AxPcZ4q3yyrbq+WQLV1j1OJqkndBcX+B7z8vANA==, tarball: file:../platforma/sdk/workflow-tengo/package.tgz}
     version: 5.3.1
 
   '@protobuf-ts/grpc-transport@2.11.1':

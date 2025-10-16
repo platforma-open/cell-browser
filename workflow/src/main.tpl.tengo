@@ -19,21 +19,14 @@ wf.body(func(args) {
 	exports := {}
 
 	annotationSpec := args.annotationSpec
-	inputAnchorSpec := args.inputAnchorSpec
-	annotationColumnSpec := util.prepareAnnotationColumnSpec(args)
+	annotationAxesSpec := util.getAnnotationAxesSpec(args)
 
-	if is_undefined(annotationColumnSpec) {
-		return {
-			outputs: outputs,
-			exports: exports
-		}
-	}
-	
-	if len(annotationSpec.steps) > 0 {
+	if !is_undefined(annotationAxesSpec) && len(annotationSpec.steps) > 0 {
 		result := annotations.computeCellAnnotations({
+			title: annotationSpec.title,
 			steps: annotationSpec.steps,
 			inputAnchor: args.inputAnchor,
-			annotationColumnSpec: annotationColumnSpec,
+			annotationAxesSpec: annotationAxesSpec,
 			shouldComputeFilters: true
 		})
 
