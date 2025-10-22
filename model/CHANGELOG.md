@@ -1,5 +1,11 @@
 # @platforma-open/milaboratories.cell-browser.model
 
+## 1.7.2
+
+### Patch Changes
+
+- fa53e44: Hide heatmap
+
 ## 1.7.1
 
 ### Patch Changes
