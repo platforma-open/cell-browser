@@ -9,6 +9,7 @@ pFrames := import("@platforma-sdk/workflow-tengo:pframes")
 
 util := import(":util")
 annotations := import(":annotations")
+annotationsStats := import(":annotations-stats")
 
 wf.prepare(func(args) {
 	return {
@@ -23,7 +24,7 @@ wf.body(func(args) {
 	annotationAxesSpec := util.getAnnotationAxesSpec(args)
 
 	if !is_undefined(annotationAxesSpec) && len(annotationSpec.steps) > 0 {
-		result := annotations.computeCellAnnotations({
+		computedAnnotations := annotations.computeCellAnnotations({
 			title: annotationSpec.title,
 			steps: annotationSpec.steps,
 			inputAnchor: args.inputAnchor,
@@ -31,7 +32,13 @@ wf.body(func(args) {
 			shouldComputeFilters: false
 		})
 
-		outputs["annotationPf"] = pFrames.exportFrame(result["annotationPf"])
+		outputs["annotationsPf"] = pFrames.exportFrame(computedAnnotations["annotationsPf"])
+
+		computedStats := annotationsStats.computeAnnotationsStats({
+			annotations: computedAnnotations.annotationsColumn
+		})
+
+		outputs["annotationStatsPf"] = pFrames.exportFrame(computedStats.annotationStatsPf)
 	}
 
 	return {

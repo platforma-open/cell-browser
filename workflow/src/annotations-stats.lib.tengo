@@ -1,0 +1,114 @@
+ll := import("@platforma-sdk/workflow-tengo:ll")
+pt := import("@platforma-sdk/workflow-tengo:pt")
+wf := import("@platforma-sdk/workflow-tengo:workflow")
+xsv := import("@platforma-sdk/workflow-tengo:pframes.xsv")
+slices := import("@platforma-sdk/workflow-tengo:slices")
+pFrames := import("@platforma-sdk/workflow-tengo:pframes")
+annotations := import("@platforma-sdk/workflow-tengo:annotations")
+
+util := import(":util")
+
+// Input headers
+SAMPLE_KEY_HEADER := "sample_key"
+CELL_KEY_HEADER := "cell_key"
+// States headers
+ANNOTATION_COUNT_HEADER := "annotation_count"
+SAMPLE_COUNT_HEADER := "sample_count"
+CELL_COUNT_HEADER := "cell_count"
+// Result file
+ANNOTATIONS_STATS_FILE := "annotation_stats.tsv"
+
+convertMapToPFrame := func(mapEntities) {
+	pf := pFrames.pFrameBuilder()
+	for k, v in mapEntities {
+		pf.add(k, v.spec, v.data)
+	}
+	return pf.build()
+}
+
+convertColumnSpecToAxisSpec := func(spec) {
+	return {
+		type: spec.valueType,
+		name: spec.name,
+		domain: spec.domain,
+		annotations: spec.annotations
+	}
+}
+
+createColumnSpec := func(type, name, label, axesSpec) {
+	blockId := wf.getBlockId()
+	return {
+		kind: "PColumn",
+		valueType: type,
+		name: "pl7.app/clonotypeAnnotation/" + name,
+		domain: {
+			"pl7.app/clonotypeAnnotationRunId": blockId
+		},
+		axesSpec: axesSpec,
+		annotations: {
+			"pl7.app/label": label
+		}
+	}
+}
+
+createStatsDataAndSpecByAnnotations := func(file, annotationsAxis) {
+	importSpec := {
+		storageFormat: "Binary",
+		partitionKeyLength: 0,
+		axes: [annotationsAxis],
+		columns: [
+			{
+				column: ANNOTATION_COUNT_HEADER,
+				spec: createColumnSpec("Long", "stats/" + ANNOTATION_COUNT_HEADER, "Total Count of Annotations", [annotationsAxis.spec])
+			},
+			{
+				column: SAMPLE_COUNT_HEADER,
+				spec: createColumnSpec("Long", "stats/" + SAMPLE_COUNT_HEADER, "Total Number of Samples", [annotationsAxis.spec])
+			},
+			{
+				column: CELL_COUNT_HEADER,
+				spec: createColumnSpec("Long", "stats/" + CELL_COUNT_HEADER, "Total Number of Cells", [annotationsAxis.spec])
+			}
+		]
+	}
+
+	return xsv.importFile(file, "tsv", importSpec, { splitDataAndSpec: true })
+}
+
+computeAnnotationsStats := func(inputs) {
+	annotations := inputs.annotations
+	sampleAxisSpec := inputs.annotations.spec.axesSpec[0]
+	cellIdAxisSpec := inputs.annotations.spec.axesSpec[1]
+
+	wf := pt.workflow()
+
+	statsFileBuilder := pFrames.tsvFileBuilder()
+	statsFileBuilder.setAxisHeader(sampleAxisSpec, SAMPLE_KEY_HEADER)
+	statsFileBuilder.setAxisHeader(cellIdAxisSpec, CELL_KEY_HEADER)
+	statsFileBuilder.add(annotations, { header: annotations.column })
+	statsFile := statsFileBuilder.build()
+	wf.frame(statsFile, { format: "tsv" }).
+		select(SAMPLE_KEY_HEADER, CELL_KEY_HEADER, annotations.column).
+		groupBy(annotations.column).
+		agg(
+			pt.col(annotations.column).count().alias(ANNOTATION_COUNT_HEADER),
+			pt.col(SAMPLE_KEY_HEADER).count().alias(SAMPLE_COUNT_HEADER),
+			pt.col(CELL_KEY_HEADER).count().alias(CELL_COUNT_HEADER)
+		).
+		save(ANNOTATIONS_STATS_FILE)
+
+	wfResult := wf.run()
+
+	annotationsAxis := { column: annotations.column, spec: convertColumnSpecToAxisSpec(annotations.spec) }	
+	statsDataAndSpecByAnnotations := createStatsDataAndSpecByAnnotations(
+		wfResult.getFile(ANNOTATIONS_STATS_FILE),
+		annotationsAxis
+	)
+	return {
+		annotationStatsPf: convertMapToPFrame(statsDataAndSpecByAnnotations)
+	}
+}
+
+export ll.toStrict({
+	computeAnnotationsStats: computeAnnotationsStats
+})

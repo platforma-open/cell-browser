@@ -30,7 +30,7 @@ wf.body(func(args) {
 			shouldComputeFilters: true
 		})
 
-		exports["annotationPf"] = result["annotationPf"]
+		exports["annotationsPf"] = result["annotationsPf"]
 		exports["filtersPf"] = result["filtersPf"]
 	}
 
