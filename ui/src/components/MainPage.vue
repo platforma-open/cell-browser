@@ -27,7 +27,7 @@ const tableSettings = usePlDataTableSettingsV2({
 <template>
   <PlBlockPage>
     <template #title>
-      Overlap Clonotypes Browser
+      Cell Browser
     </template>
     <template #append>
       <PlBtnGhost icon="settings" @click.stop="app.isAnnotationModalOpen = true">
