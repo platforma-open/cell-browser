@@ -11,7 +11,7 @@ wf.setPreRun(assets.importTemplate(":prerun"))
 
 wf.prepare(func(args) {
 	return {
-		inputAnchorSpec: is_undefined(args.inputAnchor) ? undefined : wf.resolve(args.inputAnchor).spec
+		inputAnchorColumn: is_undefined(args.inputAnchor) ? undefined : wf.resolve(args.inputAnchor)
 	}
 })
 wf.body(func(args) {

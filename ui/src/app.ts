@@ -6,6 +6,7 @@ import { ref } from 'vue';
 import AnnotationStatsPage from './components/AnnotationStatsPage.vue';
 import MainPage from './components/MainPage.vue';
 import { processAnnotationUiStateToArgsState } from './model';
+import AnnotationStatsBySamplePage from './components/AnnotationStatsBySamplePage.vue';
 
 export const sdkPlugin = defineApp(platforma as Platforma, (app) => {
   app.model.ui.statsTable ??= {
@@ -24,6 +25,7 @@ export const sdkPlugin = defineApp(platforma as Platforma, (app) => {
     routes: {
       '/': () => MainPage,
       '/stats': () => AnnotationStatsPage,
+      '/stats-by-sample': () => AnnotationStatsBySamplePage,
     },
   };
 }, { debug: false });

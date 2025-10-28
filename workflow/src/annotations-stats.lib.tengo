@@ -11,12 +11,18 @@ util := import(":util")
 // Input headers
 SAMPLE_KEY_HEADER := "sample_key"
 CELL_KEY_HEADER := "cell_key"
+GENE_KEY_HEADER := "gene_key"
 // States headers
 ANNOTATION_COUNT_HEADER := "annotation_count"
 SAMPLE_COUNT_HEADER := "sample_count"
 CELL_COUNT_HEADER := "cell_count"
+
+ANNOTATION_FRACTION_HEADER := "annotation_fractions"
+SAMPLE_FRACTION_HEADER := "sample_fractions"
+CELL_FRACTION_HEADER := "cell_fractions"
 // Result file
 ANNOTATIONS_STATS_FILE := "annotation_stats.tsv"
+ANNOTATIONS_STATS_BY_SAMPLE_FILE := "annotation_stats_by_sample.tsv"
 
 convertMapToPFrame := func(mapEntities) {
 	pf := pFrames.pFrameBuilder()
@@ -51,23 +57,36 @@ createColumnSpec := func(type, name, label, axesSpec) {
 	}
 }
 
-createStatsDataAndSpecByAnnotations := func(file, annotationsAxis) {
+createStatsDataAndSpecByAnnotations := func(file, axes) {
+	axesSpec := slices.map(axes, func(v) { return v.spec })
 	importSpec := {
 		storageFormat: "Binary",
 		partitionKeyLength: 0,
-		axes: [annotationsAxis],
+		axes: axes,
 		columns: [
 			{
 				column: ANNOTATION_COUNT_HEADER,
-				spec: createColumnSpec("Long", "stats/" + ANNOTATION_COUNT_HEADER, "Total Count of Annotations", [annotationsAxis.spec])
+				spec: createColumnSpec("Long", "stats/" + ANNOTATION_COUNT_HEADER, "Total Count of Annotations", axesSpec)
 			},
 			{
 				column: SAMPLE_COUNT_HEADER,
-				spec: createColumnSpec("Long", "stats/" + SAMPLE_COUNT_HEADER, "Total Number of Samples", [annotationsAxis.spec])
+				spec: createColumnSpec("Long", "stats/" + SAMPLE_COUNT_HEADER, "Total Number of Samples", axesSpec)
 			},
 			{
 				column: CELL_COUNT_HEADER,
-				spec: createColumnSpec("Long", "stats/" + CELL_COUNT_HEADER, "Total Number of Cells", [annotationsAxis.spec])
+				spec: createColumnSpec("Long", "stats/" + CELL_COUNT_HEADER, "Total Number of Cells", axesSpec)
+			},
+			{
+				column: ANNOTATION_FRACTION_HEADER,
+				spec: createColumnSpec("Double", "stats/" + ANNOTATION_FRACTION_HEADER, "Fraction of Annotations", axesSpec)
+			},
+			{
+				column: SAMPLE_FRACTION_HEADER,
+				spec: createColumnSpec("Double", "stats/" + SAMPLE_FRACTION_HEADER, "Fraction of Samples", axesSpec)
+			},
+			{
+				column: CELL_FRACTION_HEADER,
+				spec: createColumnSpec("Double", "stats/" + CELL_FRACTION_HEADER, "Fraction of Cells", axesSpec)
 			}
 		]
 	}
@@ -77,35 +96,71 @@ createStatsDataAndSpecByAnnotations := func(file, annotationsAxis) {
 
 computeAnnotationsStats := func(inputs) {
 	annotations := inputs.annotations
-	sampleAxisSpec := inputs.annotations.spec.axesSpec[0]
-	cellIdAxisSpec := inputs.annotations.spec.axesSpec[1]
-
-	wf := pt.workflow()
+	sampleAxisSpec := annotations.spec.axesSpec[0]
+	cellIdAxisSpec := annotations.spec.axesSpec[1]
 
 	statsFileBuilder := pFrames.tsvFileBuilder()
 	statsFileBuilder.setAxisHeader(sampleAxisSpec, SAMPLE_KEY_HEADER)
 	statsFileBuilder.setAxisHeader(cellIdAxisSpec, CELL_KEY_HEADER)
 	statsFileBuilder.add(annotations, { header: annotations.column })
 	statsFile := statsFileBuilder.build()
-	wf.frame(statsFile, { format: "tsv" }).
-		select(SAMPLE_KEY_HEADER, CELL_KEY_HEADER, annotations.column).
-		groupBy(annotations.column).
+
+	wf := pt.workflow()
+	df := wf.frame(statsFile, { format: "tsv" }).
+		select(SAMPLE_KEY_HEADER, CELL_KEY_HEADER, annotations.column)
+		
+	df.groupBy(annotations.column).
 		agg(
 			pt.col(annotations.column).count().alias(ANNOTATION_COUNT_HEADER),
 			pt.col(SAMPLE_KEY_HEADER).count().alias(SAMPLE_COUNT_HEADER),
 			pt.col(CELL_KEY_HEADER).count().alias(CELL_COUNT_HEADER)
 		).
+		withColumns(
+			pt.col(ANNOTATION_COUNT_HEADER).
+				truediv(pt.col(ANNOTATION_COUNT_HEADER).sum()).
+				alias(ANNOTATION_FRACTION_HEADER),
+			pt.col(SAMPLE_COUNT_HEADER).
+				truediv(pt.col(SAMPLE_COUNT_HEADER).sum()).
+				alias(SAMPLE_FRACTION_HEADER),
+			pt.col(CELL_COUNT_HEADER).
+				truediv(pt.col(CELL_COUNT_HEADER).sum()).
+				alias(CELL_FRACTION_HEADER)
+		).
 		save(ANNOTATIONS_STATS_FILE)
+
+	df.groupBy(annotations.column, SAMPLE_KEY_HEADER).
+		agg(
+			pt.col(annotations.column).count().alias(ANNOTATION_COUNT_HEADER),
+			pt.col(SAMPLE_KEY_HEADER).count().alias(SAMPLE_COUNT_HEADER),
+			pt.col(CELL_KEY_HEADER).count().alias(CELL_COUNT_HEADER)
+		).
+		withColumns(
+			pt.col(ANNOTATION_COUNT_HEADER).
+				truediv(pt.col(ANNOTATION_COUNT_HEADER).sum()).
+				alias(ANNOTATION_FRACTION_HEADER),
+			pt.col(SAMPLE_COUNT_HEADER).
+				truediv(pt.col(SAMPLE_COUNT_HEADER).sum()).
+				alias(SAMPLE_FRACTION_HEADER),
+			pt.col(CELL_COUNT_HEADER).
+				truediv(pt.col(CELL_COUNT_HEADER).sum()).
+				alias(CELL_FRACTION_HEADER)
+		).
+		save(ANNOTATIONS_STATS_BY_SAMPLE_FILE)
 
 	wfResult := wf.run()
 
 	annotationsAxis := { column: annotations.column, spec: convertColumnSpecToAxisSpec(annotations.spec) }	
-	statsDataAndSpecByAnnotations := createStatsDataAndSpecByAnnotations(
+	statsDataAndSpec := createStatsDataAndSpecByAnnotations(
 		wfResult.getFile(ANNOTATIONS_STATS_FILE),
-		annotationsAxis
+		[annotationsAxis]
+	)
+	statsDataAndSpecBySample := createStatsDataAndSpecByAnnotations(
+		wfResult.getFile(ANNOTATIONS_STATS_BY_SAMPLE_FILE),
+		[annotationsAxis, { column: SAMPLE_KEY_HEADER, spec: sampleAxisSpec } ]
 	)
 	return {
-		annotationStatsPf: convertMapToPFrame(statsDataAndSpecByAnnotations)
+		annotationStatsPf: convertMapToPFrame(statsDataAndSpec),
+		annotationStatsBySamplePf: convertMapToPFrame(statsDataAndSpecBySample)
 	}
 }
 

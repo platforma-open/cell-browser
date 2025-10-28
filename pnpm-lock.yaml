@@ -50,7 +50,7 @@ catalogs:
       version: 1.45.0
     '@platforma-sdk/workflow-tengo':
       specifier: ^5.5.0
-      version: 5.5.0
+      version: 5.5.1
     '@vitejs/plugin-vue':
       specifier: ^5.2.4
       version: 5.2.4
@@ -251,7 +251,7 @@ importers:
         version: 1.1.2
       '@platforma-sdk/workflow-tengo':
         specifier: 'catalog:'
-        version: 5.5.0
+        version: 5.5.1
     devDependencies:
       '@platforma-sdk/tengo-builder':
         specifier: 'catalog:'
@@ -1279,9 +1279,6 @@ packages:
   '@platforma-open/milaboratories.software-ptabler.schema@1.12.0':
     resolution: {integrity: sha512-tQw07omRWh7XFNyGDZz1VeiRxjzprvXWxhJI3git3Yf0GlgsCMmdxwSd1gpeORwFU9ggvLTGwdlAMN5KkfFwAw==}
 
-  '@platforma-open/milaboratories.software-ptabler@1.12.11':
-    resolution: {integrity: sha512-ccX6t4xbA37rSSDz9EuCoLNFLZv4idQTbAraPB6dZsajD4KR0EoFYoOSYle3ct+Aji1Ipfxu3qPkOyWHiqgGZw==}
-
   '@platforma-open/milaboratories.software-ptabler@1.13.0':
     resolution: {integrity: sha512-rZFyWaMeDIu0RLu23/xzyCOhMDldEBhfLStEC5cSPZG1QZGyJvmhgdqlLqmOzbSGGwUhMrMkHFYCyJCwK0nEUA==}
 
@@ -1366,6 +1363,9 @@ packages:
 
   '@platforma-sdk/workflow-tengo@5.5.0':
     resolution: {integrity: sha512-WEjZ36sC7De4FLURt7xkN9RHiZsHR3BZ7axcrvRZ79yZt0I1zcM0ENsK+U0+e5XHcLlAKsHSC2vSZOGdJjR99Q==}
+
+  '@platforma-sdk/workflow-tengo@5.5.1':
+    resolution: {integrity: sha512-pbVI1jq/BCRoI5n/Ctg7eTdp1HriPTPe47kiP+Vtp1xfflwbcMVvXRGMMlx1pHGv4Tw1mY6FUcMn0yKxgMFLNg==}
 
   '@protobuf-ts/grpc-transport@2.11.1':
     resolution: {integrity: sha512-l6wrcFffY+tuNnuyrNCkRM8hDIsAZVLA8Mn7PKdVyYxITosYh60qW663p9kL6TWXYuDCL3oxH8ih3vLKTDyhtg==}
@@ -7460,8 +7460,6 @@ snapshots:
 
   '@platforma-open/milaboratories.software-ptabler.schema@1.12.0': {}
 
-  '@platforma-open/milaboratories.software-ptabler@1.12.11': {}
-
   '@platforma-open/milaboratories.software-ptabler@1.13.0': {}
 
   '@platforma-open/milaboratories.software-ptexter@1.2.0': {}
@@ -7634,10 +7632,17 @@ snapshots:
   '@platforma-sdk/workflow-tengo@4.18.2':
     dependencies:
       '@milaboratories/software-pframes-conv': 2.2.2
-      '@platforma-open/milaboratories.software-ptabler': 1.12.11
+      '@platforma-open/milaboratories.software-ptabler': 1.13.0
       '@platforma-open/milaboratories.software-small-binaries': 1.15.23
 
   '@platforma-sdk/workflow-tengo@5.5.0':
+    dependencies:
+      '@milaboratories/software-pframes-conv': 2.2.9
+      '@platforma-open/milaboratories.software-ptabler': 1.13.0
+      '@platforma-open/milaboratories.software-ptexter': 1.2.0
+      '@platforma-open/milaboratories.software-small-binaries': 1.15.23
+
+  '@platforma-sdk/workflow-tengo@5.5.1':
     dependencies:
       '@milaboratories/software-pframes-conv': 2.2.9
       '@platforma-open/milaboratories.software-ptabler': 1.13.0

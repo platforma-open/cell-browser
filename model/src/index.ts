@@ -29,6 +29,9 @@ export type UiState = {
   statsTable: {
     tableState: PlDataTableStateV2;
   };
+  statsBySampleTable: {
+    tableState: PlDataTableStateV2;
+  };
   annotationSpec: AnnotationSpecUi;
 };
 
@@ -81,6 +84,9 @@ export const platforma = BlockModel.create('Heavy')
       tableState: createPlDataTableStateV2(),
     },
     statsTable: {
+      tableState: createPlDataTableStateV2(),
+    },
+    statsBySampleTable: {
       tableState: createPlDataTableStateV2(),
     },
     annotationSpec: {
@@ -175,37 +181,48 @@ export const platforma = BlockModel.create('Heavy')
   })
 
   .output('statsTable', (ctx) => {
-    const allColumns = [];
-    const annotationStatsPf = ctx.prerun?.resolve({ field: 'annotationStatsPf', assertFieldType: 'Input', allowPermanentAbsence: true });
-    if (annotationStatsPf && annotationStatsPf.getIsReadyOrError()) {
-      const columns = annotationStatsPf.getPColumns();
-      if (columns) {
-        allColumns.push(columns);
-      }
-    }
+    const annotationStatsBySamplePf = ctx.prerun?.resolve({ field: 'annotationStatsPf', assertFieldType: 'Input', allowPermanentAbsence: true });
+    const allColumns = annotationStatsBySamplePf?.getPColumns();
 
-    if (allColumns.length !== 1) return undefined;
+    if (allColumns == null || allColumns.length === 0) return undefined;
 
     const collection = new PColumnCollection()
       .addAxisLabelProvider(ctx.resultPool);
 
     for (const cols of allColumns) {
-      collection.addColumns(cols);
+      collection.addColumn(cols);
     }
 
-    const columnsAfterSplitting = collection
-      .getColumns([
-        // annotationStatsPf without split
-        { axes: [{}] },
-        // sampleStatsPf with split sampleId
-        // { axes: [{ split: true }, {}] },
-      ]);
+    const columns = collection.getColumns([{}]);
 
-    if (columnsAfterSplitting === undefined) return undefined;
+    if (columns === undefined) return undefined;
 
     return createPlDataTableV2(
       ctx,
-      columnsAfterSplitting,
+      columns,
+      ctx.uiState.statsTable.tableState,
+    );
+  })
+  .output('statsBySampleTable', (ctx) => {
+    const annotationStatsBySamplePf = ctx.prerun?.resolve({ field: 'annotationStatsBySamplePf', assertFieldType: 'Input', allowPermanentAbsence: true });
+    const allColumns = annotationStatsBySamplePf?.getPColumns();
+
+    if (allColumns == null || allColumns.length === 0) return undefined;
+
+    const collection = new PColumnCollection()
+      .addAxisLabelProvider(ctx.resultPool);
+
+    for (const cols of allColumns) {
+      collection.addColumn(cols);
+    }
+
+    const columns = collection.getColumns([{}]);
+
+    if (columns === undefined) return undefined;
+
+    return createPlDataTableV2(
+      ctx,
+      columns,
       ctx.uiState.statsTable.tableState,
     );
   })
@@ -214,7 +231,10 @@ export const platforma = BlockModel.create('Heavy')
     return [
       { type: 'link', href: '/', label: 'Annotation' } as const,
       ...(ctx.args.annotationSpec.steps.length > 0
-        ? [{ type: 'link', href: '/stats', label: 'Stats' } as const]
+        ? [
+          { type: 'link', href: '/stats', label: 'Stats' } as const,
+          { type: 'link', href: '/stats-by-sample', label: 'Stats by Sample' } as const,
+        ]
         : []),
     ];
   })

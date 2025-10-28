@@ -13,7 +13,7 @@ annotationsStats := import(":annotations-stats")
 
 wf.prepare(func(args) {
 	return {
-		inputAnchorSpec: is_undefined(args.inputAnchor) ? undefined : wf.resolve(args.inputAnchor).spec
+		inputAnchorColumn: is_undefined(args.inputAnchor) ? undefined : wf.resolve(args.inputAnchor)
 	}
 })
 wf.body(func(args) {
@@ -35,10 +35,12 @@ wf.body(func(args) {
 		outputs["annotationsPf"] = pFrames.exportFrame(computedAnnotations["annotationsPf"])
 
 		computedStats := annotationsStats.computeAnnotationsStats({
-			annotations: computedAnnotations.annotationsColumn
+			annotations: computedAnnotations.annotationsColumn,
+			inputAnchorColumn: args.inputAnchorColumn
 		})
 
 		outputs["annotationStatsPf"] = pFrames.exportFrame(computedStats.annotationStatsPf)
+		outputs["annotationStatsBySamplePf"] = pFrames.exportFrame(computedStats.annotationStatsBySamplePf)
 	}
 
 	return {
