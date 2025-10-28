@@ -3,13 +3,16 @@ import { platforma } from '@platforma-open/milaboratories.wip-cell-browser.model
 import { createPlDataTableStateV2 } from '@platforma-sdk/model';
 import { defineApp } from '@platforma-sdk/ui-vue';
 import { ref } from 'vue';
+import AnnotationStatsBySamplePage from './components/AnnotationStatsBySamplePage.vue';
 import AnnotationStatsPage from './components/AnnotationStatsPage.vue';
 import MainPage from './components/MainPage.vue';
 import { processAnnotationUiStateToArgsState } from './model';
-import AnnotationStatsBySamplePage from './components/AnnotationStatsBySamplePage.vue';
 
 export const sdkPlugin = defineApp(platforma as Platforma, (app) => {
   app.model.ui.statsTable ??= {
+    tableState: createPlDataTableStateV2(),
+  };
+  app.model.ui.statsBySampleTable ??= {
     tableState: createPlDataTableStateV2(),
   };
 

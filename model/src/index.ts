@@ -8,8 +8,10 @@ import type {
 } from '@platforma-sdk/model';
 import {
   BlockModel,
+  createPlDataTableSheet,
   createPlDataTableStateV2,
   createPlDataTableV2,
+  getUniquePartitionKeys,
   PColumnCollection,
 } from '@platforma-sdk/model';
 import omit from 'lodash.omit';
@@ -203,28 +205,36 @@ export const platforma = BlockModel.create('Heavy')
       ctx.uiState.statsTable.tableState,
     );
   })
-  .output('statsBySampleTable', (ctx) => {
+  .output('statsBySampleTableModel', (ctx) => {
     const annotationStatsBySamplePf = ctx.prerun?.resolve({ field: 'annotationStatsBySamplePf', assertFieldType: 'Input', allowPermanentAbsence: true });
     const allColumns = annotationStatsBySamplePf?.getPColumns();
 
     if (allColumns == null || allColumns.length === 0) return undefined;
 
-    const collection = new PColumnCollection()
-      .addAxisLabelProvider(ctx.resultPool);
-
-    for (const cols of allColumns) {
-      collection.addColumn(cols);
-    }
-
-    const columns = collection.getColumns([{}]);
+    const columns = new PColumnCollection()
+      .addAxisLabelProvider(ctx.resultPool)
+      .addColumns(allColumns)
+      .getColumns({});
+    // .getColumns({ axes: [{ split: true }, {}] });
 
     if (columns === undefined) return undefined;
 
     return createPlDataTableV2(
       ctx,
       columns,
-      ctx.uiState.statsTable.tableState,
+      ctx.uiState.statsBySampleTable.tableState,
     );
+  })
+  .output('statsBySampleTableSheets', (ctx) => {
+    const annotationStatsBySamplePf = ctx.prerun?.resolve({ field: 'annotationStatsBySamplePf', assertFieldType: 'Input', allowPermanentAbsence: true });
+    const column = annotationStatsBySamplePf?.getPColumns()?.[0];
+
+    if (!column) return undefined;
+
+    const r = getUniquePartitionKeys(column.data);
+    if (!r) return undefined;
+
+    return r.map((values, i) => createPlDataTableSheet(ctx, column.spec.axesSpec[i], values));
   })
 
   .sections((ctx) => {

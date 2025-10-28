@@ -14,11 +14,8 @@ CELL_KEY_HEADER := "cell_key"
 GENE_KEY_HEADER := "gene_key"
 // States headers
 ANNOTATION_COUNT_HEADER := "annotation_count"
-SAMPLE_COUNT_HEADER := "sample_count"
-CELL_COUNT_HEADER := "cell_count"
-
 ANNOTATION_FRACTION_HEADER := "annotation_fractions"
-SAMPLE_FRACTION_HEADER := "sample_fractions"
+CELL_COUNT_HEADER := "cell_count"
 CELL_FRACTION_HEADER := "cell_fractions"
 // Result file
 ANNOTATIONS_STATS_FILE := "annotation_stats.tsv"
@@ -60,17 +57,11 @@ createColumnSpec := func(type, name, label, axesSpec) {
 createStatsDataAndSpecByAnnotations := func(file, axes) {
 	axesSpec := slices.map(axes, func(v) { return v.spec })
 	importSpec := {
-		storageFormat: "Binary",
-		partitionKeyLength: 0,
 		axes: axes,
 		columns: [
 			{
 				column: ANNOTATION_COUNT_HEADER,
 				spec: createColumnSpec("Long", "stats/" + ANNOTATION_COUNT_HEADER, "Total Count of Annotations", axesSpec)
-			},
-			{
-				column: SAMPLE_COUNT_HEADER,
-				spec: createColumnSpec("Long", "stats/" + SAMPLE_COUNT_HEADER, "Total Number of Samples", axesSpec)
 			},
 			{
 				column: CELL_COUNT_HEADER,
@@ -81,14 +72,12 @@ createStatsDataAndSpecByAnnotations := func(file, axes) {
 				spec: createColumnSpec("Double", "stats/" + ANNOTATION_FRACTION_HEADER, "Fraction of Annotations", axesSpec)
 			},
 			{
-				column: SAMPLE_FRACTION_HEADER,
-				spec: createColumnSpec("Double", "stats/" + SAMPLE_FRACTION_HEADER, "Fraction of Samples", axesSpec)
-			},
-			{
 				column: CELL_FRACTION_HEADER,
 				spec: createColumnSpec("Double", "stats/" + CELL_FRACTION_HEADER, "Fraction of Cells", axesSpec)
 			}
-		]
+		],
+		storageFormat: "Binary",
+		partitionKeyLength: len(axes) - 1
 	}
 
 	return xsv.importFile(file, "tsv", importSpec, { splitDataAndSpec: true })
@@ -112,37 +101,29 @@ computeAnnotationsStats := func(inputs) {
 	df.groupBy(annotations.column).
 		agg(
 			pt.col(annotations.column).count().alias(ANNOTATION_COUNT_HEADER),
-			pt.col(SAMPLE_KEY_HEADER).count().alias(SAMPLE_COUNT_HEADER),
 			pt.col(CELL_KEY_HEADER).count().alias(CELL_COUNT_HEADER)
 		).
 		withColumns(
 			pt.col(ANNOTATION_COUNT_HEADER).
 				truediv(pt.col(ANNOTATION_COUNT_HEADER).sum()).
 				alias(ANNOTATION_FRACTION_HEADER),
-			pt.col(SAMPLE_COUNT_HEADER).
-				truediv(pt.col(SAMPLE_COUNT_HEADER).sum()).
-				alias(SAMPLE_FRACTION_HEADER),
 			pt.col(CELL_COUNT_HEADER).
 				truediv(pt.col(CELL_COUNT_HEADER).sum()).
 				alias(CELL_FRACTION_HEADER)
 		).
 		save(ANNOTATIONS_STATS_FILE)
 
-	df.groupBy(annotations.column, SAMPLE_KEY_HEADER).
+	df.groupBy(SAMPLE_KEY_HEADER, annotations.column).
 		agg(
 			pt.col(annotations.column).count().alias(ANNOTATION_COUNT_HEADER),
-			pt.col(SAMPLE_KEY_HEADER).count().alias(SAMPLE_COUNT_HEADER),
 			pt.col(CELL_KEY_HEADER).count().alias(CELL_COUNT_HEADER)
 		).
 		withColumns(
 			pt.col(ANNOTATION_COUNT_HEADER).
-				truediv(pt.col(ANNOTATION_COUNT_HEADER).sum()).
+				truediv(pt.col(ANNOTATION_COUNT_HEADER).sum().over(SAMPLE_KEY_HEADER)).
 				alias(ANNOTATION_FRACTION_HEADER),
-			pt.col(SAMPLE_COUNT_HEADER).
-				truediv(pt.col(SAMPLE_COUNT_HEADER).sum()).
-				alias(SAMPLE_FRACTION_HEADER),
 			pt.col(CELL_COUNT_HEADER).
-				truediv(pt.col(CELL_COUNT_HEADER).sum()).
+				truediv(pt.col(CELL_COUNT_HEADER).sum().over(SAMPLE_KEY_HEADER)).
 				alias(CELL_FRACTION_HEADER)
 		).
 		save(ANNOTATIONS_STATS_BY_SAMPLE_FILE)
@@ -156,8 +137,9 @@ computeAnnotationsStats := func(inputs) {
 	)
 	statsDataAndSpecBySample := createStatsDataAndSpecByAnnotations(
 		wfResult.getFile(ANNOTATIONS_STATS_BY_SAMPLE_FILE),
-		[annotationsAxis, { column: SAMPLE_KEY_HEADER, spec: sampleAxisSpec } ]
+		[{ column: SAMPLE_KEY_HEADER, spec: sampleAxisSpec }, annotationsAxis]
 	)
+
 	return {
 		annotationStatsPf: convertMapToPFrame(statsDataAndSpec),
 		annotationStatsBySamplePf: convertMapToPFrame(statsDataAndSpecBySample)

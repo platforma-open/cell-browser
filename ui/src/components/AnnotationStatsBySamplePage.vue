@@ -12,7 +12,8 @@ const app = useApp();
 
 const tableSettings = usePlDataTableSettingsV2({
   sourceId: () => app.model.args.annotationSpec.steps.length > 0 ? app.model.args.annotationSpec.steps : undefined,
-  model: () => app.model.outputs.statsBySampleTable,
+  sheets: () => app.model.outputs.statsBySampleTableSheets,
+  model: () => app.model.outputs.statsBySampleTableModel,
 });
 </script>
 
@@ -28,7 +29,7 @@ const tableSettings = usePlDataTableSettingsV2({
     </template>
     <PlAgDataTableV2
       ref="tableInstance"
-      v-model="app.model.ui.statsTable.tableState"
+      v-model="app.model.ui.statsBySampleTable.tableState"
       :settings="tableSettings"
       show-export-button
     />
