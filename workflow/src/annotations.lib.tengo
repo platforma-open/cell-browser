@@ -34,7 +34,8 @@ computeCellAnnotations := func(inputs) {
 		shouldComputeFilters: shouldComputeFilters
 	})
 
-	outputs["annotationPf"] = convertToPFrame(result.annotationsColumn)
+	outputs["annotationsColumn"] = result.annotationsColumn
+	outputs["annotationsPf"] = convertToPFrame(result.annotationsColumn)
 	outputs["filtersPf"] = convertToPFrame(result.annotationsFiltersColumns...)
 
 	return outputs
