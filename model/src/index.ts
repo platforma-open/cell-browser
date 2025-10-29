@@ -183,8 +183,8 @@ export const platforma = BlockModel.create('Heavy')
   })
 
   .output('statsTable', (ctx) => {
-    const annotationStatsBySamplePf = ctx.prerun?.resolve({ field: 'annotationStatsPf', assertFieldType: 'Input', allowPermanentAbsence: true });
-    const allColumns = annotationStatsBySamplePf?.getPColumns();
+    const annotationStatsPf = ctx.prerun?.resolve({ field: 'annotationStatsPf', assertFieldType: 'Input', allowPermanentAbsence: true });
+    const allColumns = annotationStatsPf?.getPColumns();
 
     if (allColumns == null || allColumns.length === 0) return undefined;
 
