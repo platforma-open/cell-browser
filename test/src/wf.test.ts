@@ -211,7 +211,7 @@
 
 //     // Initial annotation block state set to trigger column calculation
 //     await project.setBlockArgs(annotationBlockId, {
-//       inputAnchor: outputs4.inputOptions[0].ref,
+//       countsRef: outputs4.inputOptions[0].ref,
 //       annotationSpec: {
 //         title: 'My Annotation',
 //         steps: [],
@@ -264,7 +264,7 @@
 //     };
 
 //     await project.setBlockArgs(annotationBlockId, {
-//       inputAnchor: outputs5.inputOptions[0].ref,
+//       countsRef: outputs5.inputOptions[0].ref,
 //       annotationSpec,
 //     } satisfies BlockArgs);
 

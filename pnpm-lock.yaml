@@ -12,6 +12,9 @@ catalogs:
     '@milaboratories/build-configs':
       specifier: ^1.0.8
       version: 1.0.8
+    '@milaboratories/graph-maker':
+      specifier: ^1.1.165
+      version: 1.1.174
     '@milaboratories/helpers':
       specifier: ^1.12.0
       version: 1.12.0
@@ -136,6 +139,9 @@ importers:
         specifier: ^4.5.0
         version: 4.5.0
     devDependencies:
+      '@milaboratories/graph-maker':
+        specifier: 'catalog:'
+        version: 1.1.174(d3-dispatch@3.0.1)(d3-path@3.1.0)(d3-scale-chromatic@3.1.0)(sortablejs@1.15.6)(typescript@5.6.3)
       '@platforma-sdk/block-tools':
         specifier: 'catalog:'
         version: 2.6.16
@@ -191,6 +197,9 @@ importers:
 
   ui:
     dependencies:
+      '@milaboratories/graph-maker':
+        specifier: 'catalog:'
+        version: 1.1.174(d3-dispatch@3.0.1)(d3-path@3.1.0)(d3-scale-chromatic@3.1.0)(sortablejs@1.15.6)(typescript@5.6.3)
       '@platforma-open/milaboratories.wip-cell-browser.model':
         specifier: workspace:*
         version: link:../model
@@ -267,6 +276,9 @@ importers:
         version: 2.1.9(@types/node@24.5.2)(sass-embedded@1.89.2)
 
 packages:
+
+  '@ag-grid-community/core@32.3.9':
+    resolution: {integrity: sha512-oZeAEPgaJVMzfKqbAPCyadcN5+iy+tjvhRLqEYJdBxtLgW/s2s0qXcXQvnrz7eUMD3Z7h3BQRVt2h/p0T6Ox/w==}
 
   '@aws-crypto/crc32@5.2.0':
     resolution: {integrity: sha512-nLbCWqQNgUiwwtFsen1AdzAtvuLRsQS8rYgMuxCrdKf9kOssamGLuPwyTY9wyYblNr9+1XM8v6zoDTPPSIeANg==}
@@ -1143,12 +1155,18 @@ packages:
     resolution: {integrity: sha512-ZjAZX4LXqXrtHqA5eJomUoHWZYKFkHyQKwKmkPeJuvp31XsueuDE89bi6qlzKvr/jONyZyTRRMMnCy3hW16umw==}
     engines: {node: '>=22.19.0'}
 
+  '@milaboratories/graph-maker@1.1.174':
+    resolution: {integrity: sha512-miwbn+jtSeeDUy8UW231MibOuW3iR/db8qQGwjQdCwtQiWT6NxmcBr+y2KBEEvpkuevxhBBXMIqLL03ik0vbGg==}
+
   '@milaboratories/helpers@1.12.0':
     resolution: {integrity: sha512-Eg3AQMJbVClYhdvhogdlW3Ys9EdLLl8ZTqG675iLwoO64ZJcQOAnIPjXwl4zJ/bZWx4nEhRF9AvwxRdc08fikQ==}
     engines: {node: '>=22'}
 
   '@milaboratories/miplots4@1.0.155':
     resolution: {integrity: sha512-DapqlH2rdKGryhwF47fFwxv03dOROpVjRhpi3EmI/vHoDqEAeRmBNRalhkh8NOLaP5y9Rt7WqLh+ZW6oz8KxMQ==}
+
+  '@milaboratories/pf-plots@1.1.41':
+    resolution: {integrity: sha512-BvIetn6rt9zA1WlEvu70Nn1TuJ6WE1vOvTVRlfNTbMEeIDfnKSprEoKObiUG7y3k66e88UMUygUuuTbkfL7Udg==}
 
   '@milaboratories/pframes-rs-node@1.0.95':
     resolution: {integrity: sha512-ms6dGTDvtwdESoX0GqVXGEaTcP1Oynpn0CRarpadZEOmc35DY3uufdoqnBSbXKz4bVkS/mkNZbHg+x1nZIE/DA==}
@@ -3693,14 +3711,28 @@ packages:
   ag-charts-locale@12.3.0:
     resolution: {integrity: sha512-4ifdXX8Q6sjBAf85Jc2RKcl4A1lrk60jPrZwi9ACY+luFkKfxCujga66okP1JFERN31SigJRTraoXW91HFikIg==}
 
+  ag-charts-types@10.3.9:
+    resolution: {integrity: sha512-drcRiJVencliC8LnRwk4MmeQDNNBg5GzmOoLFihO3/k0CUK0VF/N+2nc7iFozwaNG0btSB9vAhYuJLjqHMtRrQ==}
+
+  ag-charts-types@11.3.2:
+    resolution: {integrity: sha512-trPGqgGYiTeLgtf9nLuztDYOPOFOLbqHn1g2D99phf7QowcwdX0TPx0wfWG8Hm90LjB8IH+G2s3AZe2vrdAtMQ==}
+
   ag-charts-types@12.3.0:
     resolution: {integrity: sha512-wvlhAgQNkXrmSSJJqeEMP4a8WJviAgphuMtNt7073sBOI0LVdcgAV7kyyJOYjbYB8S1SqKyPP0jdbwROOmQBCQ==}
+
+  ag-grid-community@33.3.2:
+    resolution: {integrity: sha512-9bx0e/+ykOyLvUxHqmdy0cRVANH6JAtv0yZdnBZEXYYqBAwN+G5a4NY+2I1KvoOCYzbk8SnStG7y4hCdVAAWOQ==}
 
   ag-grid-community@34.3.0:
     resolution: {integrity: sha512-Y1N4C5aNrY3e/ORFBcanD8eT4BcA5IrnGMB7iIet3rd749dKZ8KX3Cg7+sdKnRev3IGw0L2JbX7AYNgdNxsbpA==}
 
   ag-grid-enterprise@34.3.0:
     resolution: {integrity: sha512-z/wBJiLF52HLhdSZBF15TcmqSAywsXXXGCCZ3ikkpLpK6xj7AmlMLr9Y13x524rb08Gsr3d/NumieNRdH7+uBg==}
+
+  ag-grid-vue3@33.3.2:
+    resolution: {integrity: sha512-O1FS0MQNNBdMZTUTGrk/KjdK9nuPPRbmmL+bFQr8jKp7VCmO9wLV4w9taWbLTgQqGN6rQ4BAb6m2RJ78cHM3tQ==}
+    peerDependencies:
+      vue: ^3.5.0
 
   ag-grid-vue3@34.3.0:
     resolution: {integrity: sha512-aS2/Ha4QW4JpH2XyOrSqP03VDNtQWvHjL3YKUs5VlKazr0WU0fp6oU9KzyYtpQhAWm1eu1WRnVyb/20m/v5iqw==}
@@ -5915,6 +5947,11 @@ packages:
 
 snapshots:
 
+  '@ag-grid-community/core@32.3.9':
+    dependencies:
+      ag-charts-types: 10.3.9
+      tslib: 2.8.1
+
   '@aws-crypto/crc32@5.2.0':
     dependencies:
       '@aws-crypto/util': 5.2.0
@@ -7095,6 +7132,41 @@ snapshots:
       utility-types: 3.11.0
       zod: 3.23.8
 
+  '@milaboratories/graph-maker@1.1.174(d3-dispatch@3.0.1)(d3-path@3.1.0)(d3-scale-chromatic@3.1.0)(sortablejs@1.15.6)(typescript@5.6.3)':
+    dependencies:
+      '@ag-grid-community/core': 32.3.9
+      '@milaboratories/helpers': 1.12.0
+      '@milaboratories/miplots4': 1.0.155(d3-dispatch@3.0.1)(d3-path@3.1.0)(d3-scale-chromatic@3.1.0)
+      '@milaboratories/pf-plots': 1.1.41
+      '@platforma-sdk/model': 1.45.0
+      '@platforma-sdk/ui-vue': 1.45.0(d3-dispatch@3.0.1)(d3-path@3.1.0)(d3-scale-chromatic@3.1.0)(sortablejs@1.15.6)(typescript@5.6.3)
+      '@types/d3-hierarchy': 3.1.7
+      '@types/d3-scale': 4.0.9
+      '@vueuse/core': 13.9.0(vue@3.5.13(typescript@5.6.3))
+      ag-grid-vue3: 33.3.2(vue@3.5.13(typescript@5.6.3))
+      canonicalize: 2.1.0
+      d3-hierarchy: 3.1.2
+      d3-scale: 4.0.2
+      vue: 3.5.13(typescript@5.6.3)
+    transitivePeerDependencies:
+      - async-validator
+      - axios
+      - change-case
+      - d3-dispatch
+      - d3-path
+      - d3-scale-chromatic
+      - drauu
+      - focus-trap
+      - fuse.js
+      - idb-keyval
+      - jwt-decode
+      - nprogress
+      - qrcode
+      - sortablejs
+      - supports-color
+      - typescript
+      - universal-cookie
+
   '@milaboratories/helpers@1.12.0': {}
 
   '@milaboratories/miplots4@1.0.155(d3-dispatch@3.0.1)(d3-path@3.1.0)(d3-scale-chromatic@3.1.0)':
@@ -7150,6 +7222,13 @@ snapshots:
       - d3-path
       - d3-scale-chromatic
       - supports-color
+
+  '@milaboratories/pf-plots@1.1.41':
+    dependencies:
+      '@milaboratories/pl-model-common': 1.21.4
+      '@platforma-sdk/model': 1.45.0
+      canonicalize: 2.1.0
+      lodash: 4.17.21
 
   '@milaboratories/pframes-rs-node@1.0.95':
     dependencies:
@@ -10768,7 +10847,15 @@ snapshots:
   ag-charts-locale@12.3.0:
     optional: true
 
+  ag-charts-types@10.3.9: {}
+
+  ag-charts-types@11.3.2: {}
+
   ag-charts-types@12.3.0: {}
+
+  ag-grid-community@33.3.2:
+    dependencies:
+      ag-charts-types: 11.3.2
 
   ag-grid-community@34.3.0:
     dependencies:
@@ -10780,6 +10867,11 @@ snapshots:
     optionalDependencies:
       ag-charts-community: 12.3.0
       ag-charts-enterprise: 12.3.0
+
+  ag-grid-vue3@33.3.2(vue@3.5.13(typescript@5.6.3)):
+    dependencies:
+      ag-grid-community: 33.3.2
+      vue: 3.5.13(typescript@5.6.3)
 
   ag-grid-vue3@34.3.0(vue@3.5.13(typescript@5.6.3)):
     dependencies:

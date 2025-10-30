@@ -11,7 +11,7 @@ wf.setPreRun(assets.importTemplate(":prerun"))
 
 wf.prepare(func(args) {
 	return {
-		inputAnchorColumn: is_undefined(args.inputAnchor) ? undefined : wf.resolve(args.inputAnchor)
+		countsRefColumn: is_undefined(args.countsRef) ? undefined : wf.resolve(args.countsRef)
 	}
 })
 wf.body(func(args) {
@@ -25,7 +25,7 @@ wf.body(func(args) {
 		result := annotations.computeCellAnnotations({
 			title: annotationSpec.title,
 			steps: annotationSpec.steps,
-			inputAnchor: args.inputAnchor,
+			inputAnchor: args.countsRef,
 			annotationAxesSpec: annotationAxesSpec,
 			shouldComputeFilters: true
 		})

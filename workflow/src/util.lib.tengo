@@ -3,17 +3,17 @@ wf := import("@platforma-sdk/workflow-tengo:workflow")
 pSpec := import("@platforma-sdk/workflow-tengo:pframes.spec")
 
 getAnnotationAxesSpec := func(args) {
-	if is_undefined(args.inputAnchorColumn) {
+	if is_undefined(args.countsRefColumn) {
 		return undefined
 	}
 
-	if len(args.inputAnchorColumn.spec.axesSpec) != 3 {
-		ll.panic("Input anchor must have exactly 3 axes (sample, cell, and gene), found %d", len(args.inputAnchorColumn.spec.axesSpec))
+	if len(args.countsRefColumn.spec.axesSpec) != 3 {
+		ll.panic("Input anchor must have exactly 3 axes (sample, cell, and gene), found %d", len(args.countsRefColumn.spec.axesSpec))
 	}
 
-	sampleAxisSpec := args.inputAnchorColumn.spec.axesSpec[0]
-	cellAxisSpec := args.inputAnchorColumn.spec.axesSpec[1]
-	// geneAxisSpec := args.inputAnchorColumn.spec.axesSpec[2]
+	sampleAxisSpec := args.countsRefColumn.spec.axesSpec[0]
+	cellAxisSpec := args.countsRefColumn.spec.axesSpec[1]
+	// geneAxisSpec := args.countsRefColumn.spec.axesSpec[2]
 
 	return [sampleAxisSpec, cellAxisSpec]
 }

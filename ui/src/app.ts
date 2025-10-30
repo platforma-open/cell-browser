@@ -1,20 +1,18 @@
 import type { Platforma } from '@platforma-open/milaboratories.wip-cell-browser.model';
 import { platforma } from '@platforma-open/milaboratories.wip-cell-browser.model';
-import { createPlDataTableStateV2 } from '@platforma-sdk/model';
 import { defineApp } from '@platforma-sdk/ui-vue';
 import { ref } from 'vue';
+import { processAnnotationUiStateToArgsState } from './model';
+
+import AnnotationPage from './components/AnnotationPage.vue';
 import AnnotationStatsBySamplePage from './components/AnnotationStatsBySamplePage.vue';
 import AnnotationStatsPage from './components/AnnotationStatsPage.vue';
 import MainPage from './components/MainPage.vue';
-import { processAnnotationUiStateToArgsState } from './model';
+import ViolinPage from './components/ViolinPage.vue';
+import { setDefaultUiState } from './utils';
 
 export const sdkPlugin = defineApp(platforma as Platforma, (app) => {
-  app.model.ui.statsTable ??= {
-    tableState: createPlDataTableStateV2(),
-  };
-  app.model.ui.statsBySampleTable ??= {
-    tableState: createPlDataTableStateV2(),
-  };
+  setDefaultUiState(app.model);
 
   processAnnotationUiStateToArgsState(
     () => app.model.ui.annotationSpec,
@@ -27,8 +25,11 @@ export const sdkPlugin = defineApp(platforma as Platforma, (app) => {
     isAnnotationModalOpen,
     routes: {
       '/': () => MainPage,
-      '/stats': () => AnnotationStatsPage,
-      '/stats-by-sample': () => AnnotationStatsBySamplePage,
+      '/violin': () => ViolinPage,
+      // '/heatmaps': () => MainPage,
+      '/annotation': () => AnnotationPage,
+      '/annotation-stats': () => AnnotationStatsPage,
+      '/annotation-stats-by-sample': () => AnnotationStatsBySamplePage,
     },
   };
 }, { debug: false });

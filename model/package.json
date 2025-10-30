@@ -18,6 +18,7 @@
   "devDependencies": {
     "@platforma-sdk/block-tools": "catalog:",
     "@platforma-sdk/eslint-config": "catalog:",
+    "@milaboratories/graph-maker": "catalog:",
     "eslint": "catalog:",
     "typescript": "catalog:",
     "vite": "catalog:",

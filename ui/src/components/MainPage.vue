@@ -1,57 +1,84 @@
 <script setup lang="ts">
-import type { PlRef } from '@platforma-sdk/model';
-
-import {
-  PlAgDataTableV2,
-  PlBlockPage,
-  PlBtnGhost,
-  PlDropdownRef,
-  PlSlideModal,
-  usePlDataTableSettingsV2,
-} from '@platforma-sdk/ui-vue';
+import '@milaboratories/graph-maker/styles';
+import { plRefsEqual, type PColumnIdAndSpec, type PlRef } from '@platforma-sdk/model';
+import { PlBlockPage, PlDropdownRef } from '@platforma-sdk/ui-vue';
+import { computed, ref } from 'vue';
 import { useApp } from '../app';
-import AnnotationModal from './AnnotationModal.vue';
+
+import type { PredefinedGraphOption } from '@milaboratories/graph-maker';
+import { GraphMaker } from '@milaboratories/graph-maker';
 
 const app = useApp();
+const settingsOpen = ref(true);
 
-function setAnchorColumn(ref: PlRef | undefined) {
-  app.model.args.inputAnchor = ref;
+function setInput(inputRef?: PlRef) {
+  app.model.args.countsRef = inputRef;
+  if (inputRef)
+    app.model.args.title = app.model.outputs.countsOptions?.find((o) => plRefsEqual(o.ref, inputRef))?.label;
+  else
+    app.model.args.title = undefined;
 }
 
-const tableSettings = usePlDataTableSettingsV2({
-  sourceId: () => app.model.args.inputAnchor,
-  model: () => app.model.outputs.overlapTable,
-});
+function getDefaultOptions(umapDefaults?: PColumnIdAndSpec[]) {
+  if (!umapDefaults) {
+    return undefined;
+  }
+
+  function getIndex(name: string, pcols: PColumnIdAndSpec[]): number {
+    return pcols.findIndex((p) => p.spec.name === name);
+  }
+
+  const getDefaultSource = (name: string) => {
+    const spec = umapDefaults[getIndex(name, umapDefaults)].spec;
+    return {
+      ...spec,
+      annotations: undefined,
+    };
+  }; // annotation contains changed labels, so with them we search here only columns with long modified labels
+
+  const defaults: PredefinedGraphOption<'scatterplot-umap'>[] = [
+    {
+      inputName: 'x',
+      selectedSource: getDefaultSource('pl7.app/rna-seq/umap1'),
+    },
+    {
+      inputName: 'y',
+      selectedSource: getDefaultSource('pl7.app/rna-seq/umap2'),
+    },
+    {
+      inputName: 'grouping',
+      selectedSource: getDefaultSource('pl7.app/rna-seq/umap1').axesSpec[0],
+    },
+  ];
+
+  return defaults;
+}
+
+const defaultOptions = computed(() => getDefaultOptions(app.model.outputs.umapDefaults));
+const key = computed(() => defaultOptions.value ? JSON.stringify(defaultOptions.value) : '');
+
 </script>
 
 <template>
   <PlBlockPage>
-    <template #title>
-      Cell Browser
-    </template>
-    <template #append>
-      <PlBtnGhost icon="settings" @click.stop="app.isAnnotationModalOpen = true">
-        Annotations
-      </PlBtnGhost>
-      <PlBtnGhost icon="settings" @click.exact.stop="() => (app.model.ui.settingsOpen = true)">
-        Settings
-      </PlBtnGhost>
-    </template>
-    <PlAgDataTableV2
-      ref="tableInstance"
-      v-model="app.model.ui.overlapTable.tableState"
-      :settings="tableSettings"
-    />
+    <GraphMaker
+      v-model="app.model.ui.graphStateUMAP" :dataStateKey="key" chartType="scatterplot-umap"
+      :p-frame="app.model.outputs.UMAPPf" :default-options="defaultOptions"
+      @run="console.log('run?'); settingsOpen = false"
+    >
+      <template v-if="settingsOpen" #settingsSlot>
+        <PlDropdownRef
+          v-model="app.model.args.countsRef" :options="app.model.outputs.countsOptions"
+          :style="{ width: '320px' }" label="Select dataset"
+          clearable required @update:model-value="setInput"
+        />
+      </template>
+    </GraphMaker>
   </PlBlockPage>
-  <PlSlideModal v-model="app.model.ui.settingsOpen" :close-on-outside-click="true">
-    <template #title>Settings</template>
-    <PlDropdownRef
-      :options="app.model.outputs.inputOptions"
-      :model-value="app.model.args.inputAnchor"
-      label="Select dataset"
-      clearable
-      @update:model-value="setAnchorColumn"
-    />
-  </PlSlideModal>
-  <AnnotationModal />
 </template>
+
+<style scoped>
+.settings-content {
+  padding: 16px;
+}
+</style>

@@ -16,7 +16,7 @@ convertToPFrame := func(...entities) {
 computeCellAnnotations := func(inputs) {
 	title := inputs.title
 	steps := inputs.steps
-	inputAnchor := inputs.inputAnchor
+	countsRef := inputs.countsRef
 	annotationAxesSpec := inputs.annotationAxesSpec
 	shouldComputeFilters := inputs.shouldComputeFilters
 
@@ -29,7 +29,7 @@ computeCellAnnotations := func(inputs) {
 	result := annotations.computeAnnotations({
 		title: title,
 		steps: steps,
-		inputAnchor: inputAnchor,
+		inputAnchor: countsRef,
 		resultAxesSpec: annotationAxesSpec,
 		shouldComputeFilters: shouldComputeFilters
 	})
