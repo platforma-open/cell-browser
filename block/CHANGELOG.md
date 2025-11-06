@@ -1,5 +1,11 @@
 # @platforma-open/milaboratories.cell-browser
 
+## 1.4.7
+
+### Patch Changes
+
+- 54639ab: Update SDK
+
 ## 1.4.6
 
 ### Patch Changes
