@@ -1,12 +1,13 @@
 <script setup lang="ts">
 import '@milaboratories/graph-maker/styles';
 import { plRefsEqual, type PColumnIdAndSpec, type PlRef } from '@platforma-sdk/model';
-import { PlBlockPage, PlDropdownRef } from '@platforma-sdk/ui-vue';
+import { PlAnnotations, PlBlockPage, PlDropdownRef } from '@platforma-sdk/ui-vue';
 import { computed, ref } from 'vue';
 import { useApp } from '../app';
 
 import type { PredefinedGraphOption } from '@milaboratories/graph-maker';
 import { GraphMaker } from '@milaboratories/graph-maker';
+import { getDefaultAnnotationScript } from '../utils';
 
 const app = useApp();
 const settingsOpen = ref(true);
@@ -57,28 +58,63 @@ function getDefaultOptions(umapDefaults?: PColumnIdAndSpec[]) {
 const defaultOptions = computed(() => getDefaultOptions(app.model.outputs.umapDefaults));
 const key = computed(() => defaultOptions.value ? JSON.stringify(defaultOptions.value) : '');
 
+function handleDeleteSchema() {
+  Object.assign(app.model.ui.annotationSpec, getDefaultAnnotationScript());
+}
+
+function handleRun() {
+  console.log('run?');
+  settingsOpen.value = false;
+}
+
 </script>
 
 <template>
   <PlBlockPage>
     <GraphMaker
-      v-model="app.model.ui.graphStateUMAP" :dataStateKey="key" chartType="scatterplot-umap"
-      :p-frame="app.model.outputs.UMAPPf" :default-options="defaultOptions"
-      @run="console.log('run?'); settingsOpen = false"
+      v-model="app.model.ui.graphStateUMAP"
+      :class="$style.graphMaker"
+      :dataStateKey="key"
+      chartType="scatterplot-umap"
+      :p-frame="app.model.outputs.UMAPPf"
+      :default-options="defaultOptions"
+      @run="handleRun"
     >
       <template v-if="settingsOpen" #settingsSlot>
         <PlDropdownRef
-          v-model="app.model.args.countsRef" :options="app.model.outputs.countsOptions"
-          :style="{ width: '320px' }" label="Select dataset"
-          clearable required @update:model-value="setInput"
+          v-model="app.model.args.countsRef"
+          :class="$style.settings"
+          :options="app.model.outputs.countsOptions"
+          label="Select dataset"
+          clearable
+          required
+          @update:model-value="setInput"
+        />
+      </template>
+      <template #annotationsSlot>
+        <PlAnnotations
+          v-model:annotation="app.model.ui.annotationSpec"
+          :class="$style.annotations"
+          :columns="app.model.outputs.overlapColumns ?? []"
+          :onDeleteSchema="handleDeleteSchema"
         />
       </template>
     </GraphMaker>
   </PlBlockPage>
 </template>
 
-<style scoped>
-.settings-content {
-  padding: 16px;
+<style module>
+.graphMaker :global(.annotations-form) {
+  width: 100%;
+  height: 100%;
+}
+
+.settings {
+  width: 320px;
+}
+
+.annotations {
+  display: flex;
+  width: 768px;
 }
 </style>

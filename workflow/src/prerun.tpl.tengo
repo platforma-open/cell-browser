@@ -29,9 +29,10 @@ wf.body(func(args) {
 			steps: annotationSpec.steps,
 			countsRef: args.countsRef,
 			annotationAxesSpec: annotationAxesSpec,
-			shouldComputeFilters: false
+			shouldComputeFilters: true
 		})
 
+		outputs["filtersPf"] = pFrames.exportFrame(computedAnnotations["filtersPf"])
 		outputs["annotationsPf"] = pFrames.exportFrame(computedAnnotations["annotationsPf"])
 
 		computedStats := annotationsStats.computeAnnotationsStats({

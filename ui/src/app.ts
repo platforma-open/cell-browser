@@ -27,9 +27,9 @@ export const sdkPlugin = defineApp(platforma as Platforma, (app) => {
       '/': () => MainPage,
       '/violin': () => ViolinPage,
       // '/heatmaps': () => MainPage,
-      '/annotation': () => AnnotationPage,
-      '/annotation-stats': () => AnnotationStatsPage,
-      '/annotation-stats-by-sample': () => AnnotationStatsBySamplePage,
+      '/annotations': () => AnnotationPage,
+      '/annotations-stats': () => AnnotationStatsPage,
+      '/annotations-stats-by-sample': () => AnnotationStatsBySamplePage,
     },
   };
 }, { debug: false });

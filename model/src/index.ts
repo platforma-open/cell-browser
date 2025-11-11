@@ -3,12 +3,14 @@ import type {
   InferOutputsType,
   PColumnEntryUniversal,
   PColumnIdAndSpec,
+  PColumnSpec,
   PFrameHandle,
   PlDataTableStateV2,
   PlRef,
   SimplifiedUniversalPColumnEntry,
 } from '@platforma-sdk/model';
 import {
+  Annotation,
   BlockModel,
   createPFrameForGraphs,
   createPlDataTableSheet,
@@ -18,6 +20,7 @@ import {
   isPColumn,
   isPColumnSpec,
   PColumnCollection,
+  readAnnotationJson,
 } from '@platforma-sdk/model';
 import omit from 'lodash.omit';
 import type { AnnotationSpec, AnnotationSpecUi } from './types';
@@ -270,7 +273,6 @@ export const platforma = BlockModel.create('Heavy')
     return r.map((values, i) => createPlDataTableSheet(ctx, column.spec.axesSpec[i], values));
   })
 
-  // ----------
   .output('countsOptions', (ctx) =>
     ctx.resultPool.getOptions((spec) => isPColumnSpec(spec)
       && spec.name === 'pl7.app/rna-seq/countMatrix'
@@ -298,7 +300,10 @@ export const platforma = BlockModel.create('Heavy')
     // Build a PFrame consisting of all columns that can be associated with the selected countsRef anchor
     if (!ctx.args.countsRef) return undefined;
 
-    return createPFrameForGraphs(ctx);
+    const annotationsColumns = ctx.prerun?.resolve({ field: 'annotationsPf', assertFieldType: 'Input', allowPermanentAbsence: true })?.getPColumns() ?? [];
+    const filtersColumns = ctx.prerun?.resolve({ field: 'filtersPf', assertFieldType: 'Input', allowPermanentAbsence: true })?.getPColumns() ?? [];
+
+    return createPFrameForGraphs(ctx, [...annotationsColumns, ...filtersColumns]);
   })
 
   .output('umapDefaults', (ctx) => {
@@ -402,18 +407,17 @@ export const platforma = BlockModel.create('Heavy')
 
     return DEGcolumns;
   })
-  // ----------
 
   .sections((ctx) => {
     return [
       { type: 'link', href: '/', label: 'UMAP' },
       { type: 'link', href: '/violin', label: 'Gene Expression' },
       // { type: 'link', href: '/heatmap', label: 'Expression Heatmap' },
-      { type: 'link', href: '/annotation', label: 'Annotation' } as const,
+      { type: 'link', href: '/annotations', label: 'Annotations' } as const,
       ...(ctx.args.annotationSpec.steps.length > 0
         ? [
-          { type: 'link', href: '/annotation-stats', label: 'Stats' } as const,
-          { type: 'link', href: '/annotation-stats-by-sample', label: 'Stats by Sample' } as const,
+          { type: 'link', href: '/annotations-stats', label: 'Annotations stats' } as const,
+          { type: 'link', href: '/annotations-stats-by-sample', label: 'Annotations stats by Sample' } as const,
         ]
         : []),
     ];
@@ -435,3 +439,8 @@ export type BlockOutputs = InferOutputsType<typeof platforma>;
 export * from './types';
 // export type Href = InferHrefType<typeof platforma>;
 // export type { BlockArgs };
+
+// @todo: reexport this function from SDK, after it will be published
+export function isHiddenFromGraphColumn(column: PColumnSpec): boolean {
+  return !!readAnnotationJson(column, Annotation.HideDataFromGraphs);
+}
