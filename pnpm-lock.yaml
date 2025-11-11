@@ -1156,7 +1156,7 @@ packages:
     engines: {node: '>=22.19.0'}
 
   '@milaboratories/graph-maker@file:../graph-maker/package.tgz':
-    resolution: {integrity: sha512-L3b21wRbwL1Ftei9nz1ZAR9LEu/3mKscbeGGx0tIxbORDpGizIMolZcWF88lbC+EcKpIkyLMImOOL5y1Mq5CEw==, tarball: file:../graph-maker/package.tgz}
+    resolution: {integrity: sha512-8Gk6uhWv0kvYKJ2wLgP2svhBeQ52324xMRjJQEaE9iWbBPCNR6gYqueAqL0NhtdgzDfiYFdrvbMz0uQc6DpAPw==, tarball: file:../graph-maker/package.tgz}
     version: 1.1.174
 
   '@milaboratories/helpers@1.12.0':

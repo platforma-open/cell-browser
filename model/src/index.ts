@@ -302,8 +302,9 @@ export const platforma = BlockModel.create('Heavy')
 
     const annotationsColumns = ctx.prerun?.resolve({ field: 'annotationsPf', assertFieldType: 'Input', allowPermanentAbsence: true })?.getPColumns() ?? [];
     const filtersColumns = ctx.prerun?.resolve({ field: 'filtersPf', assertFieldType: 'Input', allowPermanentAbsence: true })?.getPColumns() ?? [];
+    const allColumns = [...annotationsColumns, ...filtersColumns];
 
-    return createPFrameForGraphs(ctx, [...annotationsColumns, ...filtersColumns]);
+    return createPFrameForGraphs(ctx, allColumns.length > 0 ? allColumns : undefined);
   })
 
   .output('umapDefaults', (ctx) => {
