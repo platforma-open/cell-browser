@@ -1,5 +1,11 @@
 # @platforma-open/milaboratories.cell-browser
 
+## 1.4.8
+
+### Patch Changes
+
+- cf0e865: Updated block metadata.
+
 ## 1.4.7
 
 ### Patch Changes
