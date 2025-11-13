@@ -13,8 +13,8 @@ catalogs:
       specifier: ^1.1.179
       version: 1.1.179
     '@platforma-sdk/block-tools':
-      specifier: ^2.6.20
-      version: 2.6.20
+      specifier: ^2.6.21
+      version: 2.6.21
     '@platforma-sdk/blocks-deps-updater':
       specifier: ^2.0.0
       version: 2.0.0
@@ -89,7 +89,7 @@ importers:
     devDependencies:
       '@platforma-sdk/block-tools':
         specifier: 'catalog:'
-        version: 2.6.20
+        version: 2.6.21
 
   model:
     dependencies:
@@ -102,7 +102,7 @@ importers:
     devDependencies:
       '@platforma-sdk/block-tools':
         specifier: 'catalog:'
-        version: 2.6.20
+        version: 2.6.21
       '@platforma-sdk/eslint-config':
         specifier: 'catalog:'
         version: 1.1.0(@eslint/js@9.20.0)(@stylistic/eslint-plugin@2.13.0(eslint@9.20.1)(typescript@5.5.4))(eslint-plugin-n@17.15.1(eslint@9.20.1))(eslint-plugin-vue@9.32.0(eslint@9.20.1))(eslint@9.20.1)(globals@15.14.0)(typescript-eslint@8.24.0(eslint@9.20.1)(typescript@5.5.4))(typescript@5.5.4)
@@ -1113,11 +1113,17 @@ packages:
   '@milaboratories/pl-model-common@1.21.5':
     resolution: {integrity: sha512-bPF/tzL2rPc6LmaVH1BVdfeZbE4Mtfaje2ZHrFQDLtnzuJEPmze06xslzkYQnfMxLaB/ou+Y36YgVYQgt15aXw==}
 
+  '@milaboratories/pl-model-common@1.21.6':
+    resolution: {integrity: sha512-PU+LYdpz3bxmdVrZyjGDzxRNBgMn4FJC/D+vxZjNCp+LjxCgQkQ2K9tBy0xlkOVG6pCfAY8QhavZJciZJZZgrQ==}
+
   '@milaboratories/pl-model-middle-layer@1.8.35':
     resolution: {integrity: sha512-fNYE4nWcmDn5CAK7IOwSR9htq10F7mPpfIunEcOHDXS1pSrPxc+QGiw6fJRWcV4KE8Qt55xfmmrl0zO/r2aCvg==}
 
   '@milaboratories/pl-model-middle-layer@1.8.39':
     resolution: {integrity: sha512-6nfmY959yuvAdknpmlzPe54bp69gU1264woKOuvuAw0xchl20QSEsKgWOdtn/I8IXhuPh5wBshwn3Ucrx/Co7g==}
+
+  '@milaboratories/pl-model-middle-layer@1.8.40':
+    resolution: {integrity: sha512-xwAhayvUYR1TmmIKtj/EOIc6TttvN18kXZcU0Ai/IfyjVqNw7GVPKywBLgD8Gt1yhg4Y8BTxilxpXTibRT3PCw==}
 
   '@milaboratories/pl-tree@1.8.13':
     resolution: {integrity: sha512-OTa+dmFO6SH7e5F36QV+B/zGg8B4geqqnJAaqTBjhniQG3XHVZOCfW7sKrMTPsOQoFKegWTWdtPi0gfxLsw+lA==}
@@ -1262,6 +1268,10 @@ packages:
 
   '@platforma-sdk/block-tools@2.6.20':
     resolution: {integrity: sha512-5KkICw/StLGTh1F6XwSK8v0kpcNtk1fkG103xoA8qsQC1TicX4+bYvSX8Ow1z/pOfYoU1tSB1T0hUZqyjBjdVQ==}
+    hasBin: true
+
+  '@platforma-sdk/block-tools@2.6.21':
+    resolution: {integrity: sha512-X5B094uOZF8QiSNQg7FhjhWtwpAHTmYBsiwwOVhfo5e0yd0x6DBns82Jp0wWwXvocv7VQnS4mYWoXCy6NVzIvw==}
     hasBin: true
 
   '@platforma-sdk/blocks-deps-updater@2.0.0':
@@ -6609,7 +6619,7 @@ snapshots:
   '@eslint/config-array@0.19.2':
     dependencies:
       '@eslint/object-schema': 2.1.6
-      debug: 4.4.0(supports-color@8.1.1)
+      debug: 4.4.3
       minimatch: 3.1.2
     transitivePeerDependencies:
       - supports-color
@@ -6625,7 +6635,7 @@ snapshots:
   '@eslint/eslintrc@3.2.0':
     dependencies:
       ajv: 6.12.6
-      debug: 4.4.0(supports-color@8.1.1)
+      debug: 4.4.3
       espree: 10.3.0
       globals: 14.0.0
       ignore: 5.3.2
@@ -7033,6 +7043,12 @@ snapshots:
       canonicalize: 2.1.0
       zod: 3.23.8
 
+  '@milaboratories/pl-model-common@1.21.6':
+    dependencies:
+      '@milaboratories/pl-error-like': 1.12.5
+      canonicalize: 2.1.0
+      zod: 3.23.8
+
   '@milaboratories/pl-model-middle-layer@1.8.35':
     dependencies:
       '@milaboratories/pl-model-common': 1.21.4
@@ -7043,6 +7059,13 @@ snapshots:
   '@milaboratories/pl-model-middle-layer@1.8.39':
     dependencies:
       '@milaboratories/pl-model-common': 1.21.5
+      remeda: 2.30.0
+      utility-types: 3.11.0
+      zod: 3.23.8
+
+  '@milaboratories/pl-model-middle-layer@1.8.40':
+    dependencies:
+      '@milaboratories/pl-model-common': 1.21.6
       remeda: 2.30.0
       utility-types: 3.11.0
       zod: 3.23.8
@@ -7246,6 +7269,28 @@ snapshots:
       '@milaboratories/pl-http': 1.2.0
       '@milaboratories/pl-model-common': 1.21.5
       '@milaboratories/pl-model-middle-layer': 1.8.39
+      '@milaboratories/resolve-helper': 1.1.1
+      '@milaboratories/ts-helpers': 1.5.4
+      '@milaboratories/ts-helpers-oclif': 1.1.33
+      '@oclif/core': 4.2.6
+      canonicalize: 2.1.0
+      lru-cache: 11.2.2
+      mime-types: 2.1.35
+      remeda: 2.30.0
+      tar: 7.4.3
+      undici: 7.16.0
+      yaml: 2.8.1
+      zod: 3.23.8
+    transitivePeerDependencies:
+      - aws-crt
+      - supports-color
+
+  '@platforma-sdk/block-tools@2.6.21':
+    dependencies:
+      '@aws-sdk/client-s3': 3.859.0
+      '@milaboratories/pl-http': 1.2.0
+      '@milaboratories/pl-model-common': 1.21.6
+      '@milaboratories/pl-model-middle-layer': 1.8.40
       '@milaboratories/resolve-helper': 1.1.1
       '@milaboratories/ts-helpers': 1.5.4
       '@milaboratories/ts-helpers-oclif': 1.1.33
@@ -9968,7 +10013,7 @@ snapshots:
       eslint-visitor-keys: 4.2.0
       espree: 10.3.0
       estraverse: 5.3.0
-      picomatch: 4.0.2
+      picomatch: 4.0.3
     transitivePeerDependencies:
       - supports-color
       - typescript
@@ -10089,7 +10134,7 @@ snapshots:
       '@typescript-eslint/types': 8.24.0
       '@typescript-eslint/typescript-estree': 8.24.0(typescript@5.5.4)
       '@typescript-eslint/visitor-keys': 8.24.0
-      debug: 4.4.0(supports-color@8.1.1)
+      debug: 4.4.3
       eslint: 9.20.1
       typescript: 5.5.4
     transitivePeerDependencies:
@@ -10104,7 +10149,7 @@ snapshots:
     dependencies:
       '@typescript-eslint/typescript-estree': 8.24.0(typescript@5.5.4)
       '@typescript-eslint/utils': 8.24.0(eslint@9.20.1)(typescript@5.5.4)
-      debug: 4.4.0(supports-color@8.1.1)
+      debug: 4.4.3
       eslint: 9.20.1
       ts-api-utils: 2.0.1(typescript@5.5.4)
       typescript: 5.5.4
@@ -10117,7 +10162,7 @@ snapshots:
     dependencies:
       '@typescript-eslint/types': 8.24.0
       '@typescript-eslint/visitor-keys': 8.24.0
-      debug: 4.4.0(supports-color@8.1.1)
+      debug: 4.4.3
       fast-glob: 3.3.2
       is-glob: 4.0.3
       minimatch: 9.0.5
@@ -11055,12 +11100,12 @@ snapshots:
       '@humanfs/node': 0.16.6
       '@humanwhocodes/module-importer': 1.0.1
       '@humanwhocodes/retry': 0.4.1
-      '@types/estree': 1.0.6
+      '@types/estree': 1.0.8
       '@types/json-schema': 7.0.15
       ajv: 6.12.6
       chalk: 4.1.2
       cross-spawn: 7.0.6
-      debug: 4.4.0(supports-color@8.1.1)
+      debug: 4.4.3
       escape-string-regexp: 4.0.0
       eslint-scope: 8.2.0
       eslint-visitor-keys: 4.2.0
@@ -12329,7 +12374,7 @@ snapshots:
 
   vue-eslint-parser@9.4.3(eslint@9.20.1):
     dependencies:
-      debug: 4.4.0(supports-color@8.1.1)
+      debug: 4.4.3
       eslint: 9.20.1
       eslint-scope: 7.2.2
       eslint-visitor-keys: 3.4.3
