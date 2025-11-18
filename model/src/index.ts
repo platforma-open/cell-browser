@@ -3,14 +3,12 @@ import type {
   InferOutputsType,
   PColumnEntryUniversal,
   PColumnIdAndSpec,
-  PColumnSpec,
   PFrameHandle,
   PlDataTableStateV2,
   PlRef,
   SimplifiedUniversalPColumnEntry,
 } from '@platforma-sdk/model';
 import {
-  Annotation,
   BlockModel,
   createPFrameForGraphs,
   createPlDataTableSheet,
@@ -20,7 +18,6 @@ import {
   isPColumn,
   isPColumnSpec,
   PColumnCollection,
-  readAnnotationJson,
 } from '@platforma-sdk/model';
 import omit from 'lodash.omit';
 import type { AnnotationSpec, AnnotationSpecUi } from './types';
@@ -82,7 +79,6 @@ const simplifyColumnEntries = (
 
   return ret;
 };
-
 export const platforma = BlockModel.create('Heavy')
 
   .withArgs<BlockArgs>({
@@ -135,6 +131,16 @@ export const platforma = BlockModel.create('Heavy')
     },
   })
 
+  .output('anchorAxesSpecs', (ctx) => {
+    if (!ctx.args.countsRef) return undefined;
+    return ctx.resultPool.getPColumnSpecByRef(ctx.args.countsRef)?.axesSpec;
+  })
+
+  .output('annotationsAxesSpecs', (ctx) => {
+    if (!ctx.args.countsRef) return undefined;
+    return ctx.resultPool.getPColumnSpecByRef(ctx.args.countsRef)?.axesSpec?.slice(0, 2);
+  })
+
   .output('inputOptions', (ctx) =>
     ctx.resultPool.getOptions([
       {
@@ -178,6 +184,40 @@ export const platforma = BlockModel.create('Heavy')
       );
 
     return simplifyColumnEntries(entries);
+  })
+
+  .output('overlapColumnsPf', (ctx) => {
+    if (ctx.args.countsRef === undefined) return undefined;
+
+    const anchorCtx = ctx.resultPool.resolveAnchorCtx({ main: ctx.args.countsRef });
+
+    if (!anchorCtx) return undefined;
+
+    const entries = new PColumnCollection()
+      .addColumnProvider(ctx.resultPool)
+      .addAxisLabelProvider(ctx.resultPool)
+      .getColumns(
+        [
+          {
+            axes: [
+              { anchor: 'main', idx: 0 }, // sampleId
+              { anchor: 'main', idx: 1 }, // cellId
+            ],
+          },
+          {
+            axes: [
+              { anchor: 'main', idx: 0 }, // sampleId
+              { anchor: 'main', idx: 1 }, // cellId
+              { anchor: 'main', idx: 2 }, // geneId
+            ],
+          },
+        ],
+        { anchorCtx },
+      );
+
+    if (entries === undefined) return undefined;
+
+    return ctx.createPFrame(entries);
   })
 
   .output('overlapTable', (ctx) => {
@@ -278,7 +318,7 @@ export const platforma = BlockModel.create('Heavy')
       && spec.name === 'pl7.app/rna-seq/countMatrix'
       && spec.domain?.['pl7.app/rna-seq/normalized'] === 'false'
       // && spec.annotations?.['pl7.app/hideDataFromGraphs'] !== 'true'
-      , { includeNativeLabel: false, addLabelAsSuffix: true }),
+    , { includeNativeLabel: false, addLabelAsSuffix: true }),
   )
 
   .output('countsSpec', (ctx) => {
@@ -297,19 +337,25 @@ export const platforma = BlockModel.create('Heavy')
   })
 
   .output('UMAPPf', (ctx): PFrameHandle | undefined => {
-    // Build a PFrame consisting of all columns that can be associated with the selected countsRef anchor
-    if (!ctx.args.countsRef) return undefined;
+    if (ctx.args.countsRef == undefined) return undefined;
+
+    const anchorCtx = ctx.resultPool.resolveAnchorCtx({ main: ctx.args.countsRef });
+    if (!anchorCtx) return undefined;
 
     const annotationsColumns = ctx.prerun?.resolve({ field: 'annotationsPf', assertFieldType: 'Input', allowPermanentAbsence: true })?.getPColumns() ?? [];
     const filtersColumns = ctx.prerun?.resolve({ field: 'filtersPf', assertFieldType: 'Input', allowPermanentAbsence: true })?.getPColumns() ?? [];
     const allColumns = [...annotationsColumns, ...filtersColumns];
 
+    // const columns = new PColumnCollection();
+    // columns.addColumnProvider(ctx.resultPool);
+    // const cols = columns.getColumns((spec) => !isHiddenFromGraphColumn(spec), { dontWaitAllData: true, overrideLabelAnnotation: false }) ?? [];
+    // throw new Error(JSON.stringify(cols, null, 2));
+
     return createPFrameForGraphs(ctx, allColumns.length > 0 ? allColumns : undefined);
   })
 
   .output('umapDefaults', (ctx) => {
-    // Build a PFrame consisting of all columns that can be associated with the selected countsRef anchor
-    if (!ctx.args.countsRef) return undefined;
+    if (ctx.args.countsRef == undefined) return undefined;
 
     // Use the SDK's anchored selection to gather all compatible columns for graphs
     const anchoredColumns = ctx.resultPool.getAnchoredPColumns(
@@ -440,8 +486,3 @@ export type BlockOutputs = InferOutputsType<typeof platforma>;
 export * from './types';
 // export type Href = InferHrefType<typeof platforma>;
 // export type { BlockArgs };
-
-// @todo: reexport this function from SDK, after it will be published
-export function isHiddenFromGraphColumn(column: PColumnSpec): boolean {
-  return !!readAnnotationJson(column, Annotation.HideDataFromGraphs);
-}

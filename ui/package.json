@@ -11,10 +11,13 @@
   },
   "dependencies": {
     "@platforma-open/milaboratories.wip-cell-browser.model": "workspace:*",
+    "@milaboratories/pl-model-common": "catalog:",
     "@milaboratories/graph-maker": "catalog:",
+    "@milaboratories/pf-plots": "catalog:",
     "@platforma-sdk/model": "catalog:",
     "@platforma-sdk/ui-vue": "catalog:",
     "@vueuse/core": "catalog:",
+    "canonicalize": "catalog:",
     "es-toolkit": "catalog:",
     "vue": "catalog:"
   },

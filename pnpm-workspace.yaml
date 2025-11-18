@@ -17,13 +17,16 @@ catalog:
   '@platforma-sdk/block-tools': ^2.6.16
   '@platforma-sdk/eslint-config': ^1.1.0
   '@milaboratories/graph-maker': ^1.1.165
+  '@milaboratories/pf-plots': ^1.1.45
   '@platforma-sdk/blocks-deps-updater': ^2.0.0
+  '@milaboratories/pl-model-common': ^1.21.5
 
   '@platforma-sdk/test': ^1.45.0
   '@milaboratories/helpers': ^1.12.0
 
   '@platforma-open/milaboratories.software-binary-collection.software-7zip': ^1.1.2
 
+  'canonicalize': ^2.1.0
   'es-toolkit': ^1.39.10
 
   'vue': 3.5.13
