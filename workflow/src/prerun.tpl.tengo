@@ -13,7 +13,7 @@ annotationsStats := import(":annotations-stats")
 
 wf.prepare(func(args) {
 	return {
-		inputAnchorColumn: is_undefined(args.inputAnchor) ? undefined : wf.resolve(args.inputAnchor)
+		countsRefColumn: is_undefined(args.countsRef) ? undefined : wf.resolve(args.countsRef)
 	}
 })
 wf.body(func(args) {
@@ -27,16 +27,16 @@ wf.body(func(args) {
 		computedAnnotations := annotations.computeCellAnnotations({
 			title: annotationSpec.title,
 			steps: annotationSpec.steps,
-			inputAnchor: args.inputAnchor,
+			countsRef: args.countsRef,
 			annotationAxesSpec: annotationAxesSpec,
-			shouldComputeFilters: false
+			shouldComputeFilters: true
 		})
 
+		outputs["filtersPf"] = pFrames.exportFrame(computedAnnotations["filtersPf"])
 		outputs["annotationsPf"] = pFrames.exportFrame(computedAnnotations["annotationsPf"])
 
 		computedStats := annotationsStats.computeAnnotationsStats({
-			annotations: computedAnnotations.annotationsColumn,
-			inputAnchorColumn: args.inputAnchorColumn
+			annotations: computedAnnotations.annotationsColumn
 		})
 
 		outputs["annotationStatsPf"] = pFrames.exportFrame(computedStats.annotationStatsPf)

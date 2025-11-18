@@ -26,7 +26,7 @@ function handleCreateAnnotation(props: { title: string }) {
   app.model.ui.annotationSpec.steps = [];
 }
 
-async function handleDeleteSchema() {
+function handleDeleteSchema() {
   Object.assign(app.model.ui.annotationSpec, getDefaultAnnotationScript());
 }
 

@@ -18,9 +18,9 @@
     "@platforma-sdk/blocks-deps-updater": "catalog:"
   },
   "packageManager": "pnpm@9.12.0",
-  "//pnpm": {
+  "pnpm": {
     "overrides": {
-      "@platforma-sdk/workflow-tengo": "file:/Users/aleksandr/GIT/MILAB/platforma/sdk/workflow-tengo/package.tgz"
+      "@milaboratories/graph-maker": "file:/Users/aleksandr/GIT/MILAB/graph-maker/package.tgz"
     }
   }
 }
