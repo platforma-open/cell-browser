@@ -4,12 +4,13 @@ import { defineApp } from '@platforma-sdk/ui-vue';
 import { ref } from 'vue';
 import { processAnnotationUiStateToArgsState } from './model';
 
+import type { PFrameDriver } from '@platforma-sdk/model';
 import AnnotationPage from './components/AnnotationPage.vue';
 import AnnotationStatsBySamplePage from './components/AnnotationStatsBySamplePage.vue';
 import AnnotationStatsPage from './components/AnnotationStatsPage.vue';
 import MainPage from './components/MainPage.vue';
 import ViolinPage from './components/ViolinPage.vue';
-import { setDefaultUiState } from './utils';
+import { setDefaultUiState, throwingError } from './utils';
 
 export const sdkPlugin = defineApp(platforma as Platforma, (app) => {
   setDefaultUiState(app.model);
@@ -21,7 +22,10 @@ export const sdkPlugin = defineApp(platforma as Platforma, (app) => {
 
   const isAnnotationModalOpen = ref(false);
 
+  const pFrameDriver = (('platforma' in window) ? window.platforma?.pFrameDriver : throwingError('Platforma SDK is not found')) as PFrameDriver;
+
   return {
+    pFrameDriver,
     isAnnotationModalOpen,
     routes: {
       '/': () => MainPage,

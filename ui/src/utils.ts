@@ -55,3 +55,11 @@ const DEFAULT_UI_STATE: UiState = {
 export function setDefaultUiState(model: { ui: UiState }) {
   Object.assign(model.ui, { ...DEFAULT_UI_STATE, ...model.ui });
 }
+
+export function throwingError(content: Error | string): never {
+  if (content instanceof Error) {
+    throw content;
+  } else {
+    throw new Error(content);
+  }
+}

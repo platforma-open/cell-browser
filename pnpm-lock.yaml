@@ -12,9 +12,15 @@ catalogs:
     '@milaboratories/build-configs':
       specifier: ^1.0.8
       version: 1.0.8
+    '@milaboratories/graph-maker':
+      specifier: ^1.1.165
+      version: 1.1.174
     '@milaboratories/helpers':
       specifier: ^1.12.0
       version: 1.12.0
+    '@milaboratories/pl-model-common':
+      specifier: ^1.21.5
+      version: 1.21.5
     '@milaboratories/ts-configs':
       specifier: ^1.0.6
       version: 1.0.6
@@ -57,6 +63,9 @@ catalogs:
     '@vueuse/core':
       specifier: ^13.9.0
       version: 13.9.0
+    canonicalize:
+      specifier: ^2.1.0
+      version: 2.1.0
     es-toolkit:
       specifier: ^1.39.10
       version: 1.39.10
@@ -87,9 +96,6 @@ catalogs:
     vue-tsc:
       specifier: ^2.2.10
       version: 2.2.10
-
-overrides:
-  '@milaboratories/graph-maker': file:/Users/aleksandr/GIT/MILAB/graph-maker/package.tgz
 
 importers:
 
@@ -140,8 +146,8 @@ importers:
         version: 4.5.0
     devDependencies:
       '@milaboratories/graph-maker':
-        specifier: file:/Users/aleksandr/GIT/MILAB/graph-maker/package.tgz
-        version: file:../graph-maker/package.tgz(d3-dispatch@3.0.1)(d3-path@3.1.0)(d3-scale-chromatic@3.1.0)(sortablejs@1.15.6)(typescript@5.6.3)
+        specifier: 'catalog:'
+        version: 1.1.174(d3-dispatch@3.0.1)(d3-path@3.1.0)(d3-scale-chromatic@3.1.0)(sortablejs@1.15.6)(typescript@5.6.3)
       '@platforma-sdk/block-tools':
         specifier: 'catalog:'
         version: 2.6.16
@@ -198,8 +204,11 @@ importers:
   ui:
     dependencies:
       '@milaboratories/graph-maker':
-        specifier: file:/Users/aleksandr/GIT/MILAB/graph-maker/package.tgz
-        version: file:../graph-maker/package.tgz(d3-dispatch@3.0.1)(d3-path@3.1.0)(d3-scale-chromatic@3.1.0)(sortablejs@1.15.6)(typescript@5.6.3)
+        specifier: 'catalog:'
+        version: 1.1.174(d3-dispatch@3.0.1)(d3-path@3.1.0)(d3-scale-chromatic@3.1.0)(sortablejs@1.15.6)(typescript@5.6.3)
+      '@milaboratories/pl-model-common':
+        specifier: 'catalog:'
+        version: 1.21.5
       '@platforma-open/milaboratories.wip-cell-browser.model':
         specifier: workspace:*
         version: link:../model
@@ -212,6 +221,9 @@ importers:
       '@vueuse/core':
         specifier: 'catalog:'
         version: 13.9.0(vue@3.5.13(typescript@5.6.3))
+      canonicalize:
+        specifier: 'catalog:'
+        version: 2.1.0
       es-toolkit:
         specifier: 'catalog:'
         version: 1.39.10
@@ -1155,9 +1167,8 @@ packages:
     resolution: {integrity: sha512-ZjAZX4LXqXrtHqA5eJomUoHWZYKFkHyQKwKmkPeJuvp31XsueuDE89bi6qlzKvr/jONyZyTRRMMnCy3hW16umw==}
     engines: {node: '>=22.19.0'}
 
-  '@milaboratories/graph-maker@file:../graph-maker/package.tgz':
-    resolution: {integrity: sha512-8Gk6uhWv0kvYKJ2wLgP2svhBeQ52324xMRjJQEaE9iWbBPCNR6gYqueAqL0NhtdgzDfiYFdrvbMz0uQc6DpAPw==, tarball: file:../graph-maker/package.tgz}
-    version: 1.1.174
+  '@milaboratories/graph-maker@1.1.174':
+    resolution: {integrity: sha512-miwbn+jtSeeDUy8UW231MibOuW3iR/db8qQGwjQdCwtQiWT6NxmcBr+y2KBEEvpkuevxhBBXMIqLL03ik0vbGg==}
 
   '@milaboratories/helpers@1.12.0':
     resolution: {integrity: sha512-Eg3AQMJbVClYhdvhogdlW3Ys9EdLLl8ZTqG675iLwoO64ZJcQOAnIPjXwl4zJ/bZWx4nEhRF9AvwxRdc08fikQ==}
@@ -1212,6 +1223,9 @@ packages:
 
   '@milaboratories/pl-model-common@1.21.4':
     resolution: {integrity: sha512-k0dqRSWF2npDXEI00F+on6g/B6LDIOlRTJTZ5Pc+vyj9n4GvlR2lT93GKJwJXEx4jok8H//2FwZabC+EFxTYpQ==}
+
+  '@milaboratories/pl-model-common@1.21.5':
+    resolution: {integrity: sha512-bPF/tzL2rPc6LmaVH1BVdfeZbE4Mtfaje2ZHrFQDLtnzuJEPmze06xslzkYQnfMxLaB/ou+Y36YgVYQgt15aXw==}
 
   '@milaboratories/pl-model-middle-layer@1.8.34':
     resolution: {integrity: sha512-0VdpZ67nmX0bWjCjcCR0paGqzJleZ/1TVLdbK71gWuq2jwN6wmBA90t5rDAfRWj7Ju9RkUU7LR5QyuwB/L0OfQ==}
@@ -7133,7 +7147,7 @@ snapshots:
       utility-types: 3.11.0
       zod: 3.23.8
 
-  '@milaboratories/graph-maker@file:../graph-maker/package.tgz(d3-dispatch@3.0.1)(d3-path@3.1.0)(d3-scale-chromatic@3.1.0)(sortablejs@1.15.6)(typescript@5.6.3)':
+  '@milaboratories/graph-maker@1.1.174(d3-dispatch@3.0.1)(d3-path@3.1.0)(d3-scale-chromatic@3.1.0)(sortablejs@1.15.6)(typescript@5.6.3)':
     dependencies:
       '@ag-grid-community/core': 32.3.9
       '@milaboratories/helpers': 1.12.0
@@ -7388,6 +7402,12 @@ snapshots:
       zod: 3.23.8
 
   '@milaboratories/pl-model-common@1.21.4':
+    dependencies:
+      '@milaboratories/pl-error-like': 1.12.5
+      canonicalize: 2.1.0
+      zod: 3.23.8
+
+  '@milaboratories/pl-model-common@1.21.5':
     dependencies:
       '@milaboratories/pl-error-like': 1.12.5
       canonicalize: 2.1.0
