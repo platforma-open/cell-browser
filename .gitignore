@@ -5,6 +5,7 @@ dev/
 work/
 log/
 *.tgz
+.idea
 .test_auth.json
 .turbo
 vite.config.*.timestamp-*
