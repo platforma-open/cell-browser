@@ -4,6 +4,7 @@ block-pack/
 dev/
 work/
 log/
+.idea
 *.tgz
 .test_auth.json
 .turbo
