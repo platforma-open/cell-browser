@@ -7,9 +7,11 @@ import { useApp } from '../app';
 
 import type { PredefinedGraphOption } from '@milaboratories/graph-maker';
 import { GraphMaker } from '@milaboratories/graph-maker';
+import { useColumnSuggestion } from '../suggestion';
 import { getDefaultAnnotationScript } from '../utils';
 
 const app = useApp();
+const suggest = useColumnSuggestion();
 const settingsOpen = ref(true);
 
 function setInput(inputRef?: PlRef) {
@@ -72,7 +74,7 @@ function handleRun() {
 <template>
   <PlBlockPage>
     <GraphMaker
-      v-model="app.model.ui.graphStateUMAP"
+      v-model="app.model.ui.graphStateUMAP as any"
       :class="$style.graphMaker"
       :dataStateKey="key"
       chartType="scatterplot-umap"
@@ -96,6 +98,7 @@ function handleRun() {
           v-model:annotation="app.model.ui.annotationSpec"
           :class="$style.annotations"
           :columns="app.model.outputs.overlapColumns ?? []"
+          :getSuggestOptions="suggest"
           :onDeleteSchema="handleDeleteSchema"
         />
       </template>

@@ -1,9 +1,11 @@
 import type {
   CalculateTableDataRequest,
+  ListOptionBase,
   PColumnSpec,
   PFrameDriver,
   PFrameHandle,
   PTableVector,
+  SUniversalPColumnId,
   UniqueValuesRequest,
 } from '@milaboratories/pl-model-common';
 import { pTableValue } from '@milaboratories/pl-model-common';
@@ -14,6 +16,33 @@ import type {
 } from '@milaboratories/pl-model-common';
 import type { AxisId, CanonicalizedJson, FindColumnsRequest, FindColumnsResponse, FullPTableColumnData, PColumnIdAndSpec, PObjectId, PTableRecordSingleValueFilterV2, ValueType } from '@platforma-sdk/model';
 import { Annotation, canonicalizeAxisId, getAxisId, readAnnotation } from '@platforma-sdk/model';
+import { computed } from 'vue';
+import { useApp } from './app';
+
+export function useColumnSuggestion() {
+  const app = useApp();
+
+  const provider = computed(() => app.model.outputs.overlapColumnsPf
+    ? new ColumnsProvider(app.model.outputs.overlapColumnsPf, app.pFrameDriver)
+    : null,
+  );
+
+  const suggest = async (params: { columnId: string; searchStr: string; axisIdx?: number }): Promise<ListOptionBase<string | number>[]> => {
+    const providerValue = provider.value;
+    if (providerValue == null) return [];
+
+    const response = await getUniqueSourceValuesWithLabels(providerValue, {
+      columnId: params.columnId as SUniversalPColumnId,
+      axisIdx: params.axisIdx,
+      limit: 300,
+      searchQuery: params.searchStr,
+    });
+
+    return response.values;
+  };
+
+  return suggest;
+}
 
 export type PValue = string | number | null;
 

@@ -1,12 +1,12 @@
-import type { GraphMakerState } from '@milaboratories/graph-maker';
+// import type { GraphMakerState } from '@milaboratories/graph-maker';
 import type {
   InferOutputsType,
   PColumnEntryUniversal,
   PColumnIdAndSpec,
+  PColumnSpec,
   PFrameHandle,
   PlDataTableStateV2,
   PlRef,
-  SimplifiedUniversalPColumnEntry,
 } from '@platforma-sdk/model';
 import {
   BlockModel,
@@ -19,7 +19,6 @@ import {
   isPColumnSpec,
   PColumnCollection,
 } from '@platforma-sdk/model';
-import omit from 'lodash.omit';
 import type { AnnotationSpec, AnnotationSpecUi } from './types';
 
 type BlockArgs = {
@@ -41,37 +40,29 @@ export type UiState = {
   };
   annotationSpec: AnnotationSpecUi;
   //
-  graphStateUMAP: GraphMakerState;
-  graphStateViolin: GraphMakerState;
-  heatmapState: GraphMakerState;
+  graphStateUMAP: unknown;// GraphMakerState;
+  graphStateViolin: unknown;// GraphMakerState;
+  heatmapState: unknown;// GraphMakerState;
 };
 
-const excludedAnnotationKeys = [
-  'pl7.app/table/orderPriority',
-  'pl7.app/table/visibility',
-  'pl7.app/trace',
-];
-
-const simplifyColumnEntries = (
-  entries: PColumnEntryUniversal[] | undefined,
-): SimplifiedUniversalPColumnEntry[] | undefined => {
-  if (!entries) {
-    return undefined;
-  }
-
+function prepareToAdvancedFilters(
+  anchorSpec: PColumnSpec,
+  entries: PColumnEntryUniversal[],
+) {
+  const anchorAxes = anchorSpec.axesSpec;
   const ret = entries.map((entry) => {
-    const filteredAnnotations = entry.spec.annotations
-      ? omit(entry.spec.annotations, excludedAnnotationKeys)
-      : undefined;
-
     return {
       id: entry.id,
+      spec: entry.spec,
       label: entry.label,
-      axesSpec: entry.spec.axesSpec,
-      obj: {
-        valueType: entry.spec.valueType,
-        annotations: filteredAnnotations,
-      },
+      axesToBeFixed: entry.spec.axesSpec.length > anchorAxes.length
+        ? entry.spec.axesSpec.slice(anchorAxes.length).map((axis, i) => {
+          return {
+            idx: anchorAxes.length + i,
+            label: axis.name,
+          };
+        })
+        : undefined,
     };
   });
 
@@ -159,7 +150,8 @@ export const platforma = BlockModel.create('Heavy')
     if (ctx.args.countsRef === undefined)
       return undefined;
     const anchorCtx = ctx.resultPool.resolveAnchorCtx({ main: ctx.args.countsRef });
-    if (!anchorCtx) return undefined;
+    const anchorSpec = ctx.resultPool.getPColumnSpecByRef(ctx.args.countsRef);
+    if (anchorCtx == null || anchorSpec == null) return undefined;
 
     const entries = new PColumnCollection()
       .addColumnProvider(ctx.resultPool)
@@ -183,7 +175,9 @@ export const platforma = BlockModel.create('Heavy')
         { anchorCtx },
       );
 
-    return simplifyColumnEntries(entries);
+    if (entries === undefined) return undefined;
+
+    return prepareToAdvancedFilters(anchorSpec, entries);
   })
 
   .output('overlapColumnsPf', (ctx) => {
@@ -481,8 +475,8 @@ export const platforma = BlockModel.create('Heavy')
 
   .done(2);
 
+export type * from './types';
 export type Platforma = typeof platforma;
 export type BlockOutputs = InferOutputsType<typeof platforma>;
-export * from './types';
 // export type Href = InferHrefType<typeof platforma>;
 // export type { BlockArgs };
