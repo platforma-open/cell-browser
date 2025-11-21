@@ -54,7 +54,8 @@ type SuggestionResponse = {
   overflow: boolean;
 };
 
-const sortValues = (values: { value: string; label: string }[]) => values.sort((a, b) => a.label.localeCompare(b.label, 'en', { numeric: true }));
+const sortValuesPredicate = (a: { label: string }, b: { label: string }) => a.label.localeCompare(b.label, 'en', { numeric: true });
+
 export async function getUniqueSourceValuesWithLabels(
   provider: ColumnsProvider,
   {
@@ -85,8 +86,7 @@ export async function getUniqueSourceValuesWithLabels(
       ? (JSON.parse(discreteValuesStr) as (string | number)[]).map((v) => String(v))
       : null;
     if (discreteValues) {
-      const values = discreteValues.map((v) => ({ value: v, label: v }));
-      sortValues(values);
+      const values = discreteValues.map((v) => ({ value: v, label: v })).sort(sortValuesPredicate);
       return { values, overflow: false };
     }
   } catch {
@@ -134,7 +134,7 @@ export async function getUniqueSourceValuesWithLabels(
       for (let i = 0; i < Math.min(axisKeys.length, limit ?? axisKeys.length); i++) {
         values.push({ value: String(axisKeys[i]), label: String(dataValues[i]) });
       }
-      sortValues(values);
+      values.sort(sortValuesPredicate);
       return { values, overflow: !(limit === undefined || axisKeys.length < limit) };
     } else {
       const searchInLabelsOrValue = searchQuery ?? searchQueryValue;
@@ -161,8 +161,9 @@ export async function getUniqueSourceValuesWithLabels(
         limit,
         filters,
       });
-      const values = response.values.map((v) => ({ value: String(v), label: String(v) }));
-      sortValues(values);
+      const values = response.values
+        .map((v) => ({ value: String(v), label: String(v) }))
+        .sort(sortValuesPredicate);
       return { values, overflow: response.overflow };
     }
   } else {
@@ -183,15 +184,12 @@ export async function getUniqueSourceValuesWithLabels(
         ]
       : [];
     const response = await provider.getColumnUniqueValues(selectedSource, limit, filters);
-    const values = response.values.map((v) => ({ value: String(v), label: String(v) }));
-    sortValues(values);
+    const values = response.values
+      .map((v) => ({ value: String(v), label: String(v) }))
+      .sort(sortValuesPredicate);
     return { values, overflow: response.overflow };
   }
 }
-
-export type AxesSet = Map<ColumnOrAxisIdString, { parentSource: ColumnOrAxisIdString; spec: AxisSpec }>;
-
-export type ColumnOrAxisIdString = string;
 
 const LABEL_COLUMN_NAME = 'pl7.app/label';
 

@@ -2,7 +2,7 @@
 import { PlAnnotationsModal } from '@platforma-sdk/ui-vue';
 import { computed } from 'vue';
 import { useApp } from '../app';
-import { useColumnSuggestion } from '../suggestion';
+import { useColumnSuggestion } from '../composition/suggest';
 import { getDefaultAnnotationScript } from '../utils';
 import AnnotationCreateDialog from './AnnotationCreateDialog.vue';
 

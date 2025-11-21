@@ -7,7 +7,7 @@ import { useApp } from '../app';
 
 import type { PredefinedGraphOption } from '@milaboratories/graph-maker';
 import { GraphMaker } from '@milaboratories/graph-maker';
-import { useColumnSuggestion } from '../suggestion';
+import { useColumnSuggestion } from '../composition/suggest';
 import { getDefaultAnnotationScript } from '../utils';
 
 const app = useApp();

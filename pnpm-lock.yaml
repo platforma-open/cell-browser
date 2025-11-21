@@ -1375,7 +1375,7 @@ packages:
       typescript-eslint: ^8.17.0
 
   '@platforma-sdk/model@file:../platforma/sdk/model/package.tgz':
-    resolution: {integrity: sha512-T1G1zCNFvm3dbn+QYt6x3vhrmUlsCvrnWiSGU84I6lF+GMlFLWzfwdCK9eH2zuyNRtmqzmj00h1/3uwBx4PfmA==, tarball: file:../platforma/sdk/model/package.tgz}
+    resolution: {integrity: sha512-8cqfLzaRpxVZHwkcJiHbvmSB/CzPq4k0V+ADwGHlTLcF/0Q+vFpdOnG+GpGOqeNL7X7KSGNAoBjpCDW6IKQaxw==, tarball: file:../platforma/sdk/model/package.tgz}
     version: 1.45.35
 
   '@platforma-sdk/tengo-builder@2.3.10':
@@ -1387,7 +1387,7 @@ packages:
     resolution: {integrity: sha512-fVV6mwsFy2iuMniWKu49X2d6sJiiHexeKdAaZMO6TU69CVrTxkSevpZ8ryYzv1ADaKs8FPwus7UoysmqyyCOQw==}
 
   '@platforma-sdk/ui-vue@file:../platforma/sdk/ui-vue/package.tgz':
-    resolution: {integrity: sha512-ezG9JhpJWEaueSeij+hq7N2ODNedNNzFd4DsHRPxFbMdNcwpCFFZBGLpUQzZNqWqB6ve90rbElaj12DlV2OZYg==, tarball: file:../platforma/sdk/ui-vue/package.tgz}
+    resolution: {integrity: sha512-6bhZL169Z/FyJG9K4RBo4qid3GXLQTHLD73ylP5kVb4HpXW1M78dM4CKKOXZbvZDaHE1O4EmgFEXX7yr37v3ZA==, tarball: file:../platforma/sdk/ui-vue/package.tgz}
     version: 1.45.36
 
   '@platforma-sdk/workflow-tengo@4.18.2':

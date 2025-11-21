@@ -46,19 +46,19 @@ export type UiState = {
 };
 
 function prepareToAdvancedFilters(
-  anchorSpec: PColumnSpec,
   entries: PColumnEntryUniversal[],
+  anchorAxesSpec: PColumnSpec['axesSpec'],
 ) {
-  const anchorAxes = anchorSpec.axesSpec;
   const ret = entries.map((entry) => {
+    const axesSpec = entry.spec.axesSpec;
     return {
       id: entry.id,
       spec: entry.spec,
       label: entry.label,
-      axesToBeFixed: entry.spec.axesSpec.length > anchorAxes.length
-        ? entry.spec.axesSpec.slice(anchorAxes.length).map((axis, i) => {
+      axesToBeFixed: axesSpec.length > anchorAxesSpec.length
+        ? axesSpec.slice(anchorAxesSpec.length).map((axis, i) => {
           return {
-            idx: anchorAxes.length + i,
+            idx: anchorAxesSpec.length + i,
             label: axis.name,
           };
         })
@@ -177,7 +177,7 @@ export const platforma = BlockModel.create('Heavy')
 
     if (entries === undefined) return undefined;
 
-    return prepareToAdvancedFilters(anchorSpec, entries);
+    return prepareToAdvancedFilters(entries, anchorSpec.axesSpec.slice(0, 2));
   })
 
   .output('overlapColumnsPf', (ctx) => {
