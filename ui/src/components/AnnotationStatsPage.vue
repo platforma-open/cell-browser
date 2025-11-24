@@ -11,7 +11,7 @@ import AnnotationModal from './AnnotationModal.vue';
 const app = useApp();
 
 const tableSettings = usePlDataTableSettingsV2({
-  sourceId: () => app.model.args.annotationSpec.steps.length > 0 ? app.model.args.annotationSpec.steps : undefined,
+  sourceId: () => app.model.args.countsRef,
   model: () => app.model.outputs.statsTable,
 });
 </script>
@@ -22,8 +22,11 @@ const tableSettings = usePlDataTableSettingsV2({
       Annotation Stats - {{ app.model.args.annotationSpec.title }}
     </template>
     <template #append>
-      <PlBtnGhost icon="settings" @click.stop="app.isAnnotationModalOpen = true">
+      <PlBtnGhost icon="annotate" @click.stop="app.isAnnotationModalOpen = true">
         Annotations
+      </PlBtnGhost>
+      <PlBtnGhost icon="settings" @click.exact.stop="app.model.ui.settingsOpen = true">
+        Settings
       </PlBtnGhost>
     </template>
     <PlAgDataTableV2

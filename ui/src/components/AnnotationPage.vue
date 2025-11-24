@@ -23,10 +23,10 @@ const tableSettings = usePlDataTableSettingsV2({
       Cell Browser
     </template>
     <template #append>
-      <PlBtnGhost icon="settings" @click.stop="app.isAnnotationModalOpen = true">
+      <PlBtnGhost icon="annotate" @click.stop="app.isAnnotationModalOpen = true">
         Annotations
       </PlBtnGhost>
-      <PlBtnGhost icon="settings" @click.exact.stop="() => (app.model.ui.settingsOpen = true)">
+      <PlBtnGhost icon="settings" @click.exact.stop="app.model.ui.settingsOpen = true">
         Settings
       </PlBtnGhost>
     </template>

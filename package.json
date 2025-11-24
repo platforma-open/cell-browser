@@ -21,7 +21,8 @@
   "pnpm": {
     "overrides": {
       "@platforma-sdk/model": "file:/Users/aleksandr/GIT/MILAB/platforma/sdk/model/package.tgz",
-      "@platforma-sdk/ui-vue": "file:/Users/aleksandr/GIT/MILAB/platforma/sdk/ui-vue/package.tgz"
+      "@platforma-sdk/ui-vue": "file:/Users/aleksandr/GIT/MILAB/platforma/sdk/ui-vue/package.tgz",
+      "@milaboratories/pl-model-common": "file:/Users/aleksandr/GIT/MILAB/platforma/lib/model/common/package.tgz"
     }
   }
 }

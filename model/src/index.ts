@@ -9,6 +9,7 @@ import type {
   PlRef,
 } from '@platforma-sdk/model';
 import {
+  Annotation,
   BlockModel,
   createPFrameForGraphs,
   createPlDataTableSheet,
@@ -59,7 +60,7 @@ function prepareToAdvancedFilters(
         ? axesSpec.slice(anchorAxesSpec.length).map((axis, i) => {
           return {
             idx: anchorAxesSpec.length + i,
-            label: axis.name,
+            label: axis.annotations?.[Annotation.Label] ?? axis.name,
           };
         })
         : undefined,
@@ -74,7 +75,7 @@ export const platforma = BlockModel.create('Heavy')
 
   .withArgs<BlockArgs>({
     annotationSpec: {
-      title: 'Cell Annotation',
+      title: '',
       steps: [],
     },
   })
@@ -92,7 +93,7 @@ export const platforma = BlockModel.create('Heavy')
     },
     annotationSpec: {
       isCreated: false,
-      title: 'Cell Annotation',
+      title: '',
       steps: [],
     } satisfies AnnotationSpecUi,
     graphStateUMAP: {
@@ -253,7 +254,11 @@ export const platforma = BlockModel.create('Heavy')
   })
 
   .output('statsTable', (ctx) => {
-    const annotationStatsPf = ctx.prerun?.resolve({ field: 'annotationStatsPf', assertFieldType: 'Input', allowPermanentAbsence: true });
+    const annotationStatsPf = ctx.prerun?.resolve({
+      field: 'annotationStatsPf',
+      assertFieldType: 'Input',
+      allowPermanentAbsence: true,
+    });
     const allColumns = annotationStatsPf?.getPColumns();
 
     if (allColumns == null || allColumns.length === 0) return undefined;
@@ -285,7 +290,6 @@ export const platforma = BlockModel.create('Heavy')
       .addAxisLabelProvider(ctx.resultPool)
       .addColumns(allColumns)
       .getColumns({});
-    // .getColumns({ axes: [{ split: true }, {}] });
 
     if (columns === undefined) return undefined;
 
@@ -330,20 +334,25 @@ export const platforma = BlockModel.create('Heavy')
     return countsSpec;
   })
 
-  .output('UMAPPf', (ctx): PFrameHandle | undefined => {
+  .retentiveOutput('UMAPPf', (ctx): PFrameHandle | undefined => {
     if (ctx.args.countsRef == undefined) return undefined;
 
     const anchorCtx = ctx.resultPool.resolveAnchorCtx({ main: ctx.args.countsRef });
     if (!anchorCtx) return undefined;
 
-    const annotationsColumns = ctx.prerun?.resolve({ field: 'annotationsPf', assertFieldType: 'Input', allowPermanentAbsence: true })?.getPColumns() ?? [];
-    const filtersColumns = ctx.prerun?.resolve({ field: 'filtersPf', assertFieldType: 'Input', allowPermanentAbsence: true })?.getPColumns() ?? [];
+    const annotationsColumns = ctx.prerun?.resolve({
+      field: 'annotationsPf',
+      stableIfNotFound: true,
+      assertFieldType: 'Input',
+      allowPermanentAbsence: true,
+    })?.getPColumns() ?? [];
+    const filtersColumns = ctx.prerun?.resolve({
+      field: 'filtersPf',
+      stableIfNotFound: true,
+      assertFieldType: 'Input',
+      allowPermanentAbsence: true,
+    })?.getPColumns() ?? [];
     const allColumns = [...annotationsColumns, ...filtersColumns];
-
-    // const columns = new PColumnCollection();
-    // columns.addColumnProvider(ctx.resultPool);
-    // const cols = columns.getColumns((spec) => !isHiddenFromGraphColumn(spec), { dontWaitAllData: true, overrideLabelAnnotation: false }) ?? [];
-    // throw new Error(JSON.stringify(cols, null, 2));
 
     return createPFrameForGraphs(ctx, allColumns.length > 0 ? allColumns : undefined);
   })
