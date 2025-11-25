@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { PlAnnotationsModal } from '@platforma-sdk/ui-vue';
 import { useApp } from '../app';
-import { useColumnSuggestion } from '../composition/suggest';
+import { useColumnSuggestion } from '../composition/useColumnSuggestion';
 import { getDefaultAnnotationScript } from '../utils';
 
 const app = useApp();

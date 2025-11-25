@@ -334,6 +334,16 @@ export const platforma = BlockModel.create('Heavy')
     return countsSpec;
   })
 
+  .output('annotationsIsComputing', (ctx) => {
+    if (ctx.args.countsRef === undefined) return false;
+    if (ctx.args.annotationSpec.steps.length === 0) return false;
+
+    const annotationsPf = ctx.prerun?.resolve('annotationsPf');
+    const filtersPf = ctx.prerun?.resolve('filtersPf');
+
+    return (annotationsPf === undefined || filtersPf === undefined);
+  })
+
   .retentiveOutput('UMAPPf', (ctx): PFrameHandle | undefined => {
     if (ctx.args.countsRef == undefined) return undefined;
 
@@ -463,9 +473,9 @@ export const platforma = BlockModel.create('Heavy')
       { type: 'link', href: '/', label: 'UMAP' },
       { type: 'link', href: '/violin', label: 'Gene Expression' },
       // { type: 'link', href: '/heatmap', label: 'Expression Heatmap' },
-      { type: 'link', href: '/annotations', label: 'Annotations' } as const,
       ...(ctx.args.annotationSpec.steps.length > 0
         ? [
+          { type: 'link', href: '/annotations', label: 'Annotations' } as const,
           { type: 'link', href: '/annotations-stats', label: 'Annotations stats' } as const,
           { type: 'link', href: '/annotations-stats-by-sample', label: 'Annotations stats by Sample' } as const,
         ]
@@ -478,14 +488,18 @@ export const platforma = BlockModel.create('Heavy')
   // We enrich the input, only if we produce annotations
   .enriches((args) => args.countsRef !== undefined && args.annotationSpec.steps.length > 0 ? [args.countsRef] : [])
 
-  .title((ctx) => ctx.args.title
-    ? `Cell Browser - ${ctx.args.title}`
-    : 'Cell Browser')
+  .title((ctx) => {
+    const prefix = ctx.args.annotationSpec.steps.length > 0
+      ? 'Cell Browser'
+      : 'Cell Annotation';
+
+    return ctx.args.title
+      ? `${prefix} - ${ctx.args.title}`
+      : prefix;
+  })
 
   .done(2);
 
 export type * from './types';
 export type Platforma = typeof platforma;
 export type BlockOutputs = InferOutputsType<typeof platforma>;
-// export type Href = InferHrefType<typeof platforma>;
-// export type { BlockArgs };

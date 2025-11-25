@@ -84,6 +84,7 @@ catalogs:
 
 overrides:
   '@platforma-sdk/model': file:/Users/aleksandr/GIT/MILAB/platforma/sdk/model/package.tgz
+  '@milaboratories/uikit': file:/Users/aleksandr/GIT/MILAB/platforma/lib/ui/uikit/package.tgz
   '@platforma-sdk/ui-vue': file:/Users/aleksandr/GIT/MILAB/platforma/sdk/ui-vue/package.tgz
   '@milaboratories/pl-model-common': file:/Users/aleksandr/GIT/MILAB/platforma/lib/model/common/package.tgz
 
@@ -1254,8 +1255,9 @@ packages:
     resolution: {integrity: sha512-Inpyk9sYn1e+59KwgAQW9uFBIR6hmMozDgTfOmz7sx38a2ZftBkYQtSCHwzztbV5tg8covugxbFEbpDKfDDF6A==}
     engines: {node: '>=22.19.0'}
 
-  '@milaboratories/uikit@2.6.2':
-    resolution: {integrity: sha512-22+KC5UXJ63d5+tEQsbTorincA1TZm2JGG9sI9830pCPr+bZOsc+f4cs3g1T4tyFAlrcIQCky/gaCpPe5UckMw==}
+  '@milaboratories/uikit@file:../platforma/lib/ui/uikit/package.tgz':
+    resolution: {integrity: sha512-FvWApqhiDvMHZPrzWpwrRrf2+SAyJ6yU3JUqpOkyxj8m4dUpaeJvsoll9hggXbSW4yCuDti4u4E2948hL+3TUg==, tarball: file:../platforma/lib/ui/uikit/package.tgz}
+    version: 2.6.2
 
   '@mstssk/cleandir@2.0.0':
     resolution: {integrity: sha512-CidYeaV4VQLIMbZlYqs0SJaZe/DyI0E4nsbFmPtCa2koKzMjZj/BThTCb+bvzcGhzp2A4Js1c4jDg6lqaqapyQ==}
@@ -1371,7 +1373,7 @@ packages:
       typescript-eslint: ^8.17.0
 
   '@platforma-sdk/model@file:../platforma/sdk/model/package.tgz':
-    resolution: {integrity: sha512-3s9ked52qjQXEOmR5qfO7jfQNDWSIGBd6mWYuURdwePUtCMmX9EOx+hMpPPQ6/vezzrjKG4IP3Ioy6+ZeFvXUA==, tarball: file:../platforma/sdk/model/package.tgz}
+    resolution: {integrity: sha512-GxVEsGGakAmvSOYbY8RLFjHqBPVg+v85rxM38pcohu9ke9Q97CNW/CkHa8tgMBB1wUzsDCr7BEpWCx4lea5iWA==, tarball: file:../platforma/sdk/model/package.tgz}
     version: 1.45.35
 
   '@platforma-sdk/tengo-builder@2.3.10':
@@ -1383,7 +1385,7 @@ packages:
     resolution: {integrity: sha512-fVV6mwsFy2iuMniWKu49X2d6sJiiHexeKdAaZMO6TU69CVrTxkSevpZ8ryYzv1ADaKs8FPwus7UoysmqyyCOQw==}
 
   '@platforma-sdk/ui-vue@file:../platforma/sdk/ui-vue/package.tgz':
-    resolution: {integrity: sha512-e7I4LdN73QElEUMw/Iq830puFYuxHHvYdLcvv5BvgTbCXAdE6HPnGTpt7SLDDfYmcPwlEbCyWbGQqq7a8YlB2g==, tarball: file:../platforma/sdk/ui-vue/package.tgz}
+    resolution: {integrity: sha512-cNbXd7OOrZVrQFOmBN/i6VKU6H2BHiC9BuQX/fRUbXvaf4Qj13WEnbbnagA7A/3vvSuvjLy26EykVvGoKDm6Ag==, tarball: file:../platforma/sdk/ui-vue/package.tgz}
     version: 1.45.36
 
   '@platforma-sdk/workflow-tengo@4.18.2':
@@ -7652,7 +7654,7 @@ snapshots:
       canonicalize: 2.1.0
       denque: 2.1.0
 
-  '@milaboratories/uikit@2.6.2(typescript@5.6.3)':
+  '@milaboratories/uikit@file:../platforma/lib/ui/uikit/package.tgz(typescript@5.6.3)':
     dependencies:
       '@milaboratories/helpers': 1.12.0
       '@platforma-sdk/model': file:../platforma/sdk/model/package.tgz
@@ -7662,8 +7664,8 @@ snapshots:
       '@types/d3-selection': 3.0.11
       '@types/sortablejs': 1.15.9
       '@vue/test-utils': 2.4.6
-      '@vueuse/core': 13.9.0(vue@3.5.22(typescript@5.6.3))
-      '@vueuse/integrations': 13.9.0(sortablejs@1.15.6)(vue@3.5.22(typescript@5.6.3))
+      '@vueuse/core': 13.9.0(vue@3.5.24(typescript@5.6.3))
+      '@vueuse/integrations': 13.9.0(sortablejs@1.15.6)(vue@3.5.24(typescript@5.6.3))
       canonicalize: 2.1.0
       d3-array: 3.2.4
       d3-axis: 3.0.0
@@ -7671,7 +7673,7 @@ snapshots:
       d3-selection: 3.0.0
       resize-observer-polyfill: 1.5.1
       sortablejs: 1.15.6
-      vue: 3.5.22(typescript@5.6.3)
+      vue: 3.5.24(typescript@5.6.3)
     transitivePeerDependencies:
       - async-validator
       - axios
@@ -7838,6 +7840,7 @@ snapshots:
       '@milaboratories/pl-model-common': file:../platforma/lib/model/common/package.tgz
       '@milaboratories/ptabler-expression-js': 1.1.3
       canonicalize: 2.1.0
+      es-toolkit: 1.39.10
       utility-types: 3.11.0
       zod: 3.23.8
 
@@ -7892,7 +7895,7 @@ snapshots:
     dependencies:
       '@milaboratories/biowasm-tools': 2.0.0
       '@milaboratories/ptabler-expression-js': 1.1.3
-      '@milaboratories/uikit': 2.6.2(typescript@5.6.3)
+      '@milaboratories/uikit': file:../platforma/lib/ui/uikit/package.tgz(typescript@5.6.3)
       '@platforma-sdk/model': file:../platforma/sdk/model/package.tgz
       '@types/d3-format': 3.0.4
       '@types/node': 24.5.2
@@ -11049,6 +11052,14 @@ snapshots:
       '@vueuse/core': 13.9.0(vue@3.5.22(typescript@5.6.3))
       '@vueuse/shared': 13.9.0(vue@3.5.22(typescript@5.6.3))
       vue: 3.5.22(typescript@5.6.3)
+    optionalDependencies:
+      sortablejs: 1.15.6
+
+  '@vueuse/integrations@13.9.0(sortablejs@1.15.6)(vue@3.5.24(typescript@5.6.3))':
+    dependencies:
+      '@vueuse/core': 13.9.0(vue@3.5.24(typescript@5.6.3))
+      '@vueuse/shared': 13.9.0(vue@3.5.24(typescript@5.6.3))
+      vue: 3.5.24(typescript@5.6.3)
     optionalDependencies:
       sortablejs: 1.15.6
 

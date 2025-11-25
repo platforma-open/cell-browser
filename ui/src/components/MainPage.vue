@@ -7,7 +7,7 @@ import { useApp } from '../app';
 
 import type { PredefinedGraphOption } from '@milaboratories/graph-maker';
 import { GraphMaker } from '@milaboratories/graph-maker';
-import { useColumnSuggestion } from '../composition/suggest';
+import { useColumnSuggestion } from '../composition/useColumnSuggestion';
 import { getDefaultAnnotationScript } from '../utils';
 
 const app = useApp();
@@ -119,5 +119,6 @@ function handleRun() {
 .annotations {
   display: flex;
   width: 768px;
+  height: 100%;
 }
 </style>

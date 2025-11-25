@@ -27,6 +27,7 @@ export const sdkPlugin = defineApp(platforma as Platforma, (app) => {
   return {
     pFrameDriver,
     isAnnotationModalOpen,
+    progress: () => app.model.outputs.annotationsIsComputing,
     routes: {
       '/': () => MainPage,
       '/violin': () => ViolinPage,
