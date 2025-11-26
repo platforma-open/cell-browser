@@ -2,15 +2,16 @@
 import '@milaboratories/graph-maker/styles';
 import { plRefsEqual, type PColumnIdAndSpec, type PlRef } from '@platforma-sdk/model';
 import { PlAnnotations, PlBlockPage, PlDropdownRef } from '@platforma-sdk/ui-vue';
-import { computed, ref } from 'vue';
+import { computed } from 'vue';
 import { useApp } from '../app';
 
 import type { PredefinedGraphOption } from '@milaboratories/graph-maker';
 import { GraphMaker } from '@milaboratories/graph-maker';
+import { useColumnSuggestion } from '../composition/useColumnSuggestion';
 import { getDefaultAnnotationScript } from '../utils';
 
 const app = useApp();
-const settingsOpen = ref(true);
+const suggest = useColumnSuggestion();
 
 function setInput(inputRef?: PlRef) {
   app.model.args.countsRef = inputRef;
@@ -62,25 +63,19 @@ function handleDeleteSchema() {
   Object.assign(app.model.ui.annotationSpec, getDefaultAnnotationScript());
 }
 
-function handleRun() {
-  console.log('run?');
-  settingsOpen.value = false;
-}
-
 </script>
 
 <template>
   <PlBlockPage>
     <GraphMaker
-      v-model="app.model.ui.graphStateUMAP"
+      v-model="app.model.ui.graphStateUMAP as any"
       :class="$style.graphMaker"
       :dataStateKey="key"
       chartType="scatterplot-umap"
       :p-frame="app.model.outputs.UMAPPf"
       :default-options="defaultOptions"
-      @run="handleRun"
     >
-      <template v-if="settingsOpen" #settingsSlot>
+      <template #settingsSlot>
         <PlDropdownRef
           v-model="app.model.args.countsRef"
           :class="$style.settings"
@@ -96,6 +91,7 @@ function handleRun() {
           v-model:annotation="app.model.ui.annotationSpec"
           :class="$style.annotations"
           :columns="app.model.outputs.overlapColumns ?? []"
+          :getSuggestOptions="suggest"
           :onDeleteSchema="handleDeleteSchema"
         />
       </template>
@@ -116,5 +112,6 @@ function handleRun() {
 .annotations {
   display: flex;
   width: 768px;
+  height: 100%;
 }
 </style>

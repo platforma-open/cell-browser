@@ -1,14 +1,15 @@
-import type { GraphMakerState } from '@milaboratories/graph-maker';
+// import type { GraphMakerState } from '@milaboratories/graph-maker';
 import type {
   InferOutputsType,
-  PColumnEntryUniversal,
+  PColumn, PColumnDataUniversal, PColumnEntryUniversal,
   PColumnIdAndSpec,
+  PColumnSpec,
   PFrameHandle,
   PlDataTableStateV2,
   PlRef,
-  SimplifiedUniversalPColumnEntry,
 } from '@platforma-sdk/model';
 import {
+  Annotation,
   BlockModel,
   createPFrameForGraphs,
   createPlDataTableSheet,
@@ -19,7 +20,7 @@ import {
   isPColumnSpec,
   PColumnCollection,
 } from '@platforma-sdk/model';
-import omit from 'lodash.omit';
+import type { GraphMakerState } from '@milaboratories/graph-maker';
 import type { AnnotationSpec, AnnotationSpecUi } from './types';
 
 type BlockArgs = {
@@ -46,32 +47,24 @@ export type UiState = {
   heatmapState: GraphMakerState;
 };
 
-const excludedAnnotationKeys = [
-  'pl7.app/table/orderPriority',
-  'pl7.app/table/visibility',
-  'pl7.app/trace',
-];
-
-const simplifyColumnEntries = (
-  entries: PColumnEntryUniversal[] | undefined,
-): SimplifiedUniversalPColumnEntry[] | undefined => {
-  if (!entries) {
-    return undefined;
-  }
-
+function prepareToAdvancedFilters(
+  entries: PColumnEntryUniversal[],
+  anchorAxesSpec: PColumnSpec['axesSpec'],
+) {
   const ret = entries.map((entry) => {
-    const filteredAnnotations = entry.spec.annotations
-      ? omit(entry.spec.annotations, excludedAnnotationKeys)
-      : undefined;
-
+    const axesSpec = entry.spec.axesSpec;
     return {
       id: entry.id,
+      spec: entry.spec,
       label: entry.label,
-      axesSpec: entry.spec.axesSpec,
-      obj: {
-        valueType: entry.spec.valueType,
-        annotations: filteredAnnotations,
-      },
+      axesToBeFixed: axesSpec.length > anchorAxesSpec.length
+        ? axesSpec.slice(anchorAxesSpec.length).map((axis, i) => {
+          return {
+            idx: anchorAxesSpec.length + i,
+            label: axis.annotations?.[Annotation.Label] ?? axis.name,
+          };
+        })
+        : undefined,
     };
   });
 
@@ -83,7 +76,7 @@ export const platforma = BlockModel.create('Heavy')
 
   .withArgs<BlockArgs>({
     annotationSpec: {
-      title: 'Cell Annotation',
+      title: '',
       steps: [],
     },
   })
@@ -100,8 +93,7 @@ export const platforma = BlockModel.create('Heavy')
       tableState: createPlDataTableStateV2(),
     },
     annotationSpec: {
-      isCreated: false,
-      title: 'Cell Annotation',
+      title: '',
       steps: [],
     } satisfies AnnotationSpecUi,
     graphStateUMAP: {
@@ -159,7 +151,8 @@ export const platforma = BlockModel.create('Heavy')
     if (ctx.args.countsRef === undefined)
       return undefined;
     const anchorCtx = ctx.resultPool.resolveAnchorCtx({ main: ctx.args.countsRef });
-    if (!anchorCtx) return undefined;
+    const anchorSpec = ctx.resultPool.getPColumnSpecByRef(ctx.args.countsRef);
+    if (anchorCtx == null || anchorSpec == null) return undefined;
 
     const entries = new PColumnCollection()
       .addColumnProvider(ctx.resultPool)
@@ -183,7 +176,9 @@ export const platforma = BlockModel.create('Heavy')
         { anchorCtx },
       );
 
-    return simplifyColumnEntries(entries);
+    if (entries === undefined) return undefined;
+
+    return prepareToAdvancedFilters(entries, anchorSpec.axesSpec.slice(0, 2));
   })
 
   .output('overlapColumnsPf', (ctx) => {
@@ -259,7 +254,11 @@ export const platforma = BlockModel.create('Heavy')
   })
 
   .output('statsTable', (ctx) => {
-    const annotationStatsPf = ctx.prerun?.resolve({ field: 'annotationStatsPf', assertFieldType: 'Input', allowPermanentAbsence: true });
+    const annotationStatsPf = ctx.prerun?.resolve({
+      field: 'annotationStatsPf',
+      assertFieldType: 'Input',
+      allowPermanentAbsence: true,
+    });
     const allColumns = annotationStatsPf?.getPColumns();
 
     if (allColumns == null || allColumns.length === 0) return undefined;
@@ -291,7 +290,6 @@ export const platforma = BlockModel.create('Heavy')
       .addAxisLabelProvider(ctx.resultPool)
       .addColumns(allColumns)
       .getColumns({});
-    // .getColumns({ axes: [{ split: true }, {}] });
 
     if (columns === undefined) return undefined;
 
@@ -336,22 +334,44 @@ export const platforma = BlockModel.create('Heavy')
     return countsSpec;
   })
 
-  .output('UMAPPf', (ctx): PFrameHandle | undefined => {
+  .output('annotationsIsComputing', (ctx) => {
+    if (ctx.args.countsRef === undefined) return false;
+    if (ctx.args.annotationSpec.steps.length === 0) return false;
+
+    const annotationsPf = ctx.prerun?.resolve('annotationsPf');
+    const filtersPf = ctx.prerun?.resolve('filtersPf');
+
+    return (annotationsPf === undefined || filtersPf === undefined);
+  })
+
+  .retentiveOutput('UMAPPf', (ctx): PFrameHandle | undefined => {
     if (ctx.args.countsRef == undefined) return undefined;
 
     const anchorCtx = ctx.resultPool.resolveAnchorCtx({ main: ctx.args.countsRef });
     if (!anchorCtx) return undefined;
 
-    const annotationsColumns = ctx.prerun?.resolve({ field: 'annotationsPf', assertFieldType: 'Input', allowPermanentAbsence: true })?.getPColumns() ?? [];
-    const filtersColumns = ctx.prerun?.resolve({ field: 'filtersPf', assertFieldType: 'Input', allowPermanentAbsence: true })?.getPColumns() ?? [];
-    const allColumns = [...annotationsColumns, ...filtersColumns];
+    const allAnnotationsColumns: PColumn<PColumnDataUniversal>[] = [];
+    const shouldRequestAnnotations = ctx.args.annotationSpec.steps.length > 0;
 
-    // const columns = new PColumnCollection();
-    // columns.addColumnProvider(ctx.resultPool);
-    // const cols = columns.getColumns((spec) => !isHiddenFromGraphColumn(spec), { dontWaitAllData: true, overrideLabelAnnotation: false }) ?? [];
-    // throw new Error(JSON.stringify(cols, null, 2));
+    if (shouldRequestAnnotations) {
+      const annotationsColumns = ctx.prerun?.resolve({
+        field: 'annotationsPf',
+        stableIfNotFound: true,
+        assertFieldType: 'Input',
+        allowPermanentAbsence: true,
+      })?.getPColumns() ?? [];
+      const filtersColumns = ctx.prerun?.resolve({
+        field: 'filtersPf',
+        stableIfNotFound: true,
+        assertFieldType: 'Input',
+        allowPermanentAbsence: true,
+      })?.getPColumns() ?? [];
 
-    return createPFrameForGraphs(ctx, allColumns.length > 0 ? allColumns : undefined);
+      allAnnotationsColumns.push(...annotationsColumns);
+      allAnnotationsColumns.push(...filtersColumns);
+    }
+
+    return createPFrameForGraphs(ctx, allAnnotationsColumns.length > 0 ? allAnnotationsColumns : undefined);
   })
 
   .output('umapDefaults', (ctx) => {
@@ -460,9 +480,9 @@ export const platforma = BlockModel.create('Heavy')
       { type: 'link', href: '/', label: 'UMAP' },
       { type: 'link', href: '/violin', label: 'Gene Expression' },
       // { type: 'link', href: '/heatmap', label: 'Expression Heatmap' },
-      { type: 'link', href: '/annotations', label: 'Annotations' } as const,
       ...(ctx.args.annotationSpec.steps.length > 0
         ? [
+          { type: 'link', href: '/annotations', label: 'Annotations' } as const,
           { type: 'link', href: '/annotations-stats', label: 'Annotations stats' } as const,
           { type: 'link', href: '/annotations-stats-by-sample', label: 'Annotations stats by Sample' } as const,
         ]
@@ -475,14 +495,18 @@ export const platforma = BlockModel.create('Heavy')
   // We enrich the input, only if we produce annotations
   .enriches((args) => args.countsRef !== undefined && args.annotationSpec.steps.length > 0 ? [args.countsRef] : [])
 
-  .title((ctx) => ctx.args.title
-    ? `Cell Browser - ${ctx.args.title}`
-    : 'Cell Browser')
+  .title((ctx) => {
+    const prefix = ctx.args.annotationSpec.steps.length > 0
+      ? 'Cell Browser'
+      : 'Cell Annotation';
+
+    return ctx.args.title
+      ? `${prefix} - ${ctx.args.title}`
+      : prefix;
+  })
 
   .done(2);
 
+export type * from './types';
 export type Platforma = typeof platforma;
 export type BlockOutputs = InferOutputsType<typeof platforma>;
-export * from './types';
-// export type Href = InferHrefType<typeof platforma>;
-// export type { BlockArgs };
