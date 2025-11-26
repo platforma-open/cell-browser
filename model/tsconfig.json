@@ -1,6 +1,7 @@
 {
   "extends": "@milaboratories/ts-configs/tsconfig.node.json",
   "compilerOptions": {
+    "customConditions": [],
     "baseUrl": ".",
     "outDir": "./dist",
     "rootDir": "./src"

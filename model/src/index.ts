@@ -20,6 +20,7 @@ import {
   isPColumnSpec,
   PColumnCollection,
 } from '@platforma-sdk/model';
+import type { GraphMakerState } from '@milaboratories/graph-maker';
 import type { AnnotationSpec, AnnotationSpecUi } from './types';
 
 type BlockArgs = {
@@ -41,9 +42,9 @@ export type UiState = {
   };
   annotationSpec: AnnotationSpecUi;
   //
-  graphStateUMAP: unknown;// GraphMakerState;
-  graphStateViolin: unknown;// GraphMakerState;
-  heatmapState: unknown;// GraphMakerState;
+  graphStateUMAP: GraphMakerState;
+  graphStateViolin: GraphMakerState;
+  heatmapState: GraphMakerState;
 };
 
 function prepareToAdvancedFilters(
