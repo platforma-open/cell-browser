@@ -1,7 +1,7 @@
 // import type { GraphMakerState } from '@milaboratories/graph-maker';
 import type {
   InferOutputsType,
-  PColumnEntryUniversal,
+  PColumn, PColumnDataUniversal, PColumnEntryUniversal,
   PColumnIdAndSpec,
   PColumnSpec,
   PFrameHandle,
@@ -92,7 +92,6 @@ export const platforma = BlockModel.create('Heavy')
       tableState: createPlDataTableStateV2(),
     },
     annotationSpec: {
-      isCreated: false,
       title: '',
       steps: [],
     } satisfies AnnotationSpecUi,
@@ -350,21 +349,28 @@ export const platforma = BlockModel.create('Heavy')
     const anchorCtx = ctx.resultPool.resolveAnchorCtx({ main: ctx.args.countsRef });
     if (!anchorCtx) return undefined;
 
-    const annotationsColumns = ctx.prerun?.resolve({
-      field: 'annotationsPf',
-      stableIfNotFound: true,
-      assertFieldType: 'Input',
-      allowPermanentAbsence: true,
-    })?.getPColumns() ?? [];
-    const filtersColumns = ctx.prerun?.resolve({
-      field: 'filtersPf',
-      stableIfNotFound: true,
-      assertFieldType: 'Input',
-      allowPermanentAbsence: true,
-    })?.getPColumns() ?? [];
-    const allColumns = [...annotationsColumns, ...filtersColumns];
+    const allAnnotationsColumns: PColumn<PColumnDataUniversal>[] = [];
+    const shouldRequestAnnotations = ctx.args.annotationSpec.steps.length > 0;
 
-    return createPFrameForGraphs(ctx, allColumns.length > 0 ? allColumns : undefined);
+    if (shouldRequestAnnotations) {
+      const annotationsColumns = ctx.prerun?.resolve({
+        field: 'annotationsPf',
+        stableIfNotFound: true,
+        assertFieldType: 'Input',
+        allowPermanentAbsence: true,
+      })?.getPColumns() ?? [];
+      const filtersColumns = ctx.prerun?.resolve({
+        field: 'filtersPf',
+        stableIfNotFound: true,
+        assertFieldType: 'Input',
+        allowPermanentAbsence: true,
+      })?.getPColumns() ?? [];
+
+      allAnnotationsColumns.push(...annotationsColumns);
+      allAnnotationsColumns.push(...filtersColumns);
+    }
+
+    return createPFrameForGraphs(ctx, allAnnotationsColumns.length > 0 ? allAnnotationsColumns : undefined);
   })
 
   .output('umapDefaults', (ctx) => {

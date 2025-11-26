@@ -5,4 +5,4 @@ export type FilterSpec = _FilterSpec<FilterSpecLeaf, { id: number; name?: string
 
 export type FilterSpecUI = _FilterSpecUI<Extract<FilterSpec, { type: 'and' | 'or' }>> & { id: number };
 
-export type AnnotationSpecUi = _AnnotationSpecUi<FilterSpecUI> & { isCreated: boolean };
+export type AnnotationSpecUi = _AnnotationSpecUi<FilterSpecUI>;

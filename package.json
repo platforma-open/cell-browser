@@ -18,7 +18,7 @@
     "@platforma-sdk/blocks-deps-updater": "catalog:"
   },
   "packageManager": "pnpm@9.12.0",
-  "pnpm": {
+  "//pnpm": {
     "overrides": {
       "@platforma-sdk/model": "file:/Users/aleksandr/GIT/MILAB/platforma/sdk/model/package.tgz",
       "@milaboratories/uikit": "file:/Users/aleksandr/GIT/MILAB/platforma/lib/ui/uikit/package.tgz",

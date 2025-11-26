@@ -2,7 +2,7 @@
 import '@milaboratories/graph-maker/styles';
 import { plRefsEqual, type PColumnIdAndSpec, type PlRef } from '@platforma-sdk/model';
 import { PlAnnotations, PlBlockPage, PlDropdownRef } from '@platforma-sdk/ui-vue';
-import { computed, ref } from 'vue';
+import { computed } from 'vue';
 import { useApp } from '../app';
 
 import type { PredefinedGraphOption } from '@milaboratories/graph-maker';
@@ -12,7 +12,6 @@ import { getDefaultAnnotationScript } from '../utils';
 
 const app = useApp();
 const suggest = useColumnSuggestion();
-const settingsOpen = ref(true);
 
 function setInput(inputRef?: PlRef) {
   app.model.args.countsRef = inputRef;
@@ -64,11 +63,6 @@ function handleDeleteSchema() {
   Object.assign(app.model.ui.annotationSpec, getDefaultAnnotationScript());
 }
 
-function handleRun() {
-  console.log('run?');
-  settingsOpen.value = false;
-}
-
 </script>
 
 <template>
@@ -80,9 +74,8 @@ function handleRun() {
       chartType="scatterplot-umap"
       :p-frame="app.model.outputs.UMAPPf"
       :default-options="defaultOptions"
-      @run="handleRun"
     >
-      <template v-if="settingsOpen" #settingsSlot>
+      <template #settingsSlot>
         <PlDropdownRef
           v-model="app.model.args.countsRef"
           :class="$style.settings"

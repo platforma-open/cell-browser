@@ -3,7 +3,6 @@ import { createPlDataTableStateV2 } from '@platforma-sdk/model';
 
 export function getDefaultAnnotationScript(): AnnotationSpecUi {
   return {
-    isCreated: false,
     title: '',
     steps: [],
   };
@@ -21,7 +20,6 @@ const DEFAULT_UI_STATE: UiState = {
     tableState: createPlDataTableStateV2(),
   },
   annotationSpec: {
-    isCreated: false,
     title: '',
     steps: [],
   } satisfies AnnotationSpecUi,
