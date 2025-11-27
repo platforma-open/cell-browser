@@ -90,7 +90,7 @@ function handleDeleteSchema() {
         <PlAnnotations
           v-model:annotation="app.model.ui.annotationSpec"
           :class="$style.annotations"
-          :columns="app.model.outputs.overlapColumns ?? []"
+          :columns="app.model.outputs.overlapColumns?.filterOptions ?? []"
           :getSuggestOptions="suggest"
           :onDeleteSchema="handleDeleteSchema"
         />

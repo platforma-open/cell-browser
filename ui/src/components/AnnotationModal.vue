@@ -16,7 +16,7 @@ function handleDeleteSchema() {
   <PlAnnotationsModal
     v-model:opened="app.isAnnotationModalOpen"
     v-model:annotation="app.model.ui.annotationSpec"
-    :columns="app.model.outputs.overlapColumns ?? []"
+    :columns="app.model.outputs.overlapColumns?.filterOptions ?? []"
     :getSuggestOptions="suggest"
     :onDeleteSchema="handleDeleteSchema"
   />

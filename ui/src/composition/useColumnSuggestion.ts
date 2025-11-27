@@ -10,7 +10,7 @@ export function useColumnSuggestion() {
   const app = useApp();
 
   const suggest = async (params: { columnId: string; searchStr: string; axisIdx?: number }): Promise<ListOptionBase<string | number>[]> => {
-    const handle = app.model.outputs.overlapColumnsPf;
+    const handle = app.model.outputs.overlapColumns?.pFrame;
     if (handle == null) return [];
     const response = await getUniqueSourceValuesWithLabels(handle, {
       columnId: params.columnId as SUniversalPColumnId,

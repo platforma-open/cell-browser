@@ -19,6 +19,7 @@ import {
   isPColumn,
   isPColumnSpec,
   PColumnCollection,
+  PColumnName,
 } from '@platforma-sdk/model';
 import type { GraphMakerState } from '@milaboratories/graph-maker';
 import type { AnnotationSpec, AnnotationSpecUi } from './types';
@@ -47,11 +48,27 @@ export type UiState = {
   heatmapState: GraphMakerState;
 };
 
+function splitColumns(entries: PColumnEntryUniversal[]) {
+  const labelColumns: PColumnEntryUniversal[] = [];
+  const restColumns: PColumnEntryUniversal[] = [];
+
+  for (const entry of entries) {
+    if (entry.spec.name === PColumnName.Label) {
+      labelColumns.push(entry);
+    } else {
+      restColumns.push(entry);
+    }
+  }
+
+  return [labelColumns, restColumns];
+}
+
 function prepareToAdvancedFilters(
   entries: PColumnEntryUniversal[],
   anchorAxesSpec: PColumnSpec['axesSpec'],
 ) {
-  const ret = entries.map((entry) => {
+  const [labelColumns, columns] = splitColumns(entries);
+  const ret = columns.map((entry) => {
     const axesSpec = entry.spec.axesSpec;
     return {
       id: entry.id,
@@ -59,9 +76,13 @@ function prepareToAdvancedFilters(
       label: entry.label,
       axesToBeFixed: axesSpec.length > anchorAxesSpec.length
         ? axesSpec.slice(anchorAxesSpec.length).map((axis, i) => {
+          const labelColumn = labelColumns.find((c) => {
+            return c.spec.axesSpec[0].name === axis.name;
+          });
+
           return {
             idx: anchorAxesSpec.length + i,
-            label: axis.annotations?.[Annotation.Label] ?? axis.name,
+            label: labelColumn?.label ?? axis.annotations?.[Annotation.Label] ?? axis.name,
           };
         })
         : undefined,
@@ -162,37 +183,18 @@ export const platforma = BlockModel.create('Heavy')
           {
             axes: [
               { anchor: 'main', idx: 0 }, // sampleId
+            ],
+          },
+          {
+            axes: [
               { anchor: 'main', idx: 1 }, // cellId
             ],
           },
           {
             axes: [
-              { anchor: 'main', idx: 0 }, // sampleId
-              { anchor: 'main', idx: 1 }, // cellId
               { anchor: 'main', idx: 2 }, // geneId
             ],
           },
-        ],
-        { anchorCtx },
-      );
-
-    if (entries === undefined) return undefined;
-
-    return prepareToAdvancedFilters(entries, anchorSpec.axesSpec.slice(0, 2));
-  })
-
-  .output('overlapColumnsPf', (ctx) => {
-    if (ctx.args.countsRef === undefined) return undefined;
-
-    const anchorCtx = ctx.resultPool.resolveAnchorCtx({ main: ctx.args.countsRef });
-
-    if (!anchorCtx) return undefined;
-
-    const entries = new PColumnCollection()
-      .addColumnProvider(ctx.resultPool)
-      .addAxisLabelProvider(ctx.resultPool)
-      .getColumns(
-        [
           {
             axes: [
               { anchor: 'main', idx: 0 }, // sampleId
@@ -212,7 +214,10 @@ export const platforma = BlockModel.create('Heavy')
 
     if (entries === undefined) return undefined;
 
-    return ctx.createPFrame(entries);
+    return {
+      pFrame: ctx.createPFrame(entries),
+      filterOptions: prepareToAdvancedFilters(entries, anchorSpec.axesSpec.slice(0, 2)),
+    };
   })
 
   .output('overlapTable', (ctx) => {
