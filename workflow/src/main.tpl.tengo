@@ -25,13 +25,13 @@ wf.body(func(args) {
 		result := annotations.computeCellAnnotations({
 			title: annotationSpec.title,
 			steps: annotationSpec.steps,
-			inputAnchor: args.countsRef,
+			countsRef: args.countsRef,
 			annotationAxesSpec: annotationAxesSpec,
 			shouldComputeFilters: true
 		})
 
-		exports["annotationsPf"] = result["annotationsPf"]
 		exports["filtersPf"] = result["filtersPf"]
+		exports["annotationsPf"] = result["annotationsPf"]
 	}
 
 	return {
