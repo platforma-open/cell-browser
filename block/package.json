@@ -2,7 +2,6 @@
   "name": "@platforma-open/milaboratories.wip-cell-browser",
   "version": "1.0.1",
   "scripts": {
-    "pretty": "prettier --write \"./**/*.{js,jsx,mjs,cjs,ts,tsx,json,vue}\"",
     "build": "rm -rf ./block-pack && block-tools pack",
     "mark-stable": "block-tools mark-stable -r 's3://milab-euce1-prod-pkgs-s3-block-registry/pub/releases/?region=eu-central-1'",
     "prepublishOnly": "block-tools pack && block-tools publish -r 's3://milab-euce1-prod-pkgs-s3-block-registry/pub/releases/?region=eu-central-1'"
@@ -26,20 +25,21 @@
     "meta": {
       "title": "[WIP] Cell Browser",
       "logo": "file:../logos/block-logo.png",
-      "url": "https://github.com/platforma-open/wip-cell-browser",
+      "url": "https://github.com/platforma-open/cell-browser",
       "support": "mailto:support@milaboratories.com",
-      "description": "Allows to browse cells and annotate them for tracking and filtering",
+      "description": "Interactive visualization of single-cell RNA-seq data with UMAP embeddings and gene expression violin plots",
       "longDescription": "file:../docs/description.md",
-      "changelog": "file:./CHANGELOG.md",
+      "changelog": "file:../CHANGELOG.md",
       "tags": [
-        "annotation"
+        "RNA-seq",
+        "visualization",
+        "single-cell"
       ],
       "organization": {
         "name": "MiLaboratories Inc",
         "url": "https://milaboratories.com/",
         "logo": "file:../logos/organization-logo.png"
-      },
-      "marketplaceRanking": 16500
+      }
     }
   },
   "devDependencies": {
