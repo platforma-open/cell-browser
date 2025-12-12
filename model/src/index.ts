@@ -11,8 +11,7 @@ import type {
 import {
   Annotation,
   BlockModel,
-  createPFrameForGraphs,
-  createPlDataTableSheet,
+  createPFrameForGraphs, createPlDataTableSheet,
   createPlDataTableStateV2,
   createPlDataTableV2,
   getUniquePartitionKeys,
@@ -344,9 +343,8 @@ export const platforma = BlockModel.create('Heavy')
     if (ctx.args.annotationSpec.steps.length === 0) return false;
 
     const annotationsPf = ctx.prerun?.resolve('annotationsPf');
-    const filtersPf = ctx.prerun?.resolve('filtersPf');
 
-    return (annotationsPf === undefined || filtersPf === undefined);
+    return (annotationsPf === undefined);
   })
 
   .retentiveOutput('UMAPPf', (ctx): PFrameHandle | undefined => {
@@ -365,15 +363,8 @@ export const platforma = BlockModel.create('Heavy')
         assertFieldType: 'Input',
         allowPermanentAbsence: true,
       })?.getPColumns() ?? [];
-      const filtersColumns = ctx.prerun?.resolve({
-        field: 'filtersPf',
-        stableIfNotFound: true,
-        assertFieldType: 'Input',
-        allowPermanentAbsence: true,
-      })?.getPColumns() ?? [];
 
       allAnnotationsColumns.push(...annotationsColumns);
-      allAnnotationsColumns.push(...filtersColumns);
     }
 
     return createPFrameForGraphs(ctx, allAnnotationsColumns.length > 0 ? allAnnotationsColumns : undefined);
