@@ -2,6 +2,7 @@ ll := import("@platforma-sdk/workflow-tengo:ll")
 wf := import("@platforma-sdk/workflow-tengo:workflow")
 slices := import("@platforma-sdk/workflow-tengo:slices")
 pFrames := import("@platforma-sdk/workflow-tengo:pframes")
+canonical := import("@platforma-sdk/workflow-tengo:canonical")
 annotations := import("@platforma-sdk/workflow-tengo:annotations")
 
 util := import(":util")
@@ -16,7 +17,8 @@ convertToPFrame := func(...entities) {
 computeCellAnnotations := func(inputs) {
 	title := inputs.title
 	steps := inputs.steps
-	countsRef := inputs.countsRef
+	anchorRef := inputs.anchorRef
+	defaultValue := inputs.defaultValue
 	annotationAxesSpec := inputs.annotationAxesSpec
 	shouldComputeFilters := inputs.shouldComputeFilters
 
@@ -26,11 +28,38 @@ computeCellAnnotations := func(inputs) {
 		ll.panic("No annotation steps provided")
 	}
 
+	referenceColumns := slices.map([
+		{
+			name: "pl7.app/rna-seq/umap1",
+			axes: [
+				{ anchor: "main", idx: 0 },
+				{ anchor: "main", idx: 1 }
+			],
+			domain: {
+				"pl7.app/blockId": "5dace0da-d3e5-4881-8043-8e3bd87e0a9c",
+				"pl7.app/rna-seq/batch-corrected": "true"
+			}
+		},
+		{
+			name: "pl7.app/rna-seq/umap1",
+			axes: [
+				{ anchor: "main", idx: 0 },
+				{ anchor: "main", idx: 1 }
+			],
+			domain: {
+				"pl7.app/blockId": "5dace0da-d3e5-4881-8043-8e3bd87e0a9c",
+				"pl7.app/rna-seq/batch-corrected": "false"
+			}
+		}
+	], func(v) { return canonical.encode(v) })
+
 	result := annotations.computeAnnotations({
 		title: title,
 		steps: steps,
-		inputAnchor: countsRef,
+		anchorRef: anchorRef,
+		defaultValue: defaultValue,
 		resultAxesSpec: annotationAxesSpec,
+		additionalColumns: referenceColumns,
 		shouldComputeFilters: shouldComputeFilters
 	})
 

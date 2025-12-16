@@ -47,6 +47,44 @@ export type UiState = {
   heatmapState: GraphMakerState;
 };
 
+const ALL_NEIGHBORS = [
+  {
+    axes: [
+      { anchor: 'main', idx: 0 }, // sampleId
+    ],
+  },
+  {
+    axes: [
+      { anchor: 'main', idx: 1 }, // cellId
+    ],
+  },
+  {
+    axes: [
+      { anchor: 'main', idx: 0 }, // sampleId
+      { anchor: 'main', idx: 1 }, // cellId
+    ],
+  },
+  {
+    axes: [
+      { anchor: 'main', idx: 0 }, // sampleId
+      { anchor: 'main', idx: 2 }, // geneId
+    ],
+  },
+  {
+    axes: [
+      { anchor: 'main', idx: 1 }, // cellId
+      { anchor: 'main', idx: 2 }, // geneId
+    ],
+  },
+  {
+    axes: [
+      { anchor: 'main', idx: 0 }, // sampleId
+      { anchor: 'main', idx: 1 }, // cellId
+      { anchor: 'main', idx: 2 }, // geneId
+    ],
+  },
+];
+
 function splitColumns(entries: PColumnEntryUniversal[]) {
   const labelColumns: PColumnEntryUniversal[] = [];
   const restColumns: PColumnEntryUniversal[] = [];
@@ -178,36 +216,7 @@ export const platforma = BlockModel.create('Heavy')
       .addColumnProvider(ctx.resultPool)
       .addAxisLabelProvider(ctx.resultPool)
       .getUniversalEntries(
-        [
-          {
-            axes: [
-              { anchor: 'main', idx: 0 }, // sampleId
-            ],
-          },
-          {
-            axes: [
-              { anchor: 'main', idx: 1 }, // cellId
-            ],
-          },
-          {
-            axes: [
-              { anchor: 'main', idx: 2 }, // geneId
-            ],
-          },
-          {
-            axes: [
-              { anchor: 'main', idx: 0 }, // sampleId
-              { anchor: 'main', idx: 1 }, // cellId
-            ],
-          },
-          {
-            axes: [
-              { anchor: 'main', idx: 0 }, // sampleId
-              { anchor: 'main', idx: 1 }, // cellId
-              { anchor: 'main', idx: 2 }, // geneId
-            ],
-          },
-        ],
+        ALL_NEIGHBORS,
         { anchorCtx },
       );
 
@@ -237,14 +246,7 @@ export const platforma = BlockModel.create('Heavy')
       .addAxisLabelProvider(ctx.resultPool);
 
     const columns = collection.getColumns(
-      [
-        {
-          axes: [
-            { anchor: 'main', idx: 0 }, // sampleId
-            { anchor: 'main', idx: 1 }, // cellId
-          ],
-        },
-      ],
+      ALL_NEIGHBORS,
       { anchorCtx },
     );
 

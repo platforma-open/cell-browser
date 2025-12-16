@@ -1,5 +1,6 @@
 pt := import("@platforma-sdk/workflow-tengo:pt")
 wf := import("@platforma-sdk/workflow-tengo:workflow")
+smart := import("@platforma-sdk/workflow-tengo:smart")
 assets := import("@platforma-sdk/workflow-tengo:assets")
 render := import("@platforma-sdk/workflow-tengo:render")
 pFrames := import("@platforma-sdk/workflow-tengo:pframes")
@@ -11,7 +12,7 @@ wf.setPreRun(assets.importTemplate(":prerun"))
 
 wf.prepare(func(args) {
 	return {
-		countsRefColumn: is_undefined(args.countsRef) ? undefined : wf.resolve(args.countsRef)
+		countsRefColumn: is_undefined(args.countsRef) ? smart.createNullResource() : wf.resolve(args.countsRef)
 	}
 })
 wf.body(func(args) {
@@ -25,7 +26,8 @@ wf.body(func(args) {
 		result := annotations.computeCellAnnotations({
 			title: annotationSpec.title,
 			steps: annotationSpec.steps,
-			countsRef: args.countsRef,
+			anchorRef: args.countsRef,
+			defaultValue: annotationSpec.defaultValue,
 			annotationAxesSpec: annotationAxesSpec,
 			shouldComputeFilters: true
 		})

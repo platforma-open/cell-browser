@@ -13,7 +13,7 @@ annotationsStats := import(":annotations-stats")
 
 wf.prepare(func(args) {
 	return {
-		countsRefColumn: is_undefined(args.countsRef) ? undefined : wf.resolve(args.countsRef)
+		countsRefColumn: is_undefined(args.countsRef) ? smart.createNullResource() : wf.resolve(args.countsRef)
 	}
 })
 wf.body(func(args) {
@@ -27,7 +27,8 @@ wf.body(func(args) {
 		computedAnnotations := annotations.computeCellAnnotations({
 			title: annotationSpec.title,
 			steps: annotationSpec.steps,
-			countsRef: args.countsRef,
+			anchorRef: args.countsRef,
+			defaultValue: annotationSpec.defaultValue,
 			annotationAxesSpec: annotationAxesSpec,
 			shouldComputeFilters: false
 		})
