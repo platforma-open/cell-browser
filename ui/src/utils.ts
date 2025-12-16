@@ -1,4 +1,4 @@
-import type { AnnotationSpecUi, UiState } from '@platforma-open/milaboratories.wip-cell-browser.model';
+import type { AnnotationSpecUi, UiState } from '@platforma-open/milaboratories.cell-browser-2.model';
 import { createPlDataTableStateV2 } from '@platforma-sdk/model';
 
 export function getDefaultAnnotationScript(): AnnotationSpecUi {

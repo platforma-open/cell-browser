@@ -1,5 +1,5 @@
 {
-  "name": "@platforma-open/milaboratories.wip-cell-browser.ui",
+  "name": "@platforma-open/milaboratories.cell-browser-2.ui",
   "version": "1.0.1",
   "type": "module",
   "scripts": {
@@ -10,7 +10,7 @@
     "lint": "eslint ."
   },
   "dependencies": {
-    "@platforma-open/milaboratories.wip-cell-browser.model": "workspace:*",
+    "@platforma-open/milaboratories.cell-browser-2.model": "workspace:*",
     "@milaboratories/pl-model-common": "catalog:",
     "@milaboratories/graph-maker": "catalog:",
     "@milaboratories/pf-plots": "catalog:",

@@ -1,5 +1,5 @@
 
-> @ test:dry-run /home/runner/work/wip-cell-browser/wip-cell-browser
+> @ test:dry-run /home/runner/work/cell-browser/cell-browser
 > PL_PKG_DEV=local turbo run test --dry-run=json
 
 {
@@ -24,19 +24,19 @@
     "engines": null
   },
   "packages": [
-    "@platforma-open/milaboratories.wip-cell-browser",
-    "@platforma-open/milaboratories.wip-cell-browser.model",
-    "@platforma-open/milaboratories.wip-cell-browser.test",
-    "@platforma-open/milaboratories.wip-cell-browser.ui",
-    "@platforma-open/milaboratories.wip-cell-browser.workflow"
+    "@platforma-open/milaboratories.cell-browser-2",
+    "@platforma-open/milaboratories.cell-browser-2.model",
+    "@platforma-open/milaboratories.cell-browser-2.test",
+    "@platforma-open/milaboratories.cell-browser-2.ui",
+    "@platforma-open/milaboratories.cell-browser-2.workflow"
   ],
   "envMode": "strict",
   "frameworkInference": true,
   "tasks": [
     {
-      "taskId": "@platforma-open/milaboratories.wip-cell-browser#build",
+      "taskId": "@platforma-open/milaboratories.cell-browser-2#build",
       "task": "build",
-      "package": "@platforma-open/milaboratories.wip-cell-browser",
+      "package": "@platforma-open/milaboratories.cell-browser-2",
       "hash": "8d3b3a5fa53e38d4",
       "inputs": {
         "CHANGELOG.md": "fedd3e8346eb5e6ddfc3d80c62ef94a0595cf21f",
@@ -62,13 +62,13 @@
       "logFile": "block/.turbo/turbo-build.log",
       "directory": "block",
       "dependencies": [
-        "@platforma-open/milaboratories.wip-cell-browser.model#build",
-        "@platforma-open/milaboratories.wip-cell-browser.ui#build",
-        "@platforma-open/milaboratories.wip-cell-browser.workflow#build"
+        "@platforma-open/milaboratories.cell-browser-2.model#build",
+        "@platforma-open/milaboratories.cell-browser-2.ui#build",
+        "@platforma-open/milaboratories.cell-browser-2.workflow#build"
       ],
       "dependents": [
-        "@platforma-open/milaboratories.wip-cell-browser#test",
-        "@platforma-open/milaboratories.wip-cell-browser.test#build"
+        "@platforma-open/milaboratories.cell-browser-2#test",
+        "@platforma-open/milaboratories.cell-browser-2.test#build"
       ],
       "with": [],
       "resolvedTaskDefinition": {
@@ -111,9 +111,9 @@
       }
     },
     {
-      "taskId": "@platforma-open/milaboratories.wip-cell-browser#test",
+      "taskId": "@platforma-open/milaboratories.cell-browser-2#test",
       "task": "test",
-      "package": "@platforma-open/milaboratories.wip-cell-browser",
+      "package": "@platforma-open/milaboratories.cell-browser-2",
       "hash": "5fca645399026620",
       "inputs": {
         "CHANGELOG.md": "fedd3e8346eb5e6ddfc3d80c62ef94a0595cf21f",
@@ -135,7 +135,7 @@
       "logFile": "block/.turbo/turbo-test.log",
       "directory": "block",
       "dependencies": [
-        "@platforma-open/milaboratories.wip-cell-browser#build"
+        "@platforma-open/milaboratories.cell-browser-2#build"
       ],
       "dependents": [],
       "with": [],
@@ -183,9 +183,9 @@
       }
     },
     {
-      "taskId": "@platforma-open/milaboratories.wip-cell-browser.model#build",
+      "taskId": "@platforma-open/milaboratories.cell-browser-2.model#build",
       "task": "build",
-      "package": "@platforma-open/milaboratories.wip-cell-browser.model",
+      "package": "@platforma-open/milaboratories.cell-browser-2.model",
       "hash": "c3a735b689f57b28",
       "inputs": {
         "CHANGELOG.md": "d4ca7eaef2553f3ca4dc07c7851486a71374340c",
@@ -214,10 +214,10 @@
       "directory": "model",
       "dependencies": [],
       "dependents": [
-        "@platforma-open/milaboratories.wip-cell-browser#build",
-        "@platforma-open/milaboratories.wip-cell-browser.model#test",
-        "@platforma-open/milaboratories.wip-cell-browser.test#build",
-        "@platforma-open/milaboratories.wip-cell-browser.ui#build"
+        "@platforma-open/milaboratories.cell-browser-2#build",
+        "@platforma-open/milaboratories.cell-browser-2.model#test",
+        "@platforma-open/milaboratories.cell-browser-2.test#build",
+        "@platforma-open/milaboratories.cell-browser-2.ui#build"
       ],
       "with": [],
       "resolvedTaskDefinition": {
@@ -260,9 +260,9 @@
       }
     },
     {
-      "taskId": "@platforma-open/milaboratories.wip-cell-browser.model#test",
+      "taskId": "@platforma-open/milaboratories.cell-browser-2.model#test",
       "task": "test",
-      "package": "@platforma-open/milaboratories.wip-cell-browser.model",
+      "package": "@platforma-open/milaboratories.cell-browser-2.model",
       "hash": "8d7166c707c01013",
       "inputs": {
         "CHANGELOG.md": "d4ca7eaef2553f3ca4dc07c7851486a71374340c",
@@ -286,7 +286,7 @@
       "logFile": "model/.turbo/turbo-test.log",
       "directory": "model",
       "dependencies": [
-        "@platforma-open/milaboratories.wip-cell-browser.model#build"
+        "@platforma-open/milaboratories.cell-browser-2.model#build"
       ],
       "dependents": [],
       "with": [],
@@ -334,9 +334,9 @@
       }
     },
     {
-      "taskId": "@platforma-open/milaboratories.wip-cell-browser.test#build",
+      "taskId": "@platforma-open/milaboratories.cell-browser-2.test#build",
       "task": "build",
-      "package": "@platforma-open/milaboratories.wip-cell-browser.test",
+      "package": "@platforma-open/milaboratories.cell-browser-2.test",
       "hash": "4e6cd85413f825ea",
       "inputs": {
         "CHANGELOG.md": "49a2ed96b15e0b27b8a0bd86c7fa54b81a5d6113",
@@ -364,11 +364,11 @@
       "logFile": "test/.turbo/turbo-build.log",
       "directory": "test",
       "dependencies": [
-        "@platforma-open/milaboratories.wip-cell-browser#build",
-        "@platforma-open/milaboratories.wip-cell-browser.model#build"
+        "@platforma-open/milaboratories.cell-browser-2#build",
+        "@platforma-open/milaboratories.cell-browser-2.model#build"
       ],
       "dependents": [
-        "@platforma-open/milaboratories.wip-cell-browser.test#test"
+        "@platforma-open/milaboratories.cell-browser-2.test#test"
       ],
       "with": [],
       "resolvedTaskDefinition": {
@@ -411,9 +411,9 @@
       }
     },
     {
-      "taskId": "@platforma-open/milaboratories.wip-cell-browser.test#test",
+      "taskId": "@platforma-open/milaboratories.cell-browser-2.test#test",
       "task": "test",
-      "package": "@platforma-open/milaboratories.wip-cell-browser.test",
+      "package": "@platforma-open/milaboratories.cell-browser-2.test",
       "hash": "b86ad2a8db3d394a",
       "inputs": {
         "CHANGELOG.md": "49a2ed96b15e0b27b8a0bd86c7fa54b81a5d6113",
@@ -437,7 +437,7 @@
       "logFile": "test/.turbo/turbo-test.log",
       "directory": "test",
       "dependencies": [
-        "@platforma-open/milaboratories.wip-cell-browser.test#build"
+        "@platforma-open/milaboratories.cell-browser-2.test#build"
       ],
       "dependents": [],
       "with": [],
@@ -485,9 +485,9 @@
       }
     },
     {
-      "taskId": "@platforma-open/milaboratories.wip-cell-browser.ui#build",
+      "taskId": "@platforma-open/milaboratories.cell-browser-2.ui#build",
       "task": "build",
-      "package": "@platforma-open/milaboratories.wip-cell-browser.ui",
+      "package": "@platforma-open/milaboratories.cell-browser-2.ui",
       "hash": "f2710d58cbaf8717",
       "inputs": {
         "CHANGELOG.md": "755ca410c8236a89874de34fa0cf63c2c9cafa50",
@@ -528,11 +528,11 @@
       "logFile": "ui/.turbo/turbo-build.log",
       "directory": "ui",
       "dependencies": [
-        "@platforma-open/milaboratories.wip-cell-browser.model#build"
+        "@platforma-open/milaboratories.cell-browser-2.model#build"
       ],
       "dependents": [
-        "@platforma-open/milaboratories.wip-cell-browser#build",
-        "@platforma-open/milaboratories.wip-cell-browser.ui#test"
+        "@platforma-open/milaboratories.cell-browser-2#build",
+        "@platforma-open/milaboratories.cell-browser-2.ui#test"
       ],
       "with": [],
       "resolvedTaskDefinition": {
@@ -575,9 +575,9 @@
       }
     },
     {
-      "taskId": "@platforma-open/milaboratories.wip-cell-browser.ui#test",
+      "taskId": "@platforma-open/milaboratories.cell-browser-2.ui#test",
       "task": "test",
-      "package": "@platforma-open/milaboratories.wip-cell-browser.ui",
+      "package": "@platforma-open/milaboratories.cell-browser-2.ui",
       "hash": "b742169618b3d388",
       "inputs": {
         "CHANGELOG.md": "755ca410c8236a89874de34fa0cf63c2c9cafa50",
@@ -614,7 +614,7 @@
       "logFile": "ui/.turbo/turbo-test.log",
       "directory": "ui",
       "dependencies": [
-        "@platforma-open/milaboratories.wip-cell-browser.ui#build"
+        "@platforma-open/milaboratories.cell-browser-2.ui#build"
       ],
       "dependents": [],
       "with": [],
@@ -662,9 +662,9 @@
       }
     },
     {
-      "taskId": "@platforma-open/milaboratories.wip-cell-browser.workflow#build",
+      "taskId": "@platforma-open/milaboratories.cell-browser-2.workflow#build",
       "task": "build",
-      "package": "@platforma-open/milaboratories.wip-cell-browser.workflow",
+      "package": "@platforma-open/milaboratories.cell-browser-2.workflow",
       "hash": "931f0ebacb6fb3cb",
       "inputs": {
         "CHANGELOG.md": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
@@ -697,8 +697,8 @@
       "directory": "workflow",
       "dependencies": [],
       "dependents": [
-        "@platforma-open/milaboratories.wip-cell-browser#build",
-        "@platforma-open/milaboratories.wip-cell-browser.workflow#test"
+        "@platforma-open/milaboratories.cell-browser-2#build",
+        "@platforma-open/milaboratories.cell-browser-2.workflow#test"
       ],
       "with": [],
       "resolvedTaskDefinition": {
@@ -741,9 +741,9 @@
       }
     },
     {
-      "taskId": "@platforma-open/milaboratories.wip-cell-browser.workflow#test",
+      "taskId": "@platforma-open/milaboratories.cell-browser-2.workflow#test",
       "task": "test",
-      "package": "@platforma-open/milaboratories.wip-cell-browser.workflow",
+      "package": "@platforma-open/milaboratories.cell-browser-2.workflow",
       "hash": "b0f411b0323f9978",
       "inputs": {
         "CHANGELOG.md": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
@@ -770,7 +770,7 @@
       "logFile": "workflow/.turbo/turbo-test.log",
       "directory": "workflow",
       "dependencies": [
-        "@platforma-open/milaboratories.wip-cell-browser.workflow#build"
+        "@platforma-open/milaboratories.cell-browser-2.workflow#build"
       ],
       "dependents": [],
       "with": [],

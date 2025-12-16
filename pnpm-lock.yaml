@@ -107,13 +107,13 @@ importers:
 
   block:
     dependencies:
-      '@platforma-open/milaboratories.wip-cell-browser.model':
+      '@platforma-open/milaboratories.cell-browser-2.model':
         specifier: workspace:*
         version: link:../model
-      '@platforma-open/milaboratories.wip-cell-browser.ui':
+      '@platforma-open/milaboratories.cell-browser-2.ui':
         specifier: workspace:*
         version: link:../ui
-      '@platforma-open/milaboratories.wip-cell-browser.workflow':
+      '@platforma-open/milaboratories.cell-browser-2.workflow':
         specifier: workspace:*
         version: link:../workflow
       '@platforma-sdk/model':
@@ -163,20 +163,20 @@ importers:
 
   test:
     dependencies:
+      '@platforma-open/milaboratories.cell-browser-2.model':
+        specifier: workspace:*
+        version: link:../model
       '@platforma-open/milaboratories.samples-and-data':
         specifier: 'catalog:'
         version: 1.10.7
       '@platforma-open/milaboratories.samples-and-data.model':
         specifier: 'catalog:'
         version: 1.10.0
-      '@platforma-open/milaboratories.wip-cell-browser.model':
-        specifier: workspace:*
-        version: link:../model
       '@platforma-sdk/model':
         specifier: 'catalog:'
         version: 1.48.4
       this-block:
-        specifier: workspace:@platforma-open/milaboratories.wip-cell-browser@*
+        specifier: workspace:@platforma-open/milaboratories.cell-browser-2@*
         version: link:../block
     devDependencies:
       '@platforma-sdk/eslint-config':
@@ -206,7 +206,7 @@ importers:
       '@milaboratories/pl-model-common':
         specifier: 'catalog:'
         version: 1.21.10
-      '@platforma-open/milaboratories.wip-cell-browser.model':
+      '@platforma-open/milaboratories.cell-browser-2.model':
         specifier: workspace:*
         version: link:../model
       '@platforma-sdk/model':

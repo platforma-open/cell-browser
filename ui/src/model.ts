@@ -1,4 +1,4 @@
-import type { AnnotationSpec, AnnotationSpecUi } from '@platforma-open/milaboratories.wip-cell-browser.model';
+import type { AnnotationSpec, AnnotationSpecUi } from '@platforma-open/milaboratories.cell-browser-2.model';
 import { convertFilterSpecsToExpressionSpecs } from '@platforma-sdk/model';
 import { watchDebounced } from '@vueuse/core';
 

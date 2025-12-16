@@ -2,7 +2,7 @@
 //   BlockArgs,
 //   BlockOutputs,
 //   platforma,
-// } from '@platforma-open/milaboratories.wip-cell-browser.model';
+// } from '@platforma-open/milaboratories.cell-browser-2.model';
 // import { blockSpec as clonotypingBlockSpec } from '@platforma-open/milaboratories.mixcr-clonotyping-2';
 // import type {
 //   BlockArgs as MiXCRClonotypingBlockArgs,

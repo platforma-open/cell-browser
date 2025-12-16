@@ -1,5 +1,5 @@
-import type { Platforma } from '@platforma-open/milaboratories.wip-cell-browser.model';
-import { platforma } from '@platforma-open/milaboratories.wip-cell-browser.model';
+import type { Platforma } from '@platforma-open/milaboratories.cell-browser-2.model';
+import { platforma } from '@platforma-open/milaboratories.cell-browser-2.model';
 import { defineApp } from '@platforma-sdk/ui-vue';
 import { ref } from 'vue';
 import { processAnnotationUiStateToArgsState } from './model';

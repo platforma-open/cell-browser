@@ -1,4 +1,4 @@
-# @platforma-open/milaboratories.wip-cell-browser.model
+# @platforma-open/milaboratories.cell-browser-2.model
 
 ## 1.0.1
 
