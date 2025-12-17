@@ -1,5 +1,11 @@
 # @platforma-open/milaboratories.cell-browser-2
 
+## 1.0.3
+
+### Patch Changes
+
+- 788f018: set marketplace ranking
+
 ## 1.0.2
 
 ### Patch Changes

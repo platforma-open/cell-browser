@@ -3,7 +3,7 @@
 > PL_PKG_DEV=local turbo run test --dry-run=json
 
 {
-  "id": "36yHIT6UNQQjPXm7pnpm3g9Qhhc",
+  "id": "36yHmnx65XMhq8fTj9egfnjJuyj",
   "version": "1",
   "turboVersion": "2.5.4",
   "monorepo": true,
@@ -37,12 +37,12 @@
       "taskId": "@platforma-open/milaboratories.cell-browser-2#build",
       "task": "build",
       "package": "@platforma-open/milaboratories.cell-browser-2",
-      "hash": "7e045dcc6f9d1c96",
+      "hash": "785adbd661323a95",
       "inputs": {
-        "CHANGELOG.md": "acaccef9d74bdb8161e2fef8ef9495892ad82c21",
+        "CHANGELOG.md": "4c2f546179dd55ab10dc379632def63c56a8d71d",
         "index.d.ts": "1ba908d82f37b11a66fc326a88a79ee6ef965fc7",
         "index.js": "e7798d420641e13b2104408b1cf4df20f67c654e",
-        "package.json": "285939674aa748ae9954c50f478434bdd5971d6d"
+        "package.json": "0c4d7b3f18044d9055548fc700374a80abe606d9"
       },
       "hashOfExternalDependencies": "d5dac08d5d8e0113",
       "cache": {
@@ -114,12 +114,12 @@
       "taskId": "@platforma-open/milaboratories.cell-browser-2#test",
       "task": "test",
       "package": "@platforma-open/milaboratories.cell-browser-2",
-      "hash": "1a915a5851463eed",
+      "hash": "7aea4c29f1875c21",
       "inputs": {
-        "CHANGELOG.md": "acaccef9d74bdb8161e2fef8ef9495892ad82c21",
+        "CHANGELOG.md": "4c2f546179dd55ab10dc379632def63c56a8d71d",
         "index.d.ts": "1ba908d82f37b11a66fc326a88a79ee6ef965fc7",
         "index.js": "e7798d420641e13b2104408b1cf4df20f67c654e",
-        "package.json": "285939674aa748ae9954c50f478434bdd5971d6d"
+        "package.json": "0c4d7b3f18044d9055548fc700374a80abe606d9"
       },
       "hashOfExternalDependencies": "d5dac08d5d8e0113",
       "cache": {
@@ -337,7 +337,7 @@
       "taskId": "@platforma-open/milaboratories.cell-browser-2.test#build",
       "task": "build",
       "package": "@platforma-open/milaboratories.cell-browser-2.test",
-      "hash": "e0ec7771a6b44b32",
+      "hash": "518ea719465ed396",
       "inputs": {
         "CHANGELOG.md": "f275f3b4aec48d0f6f0dd35fcc8c315c7183c463",
         "eslint.config.mjs": "031f2cccbb6ca350658f4c29c62d42e44882d43d",
@@ -414,7 +414,7 @@
       "taskId": "@platforma-open/milaboratories.cell-browser-2.test#test",
       "task": "test",
       "package": "@platforma-open/milaboratories.cell-browser-2.test",
-      "hash": "3d474864a81bb715",
+      "hash": "fdcd50e778a3624f",
       "inputs": {
         "CHANGELOG.md": "f275f3b4aec48d0f6f0dd35fcc8c315c7183c463",
         "eslint.config.mjs": "031f2cccbb6ca350658f4c29c62d42e44882d43d",
@@ -820,7 +820,7 @@
   "user": "AStaroverov",
   "scm": {
     "type": "git",
-    "sha": "89cd28b7cc18ea904af547439b2c59f062664383",
+    "sha": "788f0182acfdd358a886a33b24a8d75db55062f0",
     "branch": "main"
   }
 }
