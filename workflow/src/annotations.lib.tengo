@@ -28,30 +28,13 @@ computeCellAnnotations := func(inputs) {
 		ll.panic("No annotation steps provided")
 	}
 
-	referenceColumns := slices.map([
-		{
-			name: "pl7.app/rna-seq/umap1",
-			axes: [
-				{ anchor: "main", idx: 0 },
-				{ anchor: "main", idx: 1 }
-			],
-			domain: {
-				"pl7.app/blockId": "5dace0da-d3e5-4881-8043-8e3bd87e0a9c",
-				"pl7.app/rna-seq/batch-corrected": "true"
-			}
-		},
-		{
-			name: "pl7.app/rna-seq/umap1",
-			axes: [
-				{ anchor: "main", idx: 0 },
-				{ anchor: "main", idx: 1 }
-			],
-			domain: {
-				"pl7.app/blockId": "5dace0da-d3e5-4881-8043-8e3bd87e0a9c",
-				"pl7.app/rna-seq/batch-corrected": "false"
-			}
-		}
-	], func(v) { return canonical.encode(v) })
+	referenceColumn := canonical.encode({
+		name: "pl7.app/rna-seq/totalCounts",
+		axes: [
+			{ anchor: "main", idx: 0 },
+			{ anchor: "main", idx: 1 }
+		]
+	})
 
 	result := annotations.computeAnnotations({
 		title: title,
@@ -59,7 +42,7 @@ computeCellAnnotations := func(inputs) {
 		anchorRef: anchorRef,
 		defaultValue: defaultValue,
 		resultAxesSpec: annotationAxesSpec,
-		additionalColumns: referenceColumns,
+		additionalColumns: [referenceColumn],
 		shouldComputeFilters: shouldComputeFilters
 	})
 
