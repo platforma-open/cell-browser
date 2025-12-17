@@ -3,7 +3,7 @@
 > PL_PKG_DEV=local turbo run test --dry-run=json
 
 {
-  "id": "36yHmnx65XMhq8fTj9egfnjJuyj",
+  "id": "36ylFSalsNbbr3FrB1QAC57M8uY",
   "version": "1",
   "turboVersion": "2.5.4",
   "monorepo": true,
@@ -37,12 +37,12 @@
       "taskId": "@platforma-open/milaboratories.cell-browser-2#build",
       "task": "build",
       "package": "@platforma-open/milaboratories.cell-browser-2",
-      "hash": "785adbd661323a95",
+      "hash": "5222fe74a03afef2",
       "inputs": {
-        "CHANGELOG.md": "4c2f546179dd55ab10dc379632def63c56a8d71d",
+        "CHANGELOG.md": "19c823b1f3885646509274e01a1d7506611212c7",
         "index.d.ts": "1ba908d82f37b11a66fc326a88a79ee6ef965fc7",
         "index.js": "e7798d420641e13b2104408b1cf4df20f67c654e",
-        "package.json": "0c4d7b3f18044d9055548fc700374a80abe606d9"
+        "package.json": "5ee1276cfbebd596b90c3476c2991fad75623c67"
       },
       "hashOfExternalDependencies": "d5dac08d5d8e0113",
       "cache": {
@@ -114,12 +114,12 @@
       "taskId": "@platforma-open/milaboratories.cell-browser-2#test",
       "task": "test",
       "package": "@platforma-open/milaboratories.cell-browser-2",
-      "hash": "7aea4c29f1875c21",
+      "hash": "a497dda038152b1f",
       "inputs": {
-        "CHANGELOG.md": "4c2f546179dd55ab10dc379632def63c56a8d71d",
+        "CHANGELOG.md": "19c823b1f3885646509274e01a1d7506611212c7",
         "index.d.ts": "1ba908d82f37b11a66fc326a88a79ee6ef965fc7",
         "index.js": "e7798d420641e13b2104408b1cf4df20f67c654e",
-        "package.json": "0c4d7b3f18044d9055548fc700374a80abe606d9"
+        "package.json": "5ee1276cfbebd596b90c3476c2991fad75623c67"
       },
       "hashOfExternalDependencies": "d5dac08d5d8e0113",
       "cache": {
@@ -337,7 +337,7 @@
       "taskId": "@platforma-open/milaboratories.cell-browser-2.test#build",
       "task": "build",
       "package": "@platforma-open/milaboratories.cell-browser-2.test",
-      "hash": "518ea719465ed396",
+      "hash": "9c8c7a29bcbf1fd4",
       "inputs": {
         "CHANGELOG.md": "f275f3b4aec48d0f6f0dd35fcc8c315c7183c463",
         "eslint.config.mjs": "031f2cccbb6ca350658f4c29c62d42e44882d43d",
@@ -414,7 +414,7 @@
       "taskId": "@platforma-open/milaboratories.cell-browser-2.test#test",
       "task": "test",
       "package": "@platforma-open/milaboratories.cell-browser-2.test",
-      "hash": "fdcd50e778a3624f",
+      "hash": "e1539ea463de93f5",
       "inputs": {
         "CHANGELOG.md": "f275f3b4aec48d0f6f0dd35fcc8c315c7183c463",
         "eslint.config.mjs": "031f2cccbb6ca350658f4c29c62d42e44882d43d",
@@ -665,12 +665,12 @@
       "taskId": "@platforma-open/milaboratories.cell-browser-2.workflow#build",
       "task": "build",
       "package": "@platforma-open/milaboratories.cell-browser-2.workflow",
-      "hash": "dc8aae16de8f7cfa",
+      "hash": "6f5b0c34834598b7",
       "inputs": {
-        "CHANGELOG.md": "c0bba32014f11cef2f59658e2715169879886d6a",
-        "package.json": "bae3ed7d2b3b904a4ca2c01e2ebd33287caafb44",
+        "CHANGELOG.md": "d950e5b4214b7a33b32da17e8a48ef15bb12f5c5",
+        "package.json": "adbcc028247d7649ef4846fe213301e8070fc786",
         "src/annotations-stats.lib.tengo": "3403bf8e810f5d8f5acc1c614fa086a1842065d2",
-        "src/annotations.lib.tengo": "e9bffb31c754d19d1493c5166d3b82856005eb5f",
+        "src/annotations.lib.tengo": "bdf9c9d8538159a5eebf55d1b3429d07b475f9aa",
         "src/main.tpl.tengo": "d5371a60805785d6d98e49197f331b659051903d",
         "src/prerun.tpl.tengo": "97bcfdb46454ff2e71d77abd9b0439d4db70f95a",
         "src/util.lib.tengo": "a6babb5250bd499be785c8fea3e85241807dfe41",
@@ -743,12 +743,12 @@
       "taskId": "@platforma-open/milaboratories.cell-browser-2.workflow#test",
       "task": "test",
       "package": "@platforma-open/milaboratories.cell-browser-2.workflow",
-      "hash": "1de1c2c89d344050",
+      "hash": "4be6b2e59fa3a7ea",
       "inputs": {
-        "CHANGELOG.md": "c0bba32014f11cef2f59658e2715169879886d6a",
-        "package.json": "bae3ed7d2b3b904a4ca2c01e2ebd33287caafb44",
+        "CHANGELOG.md": "d950e5b4214b7a33b32da17e8a48ef15bb12f5c5",
+        "package.json": "adbcc028247d7649ef4846fe213301e8070fc786",
         "src/annotations-stats.lib.tengo": "3403bf8e810f5d8f5acc1c614fa086a1842065d2",
-        "src/annotations.lib.tengo": "e9bffb31c754d19d1493c5166d3b82856005eb5f",
+        "src/annotations.lib.tengo": "bdf9c9d8538159a5eebf55d1b3429d07b475f9aa",
         "src/main.tpl.tengo": "d5371a60805785d6d98e49197f331b659051903d",
         "src/prerun.tpl.tengo": "97bcfdb46454ff2e71d77abd9b0439d4db70f95a",
         "src/util.lib.tengo": "a6babb5250bd499be785c8fea3e85241807dfe41",
@@ -820,7 +820,7 @@
   "user": "AStaroverov",
   "scm": {
     "type": "git",
-    "sha": "788f0182acfdd358a886a33b24a8d75db55062f0",
+    "sha": "f034755de5fb191eb8c223db85a3b996469091af",
     "branch": "main"
   }
 }

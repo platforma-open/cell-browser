@@ -1,5 +1,12 @@
 # @platforma-open/milaboratories.cell-browser-2
 
+## 1.0.4
+
+### Patch Changes
+
+- Updated dependencies [f034755]
+  - @platforma-open/milaboratories.cell-browser-2.workflow@1.0.2
+
 ## 1.0.3
 
 ### Patch Changes
