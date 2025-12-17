@@ -25,7 +25,7 @@
     "meta": {
       "title": "Cell Browser",
       "logo": "file:../logos/block-logo.png",
-      "url": "https://github.com/platforma-open/cell-browser-2",
+      "url": "https://github.com/platforma-open/cell-browser",
       "support": "mailto:support@milaboratories.com",
       "description": "Interactive visualization of single-cell RNA-seq data with UMAP embeddings and gene expression violin plots",
       "longDescription": "file:../docs/description.md",
