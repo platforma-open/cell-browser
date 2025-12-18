@@ -1,5 +1,11 @@
 # @platforma-open/milaboratories.cell-browser-2.model
 
+## 1.0.3
+
+### Patch Changes
+
+- f2cca92: add gene columns to suggest pframe
+
 ## 1.0.2
 
 ### Patch Changes

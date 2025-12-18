@@ -1,5 +1,12 @@
 # @platforma-open/milaboratories.cell-browser-2.test
 
+## 1.0.3
+
+### Patch Changes
+
+- Updated dependencies [f2cca92]
+  - @platforma-open/milaboratories.cell-browser-2.model@1.0.3
+
 ## 1.0.2
 
 ### Patch Changes
