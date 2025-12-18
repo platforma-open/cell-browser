@@ -60,6 +60,11 @@ const ALL_NEIGHBORS = [
   },
   {
     axes: [
+      { anchor: 'main', idx: 2 }, // geneId
+    ],
+  },
+  {
+    axes: [
       { anchor: 'main', idx: 0 }, // sampleId
       { anchor: 'main', idx: 1 }, // cellId
     ],
