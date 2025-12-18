@@ -500,8 +500,8 @@ export const platforma = BlockModel.create('Heavy')
 
   .title((ctx) => {
     const prefix = ctx.args.annotationSpec.steps.length > 0
-      ? 'Cell Browser'
-      : 'Cell Annotation';
+      ? 'Cell Annotation'
+      : 'Cell Browser';
 
     return ctx.args.title
       ? `${prefix} - ${ctx.args.title}`
