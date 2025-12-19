@@ -1,5 +1,15 @@
 # @platforma-open/milaboratories.cell-browser-2
 
+## 1.0.7
+
+### Patch Changes
+
+- eb357a3: update sdk
+- Updated dependencies [eb357a3]
+  - @platforma-open/milaboratories.cell-browser-2.model@1.0.5
+  - @platforma-open/milaboratories.cell-browser-2.ui@1.0.5
+  - @platforma-open/milaboratories.cell-browser-2.workflow@1.0.3
+
 ## 1.0.6
 
 ### Patch Changes

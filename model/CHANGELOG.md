@@ -1,5 +1,11 @@
 # @platforma-open/milaboratories.cell-browser-2.model
 
+## 1.0.5
+
+### Patch Changes
+
+- eb357a3: update sdk
+
 ## 1.0.4
 
 ### Patch Changes

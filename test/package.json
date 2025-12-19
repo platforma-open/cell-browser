@@ -1,7 +1,7 @@
 {
   "name": "@platforma-open/milaboratories.cell-browser-2.test",
   "private": true,
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Block tests",
   "scripts": {
     "//test": "NODE_ENV=production vitest"
