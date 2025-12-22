@@ -1,24 +1,25 @@
 // import type { GraphMakerState } from '@milaboratories/graph-maker';
 import type {
-  InferOutputsType,
-  PColumn, PColumnDataUniversal, PColumnEntryUniversal,
+  InferOutputsType, PColumnEntryUniversal,
   PColumnIdAndSpec,
   PColumnSpec,
   PFrameHandle,
   PlDataTableStateV2,
-  PlRef,
+  PlRef
 } from '@platforma-sdk/model';
 import {
   Annotation,
-  BlockModel,
-  createPFrameForGraphs, createPlDataTableSheet,
+  BlockModel, createPlDataTableSheet,
   createPlDataTableStateV2,
   createPlDataTableV2,
+  getAllRelatedColumns,
   getUniquePartitionKeys,
+  isHiddenFromGraphColumn,
+  isHiddenFromUIColumn,
   isPColumn,
   isPColumnSpec,
   PColumnCollection,
-  PColumnName,
+  PColumnName
 } from '@platforma-sdk/model';
 import type { GraphMakerState } from '@milaboratories/graph-maker';
 import type { AnnotationSpec, AnnotationSpecUi } from './types';
@@ -360,21 +361,21 @@ export const platforma = BlockModel.create('Heavy')
     const anchorCtx = ctx.resultPool.resolveAnchorCtx({ main: ctx.args.countsRef });
     if (!anchorCtx) return undefined;
 
-    const allAnnotationsColumns: PColumn<PColumnDataUniversal>[] = [];
-    const shouldRequestAnnotations = ctx.args.annotationSpec.steps.length > 0;
+    const baseColumns = getAllRelatedColumns(
+      ctx,
+      (spec: PColumnSpec) => !isHiddenFromUIColumn(spec) && !isHiddenFromGraphColumn(spec),
+    );
 
-    if (shouldRequestAnnotations) {
-      const annotationsColumns = ctx.prerun?.resolve({
+    const annotationsColumn = ctx.args.annotationSpec.steps.length > 0
+      ? ctx.prerun?.resolve({
         field: 'annotationsPf',
         stableIfNotFound: true,
         assertFieldType: 'Input',
         allowPermanentAbsence: true,
-      })?.getPColumns() ?? [];
+      })?.getPColumns()
+      : undefined;
 
-      allAnnotationsColumns.push(...annotationsColumns);
-    }
-
-    return createPFrameForGraphs(ctx, allAnnotationsColumns.length > 0 ? allAnnotationsColumns : undefined);
+    return ctx.createPFrame(annotationsColumn ? [...baseColumns, ...annotationsColumn] : baseColumns);
   })
 
   .output('umapDefaults', (ctx) => {
