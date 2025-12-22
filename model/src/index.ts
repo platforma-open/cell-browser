@@ -1,25 +1,31 @@
 // import type { GraphMakerState } from '@milaboratories/graph-maker';
 import type {
-  InferOutputsType, PColumnEntryUniversal,
+  AxesVault,
+  InferOutputsType, PColumn, PColumnDataUniversal, PColumnEntryUniversal,
   PColumnIdAndSpec,
+  PColumnLazy,
   PColumnSpec,
+  PFrameDef,
   PFrameHandle,
   PlDataTableStateV2,
-  PlRef
+  PlRef,
+  RenderCtx,
 } from '@platforma-sdk/model';
 import {
   Annotation,
-  BlockModel, createPlDataTableSheet,
+  BlockModel, canonicalizeJson, createPlDataTableSheet,
   createPlDataTableStateV2,
   createPlDataTableV2,
-  getAllRelatedColumns,
+  enrichCompatible,
+  getAxisId,
+  getNormalizedAxesList,
   getUniquePartitionKeys,
   isHiddenFromGraphColumn,
   isHiddenFromUIColumn,
   isPColumn,
   isPColumnSpec,
   PColumnCollection,
-  PColumnName
+  PColumnName,
 } from '@platforma-sdk/model';
 import type { GraphMakerState } from '@milaboratories/graph-maker';
 import type { AnnotationSpec, AnnotationSpecUi } from './types';
@@ -514,3 +520,24 @@ export const platforma = BlockModel.create('Heavy')
 export type * from './types';
 export type Platforma = typeof platforma;
 export type BlockOutputs = InferOutputsType<typeof platforma>;
+
+function getAllRelatedColumns<A, U>(
+  ctx: RenderCtx<A, U>, predicate: (spec: PColumnSpec) => boolean,
+): PFrameDef<PColumn<PColumnDataUniversal> | PColumnLazy<undefined | PColumnDataUniversal>> {
+  // if current block doesn't produce own columns then use all columns from result pool
+  const columns = new PColumnCollection();
+  columns.addColumnProvider(ctx.resultPool);
+  const allColumns = columns.getUniversalEntries(predicate, { dontWaitAllData: true, overrideLabelAnnotation: false, enrichByLinkers: true }) ?? [];
+
+  const allAxes: AxesVault = new Map(allColumns
+    .flatMap((column) => getNormalizedAxesList(column.spec.axesSpec))
+    .map((axisSpec) => {
+      const axisId = getAxisId(axisSpec);
+      return [canonicalizeJson(axisId), axisSpec];
+    }));
+
+  // additional columns are duplicates with extra fields in domains for compatibility if there are ones with partial match
+  const extendedColumns = enrichCompatible(allAxes, allColumns);
+
+  return extendedColumns;
+}
