@@ -1,5 +1,6 @@
 // import type { GraphMakerState } from '@milaboratories/graph-maker';
 import type {
+  AnchoredIdDeriver,
   AxesVault,
   InferOutputsType, PColumn, PColumnDataUniversal, PColumnEntryUniversal,
   PColumnIdAndSpec,
@@ -369,6 +370,7 @@ export const platforma = BlockModel.create('Heavy')
 
     const baseColumns = getAllRelatedColumns(
       ctx,
+      anchorCtx,
       (spec: PColumnSpec) => !isHiddenFromUIColumn(spec) && !isHiddenFromGraphColumn(spec),
     );
 
@@ -522,12 +524,12 @@ export type Platforma = typeof platforma;
 export type BlockOutputs = InferOutputsType<typeof platforma>;
 
 function getAllRelatedColumns<A, U>(
-  ctx: RenderCtx<A, U>, predicate: (spec: PColumnSpec) => boolean,
+  ctx: RenderCtx<A, U>, anchorCtx: AnchoredIdDeriver, predicate: (spec: PColumnSpec) => boolean,
 ): PFrameDef<PColumn<PColumnDataUniversal> | PColumnLazy<undefined | PColumnDataUniversal>> {
   // if current block doesn't produce own columns then use all columns from result pool
   const columns = new PColumnCollection();
   columns.addColumnProvider(ctx.resultPool);
-  const allColumns = columns.getUniversalEntries(predicate, { dontWaitAllData: true, overrideLabelAnnotation: false, enrichByLinkers: true }) ?? [];
+  const allColumns = columns.getUniversalEntries(predicate, { dontWaitAllData: true, overrideLabelAnnotation: false, enrichByLinkers: true, anchorCtx }) ?? [];
 
   const allAxes: AxesVault = new Map(allColumns
     .flatMap((column) => getNormalizedAxesList(column.spec.axesSpec))
