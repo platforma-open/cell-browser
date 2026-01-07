@@ -2,7 +2,7 @@ import type {
   InferOutputsType, PColumnEntryUniversal,
   PColumnIdAndSpec,
   PColumnSpec,
-  PFrameHandle
+  PFrameHandle,
 } from '@platforma-sdk/model';
 import {
   Annotation,
@@ -11,7 +11,7 @@ import {
   createPlDataTableV2, getUniquePartitionKeys, isPColumn,
   isPColumnSpec,
   PColumnCollection,
-  PColumnName
+  PColumnName,
 } from '@platforma-sdk/model';
 import type { AnnotationSpecUi, BlockArgs, BlockUiState } from './types';
 import { getMainPlotsPColumns } from './getMainPlotsPColumns';
@@ -328,9 +328,12 @@ export const platforma = BlockModel.create('Heavy')
     return (annotationsPf === undefined);
   })
 
-  .retentiveOutput('mainPlotPframe', (ctx): PFrameHandle | undefined => {
+  .output('mainPlotPframe', (ctx): PFrameHandle | undefined => {
     const allColumns = getMainPlotsPColumns(ctx);
     return allColumns ? ctx.createPFrame(allColumns) : undefined;
+  }, {
+    retentive: true,
+    withStatus: true,
   })
 
   .output('mainPlotPColumns', (ctx) => {
@@ -370,6 +373,9 @@ export const platforma = BlockModel.create('Heavy')
     pCols = [...pCols, ...upstream];
 
     return ctx.createPFrame(pCols);
+  }, {
+    withStatus: true,
+    retentive: true,
   })
 
   // Pcolumns for violin plot defaults, filtered to only normalised
@@ -450,5 +456,3 @@ export const platforma = BlockModel.create('Heavy')
 export type * from './types';
 export type Platforma = typeof platforma;
 export type BlockOutputs = InferOutputsType<typeof platforma>;
-
-

@@ -110,7 +110,7 @@ const defaultOptions = computed((): PredefinedGraphOption<'scatterplot-umap'>[] 
 <template>
   <PlBlockPage>
     <GraphMaker
-      :key="`${currentTab} + ${app.model.outputs.mainPlotPframe}`"
+      :key="`${currentTab} + ${app.model.outputs.mainPlotPframe.value}`"
       :class="$style.graphMaker"
       v-model="graphState as any"
       chartType="scatterplot-umap"
