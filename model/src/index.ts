@@ -1,51 +1,20 @@
-// import type { GraphMakerState } from '@milaboratories/graph-maker';
 import type {
-  InferOutputsType,
-  PColumn, PColumnDataUniversal, PColumnEntryUniversal,
+  InferOutputsType, PColumnEntryUniversal,
   PColumnIdAndSpec,
   PColumnSpec,
   PFrameHandle,
-  PlDataTableStateV2,
-  PlRef,
 } from '@platforma-sdk/model';
 import {
   Annotation,
-  BlockModel,
-  createPFrameForGraphs, createPlDataTableSheet,
+  BlockModel, createPlDataTableSheet,
   createPlDataTableStateV2,
-  createPlDataTableV2,
-  getUniquePartitionKeys,
-  isPColumn,
+  createPlDataTableV2, getUniquePartitionKeys, isPColumn,
   isPColumnSpec,
   PColumnCollection,
   PColumnName,
 } from '@platforma-sdk/model';
-import type { GraphMakerState } from '@milaboratories/graph-maker';
-import type { AnnotationSpec, AnnotationSpecUi } from './types';
-
-type BlockArgs = {
-  title?: string;
-  countsRef?: PlRef;
-  annotationSpec: AnnotationSpec;
-};
-
-export type UiState = {
-  settingsOpen: boolean;
-  overlapTable: {
-    tableState: PlDataTableStateV2;
-  };
-  statsTable: {
-    tableState: PlDataTableStateV2;
-  };
-  statsBySampleTable: {
-    tableState: PlDataTableStateV2;
-  };
-  annotationSpec: AnnotationSpecUi;
-  //
-  graphStateUMAP: GraphMakerState;
-  graphStateViolin: GraphMakerState;
-  heatmapState: GraphMakerState;
-};
+import type { AnnotationSpecUi, BlockArgs, BlockUiState } from './types';
+import { getMainPlotsPColumns } from './getMainPlotsPColumns';
 
 const ALL_NEIGHBORS = [
   {
@@ -144,7 +113,7 @@ export const platforma = BlockModel.create('Heavy')
     },
   })
 
-  .withUiState<UiState>({
+  .withUiState<BlockUiState>({
     settingsOpen: true,
     overlapTable: {
       tableState: createPlDataTableStateV2(),
@@ -161,6 +130,11 @@ export const platforma = BlockModel.create('Heavy')
     } satisfies AnnotationSpecUi,
     graphStateUMAP: {
       title: 'UMAP',
+      template: 'dots',
+      currentTab: 'settings',
+    },
+    graphStateTSNE: {
+      title: 'TSNE',
       template: 'dots',
       currentTab: 'settings',
     },
@@ -354,51 +328,17 @@ export const platforma = BlockModel.create('Heavy')
     return (annotationsPf === undefined);
   })
 
-  .retentiveOutput('UMAPPf', (ctx): PFrameHandle | undefined => {
-    if (ctx.args.countsRef == undefined) return undefined;
-
-    const anchorCtx = ctx.resultPool.resolveAnchorCtx({ main: ctx.args.countsRef });
-    if (!anchorCtx) return undefined;
-
-    const allAnnotationsColumns: PColumn<PColumnDataUniversal>[] = [];
-    const shouldRequestAnnotations = ctx.args.annotationSpec.steps.length > 0;
-
-    if (shouldRequestAnnotations) {
-      const annotationsColumns = ctx.prerun?.resolve({
-        field: 'annotationsPf',
-        stableIfNotFound: true,
-        assertFieldType: 'Input',
-        allowPermanentAbsence: true,
-      })?.getPColumns() ?? [];
-
-      allAnnotationsColumns.push(...annotationsColumns);
-    }
-
-    return createPFrameForGraphs(ctx, allAnnotationsColumns.length > 0 ? allAnnotationsColumns : undefined);
+  .output('mainPlotPframe', (ctx): PFrameHandle | undefined => {
+    const allColumns = getMainPlotsPColumns(ctx);
+    return allColumns ? ctx.createPFrame(allColumns) : undefined;
+  }, {
+    retentive: true,
+    withStatus: true,
   })
 
-  .output('umapDefaults', (ctx) => {
-    if (ctx.args.countsRef == undefined) return undefined;
-
-    // Use the SDK's anchored selection to gather all compatible columns for graphs
-    const anchoredColumns = ctx.resultPool.getAnchoredPColumns(
-      { countsRef: ctx.args.countsRef },
-      // Capture all p-columns associated with the anchor; filtering is handled by SDK axis/anchor logic
-      (_spec) => true,
-      { dontWaitAllData: true },
-    );
-
-    if (!anchoredColumns || anchoredColumns.length === 0) return undefined;
-
-    // Return batch corrected UMAP if present
-    let finalPcols = anchoredColumns.filter((col) => col.spec.domain?.['pl7.app/rna-seq/batch-corrected'] === 'true');
-    if (finalPcols.length === 0) {
-      finalPcols = anchoredColumns.filter((col) => col.spec.domain?.['pl7.app/rna-seq/batch-corrected'] === 'false');
-    }
-
-    if (finalPcols.length === 0) return undefined;
-
-    return finalPcols.map(
+  .output('mainPlotPColumns', (ctx) => {
+    const allColumns = getMainPlotsPColumns(ctx);
+    return allColumns?.map(
       (c) => ({
         columnId: c.id,
         spec: c.spec,
@@ -433,6 +373,9 @@ export const platforma = BlockModel.create('Heavy')
     pCols = [...pCols, ...upstream];
 
     return ctx.createPFrame(pCols);
+  }, {
+    withStatus: true,
+    retentive: true,
   })
 
   // Pcolumns for violin plot defaults, filtered to only normalised
