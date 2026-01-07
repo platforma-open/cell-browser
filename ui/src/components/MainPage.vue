@@ -86,29 +86,23 @@ const graphState = computed({
 });
 
 const defaultOptions = computed((): PredefinedGraphOption<'scatterplot-umap'>[] | undefined => {
-  if (!app.model.outputs.umapPColumns) return undefined;
+  if (!app.model.outputs.mainPlotPColumns) return undefined;
 
   if (currentTab.value === 'umap') {
     return getDefaultOptions(
-      app.model.outputs.umapPColumns,
+      app.model.outputs.mainPlotPColumns,
       'pl7.app/rna-seq/umap1',
       'pl7.app/rna-seq/umap2',
     );
   }
   if (currentTab.value === 'tsne') {
     return getDefaultOptions(
-      app.model.outputs.umapPColumns,
+      app.model.outputs.mainPlotPColumns,
       'pl7.app/rna-seq/tsne1',
       'pl7.app/rna-seq/tsne2',
     );
   }
   return undefined;
-});
-const key = computed(() => {
-  const a = defaultOptions.value ? JSON.stringify(defaultOptions.value) : '';
-  console.log('>>', a);
-
-  return a;
 });
 
 </script>
@@ -116,12 +110,11 @@ const key = computed(() => {
 <template>
   <PlBlockPage>
     <GraphMaker
-      v-if="defaultOptions != null"
-      v-model="graphState as any"
+      :key="`${currentTab} + ${app.model.outputs.mainPlotPframe}`"
       :class="$style.graphMaker"
-      :dataStateKey="key"
+      v-model="graphState as any"
       chartType="scatterplot-umap"
-      :p-frame="app.model.outputs.UMAPPf"
+      :p-frame="app.model.outputs.mainPlotPframe"
       :default-options="defaultOptions"
     >
       <template #titleLineSlot>
