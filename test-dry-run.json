@@ -3,14 +3,14 @@
 > PL_PKG_DEV=local turbo run test --dry-run=json
 
 {
-  "id": "373rEROmPuYjz3QhX45IFBDLwLd",
+  "id": "37vtKqIxMkJq8fNfPlomDUP7SNA",
   "version": "1",
   "turboVersion": "2.5.4",
   "monorepo": true,
   "globalCacheInputs": {
     "rootKey": "I can’t see ya, but I know you’re here",
     "files": {},
-    "hashOfExternalDependencies": "fd6e194ad2b99add",
+    "hashOfExternalDependencies": "cc38701bed429a11",
     "hashOfInternalDependencies": "",
     "environmentVariables": {
       "specified": {
@@ -37,14 +37,14 @@
       "taskId": "@platforma-open/milaboratories.cell-browser-2#build",
       "task": "build",
       "package": "@platforma-open/milaboratories.cell-browser-2",
-      "hash": "397695bde1b65dd1",
+      "hash": "6591b6f31b5225ab",
       "inputs": {
-        "CHANGELOG.md": "a3bcd999fd6140fdb01ad196c85860ec72030c6f",
+        "CHANGELOG.md": "a731215e89baa0d81305ca112cce4b1295b160ba",
         "index.d.ts": "1ba908d82f37b11a66fc326a88a79ee6ef965fc7",
         "index.js": "e7798d420641e13b2104408b1cf4df20f67c654e",
-        "package.json": "90d6f112443ac95f0299bd5713b2d7ad0532f3c5"
+        "package.json": "bc9be8193595d9f52a1a297c68acb54912834dbf"
       },
-      "hashOfExternalDependencies": "6eaa0a03bbd02c4e",
+      "hashOfExternalDependencies": "bba64c922f90c383",
       "cache": {
         "local": false,
         "remote": false,
@@ -114,14 +114,14 @@
       "taskId": "@platforma-open/milaboratories.cell-browser-2#test",
       "task": "test",
       "package": "@platforma-open/milaboratories.cell-browser-2",
-      "hash": "2053bbb30ede189b",
+      "hash": "abb37ec498121de4",
       "inputs": {
-        "CHANGELOG.md": "a3bcd999fd6140fdb01ad196c85860ec72030c6f",
+        "CHANGELOG.md": "a731215e89baa0d81305ca112cce4b1295b160ba",
         "index.d.ts": "1ba908d82f37b11a66fc326a88a79ee6ef965fc7",
         "index.js": "e7798d420641e13b2104408b1cf4df20f67c654e",
-        "package.json": "90d6f112443ac95f0299bd5713b2d7ad0532f3c5"
+        "package.json": "bc9be8193595d9f52a1a297c68acb54912834dbf"
       },
-      "hashOfExternalDependencies": "6eaa0a03bbd02c4e",
+      "hashOfExternalDependencies": "bba64c922f90c383",
       "cache": {
         "local": false,
         "remote": false,
@@ -186,16 +186,17 @@
       "taskId": "@platforma-open/milaboratories.cell-browser-2.model#build",
       "task": "build",
       "package": "@platforma-open/milaboratories.cell-browser-2.model",
-      "hash": "c24bb6587a62d5e3",
+      "hash": "3cd08d6bc843b945",
       "inputs": {
-        "CHANGELOG.md": "ee7a8bdbe97dac39d0422fb86a58a066d75d3283",
+        "CHANGELOG.md": "bae9b695b2b147b846d46c2e146a8f85d0e98367",
         "eslint.config.mjs": "4daf8bcd2db39a1e4f37741a032e3191d3bf7c36",
-        "package.json": "f307093193445dcc54b919625fbd1ca28b52ab97",
-        "src/index.ts": "4f5abf000695004e1fe94fd7179f7093423b3124",
-        "src/types.ts": "14a4d403721f9c9099d8ead0baef94ed0ee7fdc1",
+        "package.json": "3d8df2d0f44e09b138d4de1cf1a325939e2e743f",
+        "src/getMainPlotsPColumns.ts": "40507e745d2003cc36ff05cbd93c1df832947666",
+        "src/index.ts": "186528822097eb5366bf91a40edbfa2209206874",
+        "src/types.ts": "cb8d0ba4567d95181dad9aa8140c094cd9891fda",
         "tsconfig.json": "f93b54b9fb48dabc7c1e0f4e276b99930df51b7f"
       },
-      "hashOfExternalDependencies": "1b6e7beda2de9e7e",
+      "hashOfExternalDependencies": "df7f7d8cdffdf6f9",
       "cache": {
         "local": false,
         "remote": false,
@@ -263,16 +264,17 @@
       "taskId": "@platforma-open/milaboratories.cell-browser-2.model#test",
       "task": "test",
       "package": "@platforma-open/milaboratories.cell-browser-2.model",
-      "hash": "39447c28f04cbd4d",
+      "hash": "2fba154eee27544d",
       "inputs": {
-        "CHANGELOG.md": "ee7a8bdbe97dac39d0422fb86a58a066d75d3283",
+        "CHANGELOG.md": "bae9b695b2b147b846d46c2e146a8f85d0e98367",
         "eslint.config.mjs": "4daf8bcd2db39a1e4f37741a032e3191d3bf7c36",
-        "package.json": "f307093193445dcc54b919625fbd1ca28b52ab97",
-        "src/index.ts": "4f5abf000695004e1fe94fd7179f7093423b3124",
-        "src/types.ts": "14a4d403721f9c9099d8ead0baef94ed0ee7fdc1",
+        "package.json": "3d8df2d0f44e09b138d4de1cf1a325939e2e743f",
+        "src/getMainPlotsPColumns.ts": "40507e745d2003cc36ff05cbd93c1df832947666",
+        "src/index.ts": "186528822097eb5366bf91a40edbfa2209206874",
+        "src/types.ts": "cb8d0ba4567d95181dad9aa8140c094cd9891fda",
         "tsconfig.json": "f93b54b9fb48dabc7c1e0f4e276b99930df51b7f"
       },
-      "hashOfExternalDependencies": "1b6e7beda2de9e7e",
+      "hashOfExternalDependencies": "df7f7d8cdffdf6f9",
       "cache": {
         "local": false,
         "remote": false,
@@ -337,16 +339,16 @@
       "taskId": "@platforma-open/milaboratories.cell-browser-2.test#build",
       "task": "build",
       "package": "@platforma-open/milaboratories.cell-browser-2.test",
-      "hash": "9efb528f2d8907f3",
+      "hash": "480c6341a9c0ea44",
       "inputs": {
-        "CHANGELOG.md": "f3bf601622a24b9907bf41e3dcc863f43b49a5df",
+        "CHANGELOG.md": "02f19b061e41929d964aa37f985feb747f455e0f",
         "eslint.config.mjs": "031f2cccbb6ca350658f4c29c62d42e44882d43d",
-        "package.json": "394a174f6be48f34dccb6abcaff2816f3118fe43",
+        "package.json": "9db953e8abb94b82c964331262fe187cc6797b60",
         "src/wf.test.ts": "f1bbf7a6d57e5a5e50ab2839efd3493829d5a5a3",
         "tsconfig.json": "64ebfa332d028a50e3ddadaab4ad97b44a191599",
         "vitest.config.mts": "e7d5b2219ed2be506f65c5e7b9a6412264afaf36"
       },
-      "hashOfExternalDependencies": "2b12073e91039437",
+      "hashOfExternalDependencies": "8ba26dbd304d365a",
       "cache": {
         "local": false,
         "remote": false,
@@ -414,16 +416,16 @@
       "taskId": "@platforma-open/milaboratories.cell-browser-2.test#test",
       "task": "test",
       "package": "@platforma-open/milaboratories.cell-browser-2.test",
-      "hash": "bb63a7c91928a479",
+      "hash": "9ca598e06bd6da9f",
       "inputs": {
-        "CHANGELOG.md": "f3bf601622a24b9907bf41e3dcc863f43b49a5df",
+        "CHANGELOG.md": "02f19b061e41929d964aa37f985feb747f455e0f",
         "eslint.config.mjs": "031f2cccbb6ca350658f4c29c62d42e44882d43d",
-        "package.json": "394a174f6be48f34dccb6abcaff2816f3118fe43",
+        "package.json": "9db953e8abb94b82c964331262fe187cc6797b60",
         "src/wf.test.ts": "f1bbf7a6d57e5a5e50ab2839efd3493829d5a5a3",
         "tsconfig.json": "64ebfa332d028a50e3ddadaab4ad97b44a191599",
         "vitest.config.mts": "e7d5b2219ed2be506f65c5e7b9a6412264afaf36"
       },
-      "hashOfExternalDependencies": "2b12073e91039437",
+      "hashOfExternalDependencies": "8ba26dbd304d365a",
       "cache": {
         "local": false,
         "remote": false,
@@ -488,12 +490,12 @@
       "taskId": "@platforma-open/milaboratories.cell-browser-2.ui#build",
       "task": "build",
       "package": "@platforma-open/milaboratories.cell-browser-2.ui",
-      "hash": "ed6009892cd02012",
+      "hash": "cc5161931e681585",
       "inputs": {
-        "CHANGELOG.md": "43cafb480fc354be0b191c6ae3136ad4bcaf0151",
+        "CHANGELOG.md": "5b494671f878b2188c39e6907012a057beb4d01c",
         "eslint.config.mjs": "23034ce843c37d4f42512e22d64252f0f29b280f",
         "index.html": "e37ab12ef6090a1380237b55964f225b48d02cfc",
-        "package.json": "00aa73743ec2db1bc4ccf270ae4fd96f1a360004",
+        "package.json": "8ad7b415a29b702540b1a610726dac469290001c",
         "src/app.ts": "299f0587e71fc0dcd275ea2e2521e56b19fd8226",
         "src/components/AnnotationCreateDialog.vue": "47497a00e0f4351466d1e83acecb84070b5fc747",
         "src/components/AnnotationModal.vue": "9cf027193d2138b1097a55614fa0bf77930d37c6",
@@ -501,7 +503,7 @@
         "src/components/AnnotationStatsBySamplePage.vue": "15ef61f65085e677efd09fcb10a72432f2f5cbba",
         "src/components/AnnotationStatsPage.vue": "ccc3d2a034cf14d9f0b220337fb7a1c820ef9ca4",
         "src/components/HeatmapPage.vue": "5879d491bc2574f5c616f839cb53a0017b8e0d0c",
-        "src/components/MainPage.vue": "ad64f44da5e29b87c49beb76dab6996bb7b0d495",
+        "src/components/MainPage.vue": "964e75f25692f3b627b36520d64ab297a9910e2f",
         "src/components/ViolinPage.vue": "f995443d8e119cc9d450429986cb36b003ddb8b6",
         "src/composition/useColumnSuggestion.ts": "b159134189b1f1e52146e709e26cac7a1d1d5c50",
         "src/main.ts": "09dc2db99fee48b25acbe2c40392deeeb660a3c6",
@@ -510,7 +512,7 @@
         "tsconfig.json": "4413b97586b78f0f19d323fd7e35bf8d4bf362b2",
         "vite.config.ts": "855c5945ed32eb1a8a137b5d2a31b83f62fce5f0"
       },
-      "hashOfExternalDependencies": "23fda21d3aa26593",
+      "hashOfExternalDependencies": "25afd4656fa48c68",
       "cache": {
         "local": false,
         "remote": false,
@@ -578,12 +580,12 @@
       "taskId": "@platforma-open/milaboratories.cell-browser-2.ui#test",
       "task": "test",
       "package": "@platforma-open/milaboratories.cell-browser-2.ui",
-      "hash": "4f97873510912e57",
+      "hash": "4b00b0a3215be791",
       "inputs": {
-        "CHANGELOG.md": "43cafb480fc354be0b191c6ae3136ad4bcaf0151",
+        "CHANGELOG.md": "5b494671f878b2188c39e6907012a057beb4d01c",
         "eslint.config.mjs": "23034ce843c37d4f42512e22d64252f0f29b280f",
         "index.html": "e37ab12ef6090a1380237b55964f225b48d02cfc",
-        "package.json": "00aa73743ec2db1bc4ccf270ae4fd96f1a360004",
+        "package.json": "8ad7b415a29b702540b1a610726dac469290001c",
         "src/app.ts": "299f0587e71fc0dcd275ea2e2521e56b19fd8226",
         "src/components/AnnotationCreateDialog.vue": "47497a00e0f4351466d1e83acecb84070b5fc747",
         "src/components/AnnotationModal.vue": "9cf027193d2138b1097a55614fa0bf77930d37c6",
@@ -591,7 +593,7 @@
         "src/components/AnnotationStatsBySamplePage.vue": "15ef61f65085e677efd09fcb10a72432f2f5cbba",
         "src/components/AnnotationStatsPage.vue": "ccc3d2a034cf14d9f0b220337fb7a1c820ef9ca4",
         "src/components/HeatmapPage.vue": "5879d491bc2574f5c616f839cb53a0017b8e0d0c",
-        "src/components/MainPage.vue": "ad64f44da5e29b87c49beb76dab6996bb7b0d495",
+        "src/components/MainPage.vue": "964e75f25692f3b627b36520d64ab297a9910e2f",
         "src/components/ViolinPage.vue": "f995443d8e119cc9d450429986cb36b003ddb8b6",
         "src/composition/useColumnSuggestion.ts": "b159134189b1f1e52146e709e26cac7a1d1d5c50",
         "src/main.ts": "09dc2db99fee48b25acbe2c40392deeeb660a3c6",
@@ -600,7 +602,7 @@
         "tsconfig.json": "4413b97586b78f0f19d323fd7e35bf8d4bf362b2",
         "vite.config.ts": "855c5945ed32eb1a8a137b5d2a31b83f62fce5f0"
       },
-      "hashOfExternalDependencies": "23fda21d3aa26593",
+      "hashOfExternalDependencies": "25afd4656fa48c68",
       "cache": {
         "local": false,
         "remote": false,
@@ -665,7 +667,7 @@
       "taskId": "@platforma-open/milaboratories.cell-browser-2.workflow#build",
       "task": "build",
       "package": "@platforma-open/milaboratories.cell-browser-2.workflow",
-      "hash": "c679433db7bc8a6f",
+      "hash": "5e215448c8d67eda",
       "inputs": {
         "CHANGELOG.md": "0ed6f43f3abb45ea79dcc4f05371fc0b00b3da14",
         "package.json": "3939d9eaa8af08f709ca870465f0f53368a622b5",
@@ -677,7 +679,7 @@
         "tsconfig.json": "0d3f6ef3c7eda614a600412e813ed60c6974f9f2",
         "vitest.config.mts": "526d8598f7834023b2114425a9f91c0b61f60475"
       },
-      "hashOfExternalDependencies": "af7a630c36662303",
+      "hashOfExternalDependencies": "e6e1be44f2ff773e",
       "cache": {
         "local": false,
         "remote": false,
@@ -743,7 +745,7 @@
       "taskId": "@platforma-open/milaboratories.cell-browser-2.workflow#test",
       "task": "test",
       "package": "@platforma-open/milaboratories.cell-browser-2.workflow",
-      "hash": "8e8cd25a708c5e22",
+      "hash": "494cec8327c4dfb9",
       "inputs": {
         "CHANGELOG.md": "0ed6f43f3abb45ea79dcc4f05371fc0b00b3da14",
         "package.json": "3939d9eaa8af08f709ca870465f0f53368a622b5",
@@ -755,7 +757,7 @@
         "tsconfig.json": "0d3f6ef3c7eda614a600412e813ed60c6974f9f2",
         "vitest.config.mts": "526d8598f7834023b2114425a9f91c0b61f60475"
       },
-      "hashOfExternalDependencies": "af7a630c36662303",
+      "hashOfExternalDependencies": "e6e1be44f2ff773e",
       "cache": {
         "local": false,
         "remote": false,
@@ -820,7 +822,7 @@
   "user": "AStaroverov",
   "scm": {
     "type": "git",
-    "sha": "eb357a3821c96ebc4a0d78e46fe907be7fa5d934",
+    "sha": "e22314e4465f39da09e50d3a022968df1789ef27",
     "branch": "main"
   }
 }
