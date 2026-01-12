@@ -1,4 +1,5 @@
 // import type { GraphMakerState } from '@milaboratories/graph-maker';
+import type { GraphMakerState } from '@milaboratories/graph-maker';
 import type {
   AxesVault,
   InferOutputsType, PColumn, PColumnDataUniversal, PColumnEntryUniversal,
@@ -26,7 +27,6 @@ import {
   PColumnCollection,
   PColumnName,
 } from '@platforma-sdk/model';
-import type { GraphMakerState } from '@milaboratories/graph-maker';
 import type { AnnotationSpec, AnnotationSpecUi } from './types';
 
 type BlockArgs = {
@@ -360,7 +360,7 @@ export const platforma = BlockModel.create('Heavy')
     return (annotationsPf === undefined);
   })
 
-  .retentiveOutput('UMAPPf', (ctx): PFrameHandle | undefined => {
+  .outputWithStatus('UMAPPf', (ctx): PFrameHandle | undefined => {
     if (ctx.args.countsRef == undefined) return undefined;
 
     const anchorCtx = ctx.resultPool.resolveAnchorCtx({ main: ctx.args.countsRef });
@@ -413,7 +413,7 @@ export const platforma = BlockModel.create('Heavy')
   })
 
   // @TODO - Currently createPFrameForGraphs is letting everything through. createPFrame used for now
-  .output('ExprPf', (ctx): PFrameHandle | undefined => {
+  .outputWithStatus('ExprPf', (ctx): PFrameHandle | undefined => {
     let pCols = ctx.resultPool
       .getData()
       .entries.map((c) => c.obj)
