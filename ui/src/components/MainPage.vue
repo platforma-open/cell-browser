@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import '@milaboratories/graph-maker/styles';
 import { plRefsEqual, type PColumnIdAndSpec, type PlRef } from '@platforma-sdk/model';
 import { PlAnnotations, PlBlockPage, PlDropdownRef, PlTabs } from '@platforma-sdk/ui-vue';
 import { computed, ref } from 'vue';
@@ -105,14 +104,15 @@ const defaultOptions = computed((): PredefinedGraphOption<'scatterplot-umap'>[] 
   return undefined;
 });
 
+const graphMakerKey = computed(() => `${currentTab.value} + ${app.model.outputs.mainPlotPframe.ok ? app.model.outputs.mainPlotPframe.value : 'no-pframe'}`);
 </script>
 
 <template>
   <PlBlockPage>
     <GraphMaker
-      :key="`${currentTab} + ${app.model.outputs.mainPlotPframe.value}`"
+      :key="graphMakerKey"
+      v-model="graphState"
       :class="$style.graphMaker"
-      v-model="graphState as any"
       chartType="scatterplot-umap"
       :p-frame="app.model.outputs.mainPlotPframe"
       :default-options="defaultOptions"

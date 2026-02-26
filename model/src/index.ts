@@ -207,7 +207,7 @@ export const platforma = BlockModel.create('Heavy')
     };
   })
 
-  .output('overlapTable', (ctx) => {
+  .outputWithStatus('overlapTable', (ctx) => {
     if (ctx.args.countsRef === undefined)
       return undefined;
 
@@ -238,7 +238,7 @@ export const platforma = BlockModel.create('Heavy')
     );
   })
 
-  .output('statsTable', (ctx) => {
+  .outputWithStatus('statsTable', (ctx) => {
     const annotationStatsPf = ctx.prerun?.resolve({
       field: 'annotationStatsPf',
       assertFieldType: 'Input',
@@ -265,7 +265,7 @@ export const platforma = BlockModel.create('Heavy')
       ctx.uiState.statsTable.tableState,
     );
   })
-  .output('statsBySampleTableModel', (ctx) => {
+  .outputWithStatus('statsBySampleTableModel', (ctx) => {
     const annotationStatsBySamplePf = ctx.prerun?.resolve({ field: 'annotationStatsBySamplePf', assertFieldType: 'Input', allowPermanentAbsence: true });
     const allColumns = annotationStatsBySamplePf?.getPColumns();
 
