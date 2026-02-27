@@ -1,5 +1,15 @@
 # @platforma-open/milaboratories.cell-browser-2
 
+## 1.0.9
+
+### Patch Changes
+
+- ed1cd89: Update sdk
+- Updated dependencies [ed1cd89]
+  - @platforma-open/milaboratories.cell-browser-2.model@1.0.7
+  - @platforma-open/milaboratories.cell-browser-2.ui@1.0.7
+  - @platforma-open/milaboratories.cell-browser-2.workflow@1.0.4
+
 ## 1.0.8
 
 ### Patch Changes

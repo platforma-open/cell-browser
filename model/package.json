@@ -1,6 +1,6 @@
 {
   "name": "@platforma-open/milaboratories.cell-browser-2.model",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "Block model",
   "type": "module",
   "main": "dist/index.js",

@@ -1,5 +1,11 @@
 # @platforma-open/milaboratories.cell-browser-2.workflow
 
+## 1.0.4
+
+### Patch Changes
+
+- ed1cd89: Update sdk
+
 ## 1.0.3
 
 ### Patch Changes
